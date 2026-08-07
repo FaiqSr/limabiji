@@ -1,7 +1,7 @@
-<header class="flex justify-between px-20 py-5 items-center">
+<header class="flex justify-between px-30 py-5 items-center bg-dark">
     <nav>
         <a href="{{ route('landingpages.index') }}">
-            <img src="{{ asset('assets/images/logo/logo-lima-biji.webp') }}" alt="Logo Lima Biji" class="h-15 w-auto">
+            <img src="{{ asset('assets/images/logo/logo-lima-biji.webp') }}" alt="Logo Lima Biji" class="h-20 w-auto">
         </a>
     </nav>
     <nav class="flex gap-10">
@@ -12,7 +12,10 @@
     </nav>
     <div>
         <button>
-            <a href="" class="px-5 py-2 bg-black text-white rounded-lg">Login</a>
+            <a href="" class="px-5 py-2 text-white font-bold text-2xl">Menu</a>
         </button>
     </div>
 </header>
+
+@push('scripts')
+@endpush

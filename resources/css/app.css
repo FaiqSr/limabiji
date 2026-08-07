@@ -7,11 +7,19 @@
 
 @layer components {
     .navbar-text {
-        @apply font-bold text-2xl px-3 py-1 hover:border hover:rounded-lg hover:px-3 hover:py-1 transition-all duration-300;
+        @apply font-bold text-2xl px-5 py-3 border rounded-4xl border-dark hover:border hover:border-white hover:rounded-4xl hover:px-5 hover:py-3 transition-all duration-300 text-white;
     }
     .alfa-slab-one-regular {
         font-family: "Alfa Slab One", serif;
         font-weight: 400;
         font-style: normal;
     }
+}
+
+@theme {
+    --color-primary: #079f81;
+    --color-secondary: #1b5e51;
+    --color-negatif: #9e2f06;
+    --color-negatif-dark: #49271b;
+    --color-dark: #1c332e;
 }
