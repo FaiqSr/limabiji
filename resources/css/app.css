@@ -5,21 +5,121 @@
 @source "../**/*.blade.php";
 @source "../**/*.js";
 
-@layer components {
-    .navbar-text {
-        @apply font-bold text-2xl px-5 py-3 border rounded-4xl border-dark hover:border hover:border-white hover:rounded-4xl hover:px-5 hover:py-3 transition-all duration-300 text-white;
-    }
-    .alfa-slab-one-regular {
-        font-family: "Alfa Slab One", serif;
-        font-weight: 400;
-        font-style: normal;
+@theme {
+    /* Font */
+    --font-display: "Bebas Neue", sans-serif;
+    --font-body: "Rubik", sans-serif;
+
+    /* Lima Biji — Light "Roastery Lab" Palette */
+    --color-dark: #1a1a1a;
+    --color-surface: #FAFAF8;
+    --color-surface-alt: #F0EDE8;
+    --color-primary: #08A679;
+    --color-primary-hover: #0ABE8A;
+    --color-secondary: #067A58;
+    --color-mint: #7DD4B8;
+    --color-light-grey: #6b7280;
+    --color-card: #FFFFFF;
+    --color-accent-gold: #d4924f;
+    --color-border: #E5E2DC;
+    --color-border-subtle: #EDE9E3;
+}
+
+@layer base {
+    body {
+        font-family: var(--font-body);
+        background-color: var(--color-surface);
+        color: var(--color-dark);
     }
 }
 
-@theme {
-    --color-primary: #079f81;
-    --color-secondary: #1b5e51;
-    --color-negatif: #9e2f06;
-    --color-negatif-dark: #49271b;
-    --color-dark: #1c332e;
+@layer components {
+    /* Pill-shaped navigation links */
+    .nav-link {
+        @apply font-medium text-sm px-5 py-2.5 rounded-lg border border-transparent
+               text-dark/70 hover:text-dark hover:border-border hover:bg-surface-alt
+               transition-all duration-300;
+    }
+
+    /* Section heading — small, uppercase label */
+    .section-heading {
+        @apply text-4xl font-bold tracking-widest uppercase text-light-grey mb-2;
+    }
+
+    .section-title {
+        @apply font-display text-4xl sm:text-5xl lg:text-6xl text-dark leading-tight;
+    }
+
+    .section-subtitle {
+        @apply text-light-grey text-base sm:text-lg max-w-2xl;
+    }
+
+    /* Solid card — replaces glass-card (no blur, no transparency) */
+    .card-solid {
+        @apply bg-card border border-border-subtle rounded-lg shadow-sm;
+    }
+
+    /* Rich text article body — styled markup from Trix editor */
+    .article-body {
+        @apply text-dark/80 text-lg leading-relaxed;
+    }
+
+    .article-body h1,
+    .article-body h2,
+    .article-body h3,
+    .article-body h4 {
+        @apply font-display text-dark leading-tight mt-10 mb-4 uppercase;
+    }
+
+    .article-body h1 {
+        @apply text-4xl;
+    }
+
+    .article-body h2 {
+        @apply text-3xl;
+    }
+
+    .article-body h3 {
+        @apply text-2xl;
+    }
+
+    .article-body h4 {
+        @apply text-xl;
+    }
+
+    .article-body p {
+        @apply my-5;
+    }
+
+    .article-body ul {
+        @apply list-disc pl-6 my-5 space-y-2;
+    }
+
+    .article-body ol {
+        @apply list-decimal pl-6 my-5 space-y-2;
+    }
+
+    .article-body blockquote {
+        @apply border-l-4 border-primary pl-5 my-6 italic text-dark/60;
+    }
+
+    .article-body a {
+        @apply text-primary underline decoration-primary/40 hover:decoration-primary transition-colors;
+    }
+
+    .article-body img {
+        @apply rounded-lg my-8 w-full h-auto;
+    }
+
+    .article-body hr {
+        @apply my-8 border-border;
+    }
+
+    .article-body pre {
+        @apply bg-surface-alt rounded-lg p-4 my-6 overflow-x-auto font-mono text-sm;
+    }
+
+    .article-body code {
+        @apply font-mono text-sm bg-surface-alt px-1.5 py-0.5 rounded;
+    }
 }
