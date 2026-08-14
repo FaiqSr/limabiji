@@ -5,49 +5,32 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- FOCAL POINT: Primary Decision & Action Bar (Article Approval & Publication Pipeline) -->
+    @if (session('success'))
+        <div class="p-4 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold">
+            ✓ {{ session('success') }}
+        </div>
+    @endif
+
+    <!-- FOCAL POINT: Quick Action & Operations Bar -->
     <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-2xs">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                <div class="w-10 h-10 rounded-lg bg-slate-900 text-white border border-slate-800 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                     </svg>
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <h2 class="text-base font-semibold text-slate-900">Content Publication Pipeline</h2>
-                        @if($stats['pending_articles'] > 0)
-                            <span class="px-2.5 py-0.5 rounded-lg text-xs font-medium bg-amber-50 text-amber-800 border border-amber-200 animate-pulse">
-                                {{ $stats['pending_articles'] }} Pending Review
-                            </span>
-                        @else
-                            <span class="px-2.5 py-0.5 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                All Clear
-                            </span>
-                        @endif
-                    </div>
+                    <h2 class="text-base font-semibold text-slate-900">Lima Biji Admin Operations Console</h2>
                     <p class="text-xs text-slate-500 mt-1">
-                        @if($stats['pending_articles'] > 0)
-                            Articles require editor review before publishing to international live sites.
-                        @else
-                            No pending article submissions. All published stories are up to date.
-                        @endif
+                        Manage specialty coffee landing pages, news stories, regional coffee origins, and global distribution network.
                     </p>
                 </div>
             </div>
 
             <!-- Quick Action Command Group -->
             <div class="flex flex-wrap items-center gap-2">
-                @if (auth()->user()?->role === 'admin' && $stats['pending_articles'] > 0)
-                    <a href="{{ route('admin.approvals.index') }}" class="btn btn-primary text-xs py-2 px-3.5 shadow-2xs">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        Review Pending ({{ $stats['pending_articles'] }})
-                    </a>
-                @endif
-                <a href="{{ route('admin.news.create') }}" class="btn btn-secondary text-xs py-2 px-3">
+                <a href="{{ route('admin.news.create') }}" class="btn btn-primary text-xs py-2 px-3.5 shadow-2xs">
                     + New Article
                 </a>
                 <a href="{{ route('admin.content.create') }}" class="btn btn-secondary text-xs py-2 px-3">
@@ -55,26 +38,6 @@
                 </a>
             </div>
         </div>
-
-        @if(isset($pendingArticlesList) && count($pendingArticlesList) > 0)
-            <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                @foreach($pendingArticlesList as $pendingItem)
-                    <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
-                        <div class="min-w-0 flex-1">
-                            <p class="text-xs font-semibold text-slate-900 truncate">{{ $pendingItem->title }}</p>
-                            <div class="flex items-center gap-2 text-[11px] text-slate-500 font-mono mt-0.5">
-                                <span>{{ $pendingItem->author?->name ?? 'Editor' }}</span>
-                                <span>·</span>
-                                <span>{{ $pendingItem->created_at->diffForHumans() }}</span>
-                            </div>
-                        </div>
-                        @if (auth()->user()?->role === 'admin')
-                            <a href="{{ route('admin.approvals.index') }}" class="text-xs font-semibold text-slate-900 hover:underline shrink-0">Review &rarr;</a>
-                        @endif
-                    </div>
-                @endforeach
-            </div>
-        @endif
     </div>
 
     <!-- CORE KPI METRICS ROW -->
@@ -88,10 +51,10 @@
         </div>
 
         <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-            <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Articles Published</span>
+            <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Published Articles</span>
             <div class="flex items-baseline justify-between mt-2">
-                <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight">{{ number_format($stats['articles_count']) }}</span>
-                <span class="text-[11px] font-mono font-medium px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">LIVE</span>
+                <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight">{{ number_format($stats['articles_published']) }}</span>
+                <span class="text-[11px] font-mono font-medium px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">{{ number_format($stats['articles_draft']) }} DRAFTS</span>
             </div>
         </div>
 
@@ -227,6 +190,77 @@
                 </div>
                 @endforelse
             </div>
+        </div>
+    </div>
+
+    <!-- INTEGRATED GLOBAL SITE SETTINGS SECTION -->
+    <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-2xs" x-data="{ settingsOpen: false }">
+        <div class="flex items-center justify-between cursor-pointer" @click="settingsOpen = !settingsOpen">
+            <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <h3 class="text-base font-semibold text-slate-900">Global Site Settings</h3>
+                <span class="text-xs text-slate-400 font-mono">(General Config & Contact Details)</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-500 font-medium hidden sm:inline" x-text="settingsOpen ? 'Collapse' : 'Expand Settings'"></span>
+                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="{'rotate-180': settingsOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </div>
+        </div>
+
+        <div x-show="settingsOpen" x-collapse class="mt-4 pt-4 border-t border-slate-100">
+            <form action="{{ route('admin.dashboard.settings') }}" method="POST" class="space-y-6">
+                @csrf
+                @method('PUT')
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- General Settings -->
+                    <div class="space-y-4 bg-slate-50/70 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">General Configuration</h4>
+                        @forelse (($siteSettings['general'] ?? collect()) as $setting)
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">{{ str_replace('_', ' ', $setting->key) }}</label>
+                            <input type="text" name="settings[{{ $loop->index }}][value]" value="{{ is_array($setting->value) ? json_encode($setting->value) : $setting->value }}" class="text-xs w-full border border-slate-200 rounded-lg p-2.5 bg-white">
+                            <input type="hidden" name="settings[{{ $loop->index }}][key]" value="{{ $setting->key }}">
+                            <input type="hidden" name="settings[{{ $loop->index }}][locale]" value="{{ $setting->locale }}">
+                            <input type="hidden" name="settings[{{ $loop->index }}][group]" value="general">
+                        </div>
+                        @empty
+                        <p class="text-xs text-slate-400 py-2">No general settings configured.</p>
+                        @endforelse
+                    </div>
+
+                    <!-- Contact Settings -->
+                    <div class="space-y-4 bg-slate-50/70 p-4 rounded-xl border border-slate-200">
+                        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider border-b border-slate-200 pb-2">Contact & Support Details</h4>
+                        @forelse (($siteSettings['contact'] ?? collect()) as $setting)
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="text-xs font-semibold text-slate-600 uppercase tracking-wider">{{ str_replace('_', ' ', $setting->key) }}</label>
+                                <span class="text-[10px] font-mono uppercase bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded">{{ $setting->locale ?? 'global' }}</span>
+                            </div>
+                            <input type="text" name="settings[{{ $loop->index + 100 }}][value]" value="{{ is_array($setting->value) ? json_encode($setting->value) : $setting->value }}" class="text-xs w-full border border-slate-200 rounded-lg p-2.5 bg-white">
+                            <input type="hidden" name="settings[{{ $loop->index + 100 }}][key]" value="{{ $setting->key }}">
+                            <input type="hidden" name="settings[{{ $loop->index + 100 }}][locale]" value="{{ $setting->locale }}">
+                            <input type="hidden" name="settings[{{ $loop->index + 100 }}][group]" value="contact">
+                        </div>
+                        @empty
+                        <p class="text-xs text-slate-400 py-2">No contact settings configured.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <p class="text-xs text-slate-500">Changes update global site settings across all public landing pages.</p>
+                    <button type="submit" class="btn btn-primary py-2 px-5 text-xs font-bold shadow-xs">
+                        Save Site Settings
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

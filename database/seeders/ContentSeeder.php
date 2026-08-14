@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\Origin;
 use App\Models\Page;
 use App\Models\PageBlock;
@@ -213,22 +214,84 @@ class ContentSeeder extends Seeder
 
     private function seedArticles(): void
     {
-        $articles = [
-            ['title' => 'Expansion to Japanese Market: High-Grade Specialty Civet Coffee Exported to Tokyo', 'slug' => 'expansion-japanese-market', 'category' => 'Export Market', 'excerpt' => 'Lima Biji Agritech officially ships its first premium batch of enzymatic civet coffee to top-tier roasteries in Japan.', 'content' => '<p>Lima Biji Agritech officially ships its first premium batch of enzymatic civet coffee to top-tier roasteries in Japan, marking a major milestone in our Asia-Pacific export strategy.</p>', 'content_id' => '<p>Lima Biji Agritech secara resmi mengirimkan batch premium pertama kopi luwak enzimatik ke roastery kelas atas di Jepang, menandai tonggak penting dalam strategi ekspor Asia-Pasifik kami.</p>', 'image' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=800&auto=format&fit=crop', 'author_id' => 1, 'status' => 'published', 'published_at' => now()],
-            ['title' => 'Sustainable Enzymatic Fermentation Process Achieves International Certification', 'slug' => 'sustainable-enzymatic-fermentation-certification', 'category' => 'Innovation', 'excerpt' => 'Our revolutionary cruelty-free enzymatic civet processing technique earns high acclaim for quality and sustainability.', 'content' => '<p>Our revolutionary cruelty-free enzymatic civet processing technique earns high acclaim for quality and sustainability from international coffee organizations.</p>', 'content_id' => '<p>Teknik pemrosesan luwak enzimatik bebas eksploitasi kami yang revolusioner mendapat pengakuan tinggi untuk kualitas dan keberlanjutan dari organisasi kopi internasional.</p>', 'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop', 'author_id' => 1, 'status' => 'published', 'published_at' => now()],
-            ['title' => 'New Partner Farm Partnership Program Launched Across West Java Highlands', 'slug' => 'partner-farm-program-west-java', 'category' => 'Sustainability', 'excerpt' => 'Empowering local farmers through specialty green bean cultivation and ethical harvest standards across West Java highlands.', 'content' => '<p>Empowering local farmers through specialty green bean cultivation and ethical harvest standards across West Java highlands.</p>', 'content_id' => '<p>Memberdayakan petani lokal melalui budidaya green bean specialty dan standar panen etis di seluruh dataran tinggi Jawa Barat.</p>', 'image' => 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=800&auto=format&fit=crop', 'author_id' => 1, 'status' => 'published', 'published_at' => now()],
+        $categories = [
+            ['name' => 'Export Market', 'name_id' => 'Pasar Ekspor', 'slug' => 'export-market'],
+            ['name' => 'Innovation', 'name_id' => 'Inovasi', 'slug' => 'innovation'],
+            ['name' => 'Sustainability', 'name_id' => 'Keberlanjutan', 'slug' => 'sustainability'],
+            ['name' => 'Agritech', 'name_id' => 'Agriteknologi', 'slug' => 'agritech'],
         ];
-        foreach ($articles as $article) {
-            Article::updateOrCreate(['slug' => $article['slug']], $article);
+
+        $categoryModels = [];
+        foreach ($categories as $cat) {
+            $categoryModels[$cat['name']] = Category::updateOrCreate(['slug' => $cat['slug']], $cat);
+        }
+
+        $articles = [
+            [
+                'title' => 'Expansion to Japanese Market: High-Grade Specialty Civet Coffee Exported to Tokyo',
+                'slug' => 'expansion-japanese-market',
+                'category' => 'Export Market',
+                'categories' => ['Export Market', 'Agritech'],
+                'excerpt' => 'Lima Biji Agritech officially ships its first premium batch of enzymatic civet coffee to top-tier roasteries in Japan.',
+                'content' => '<p>Lima Biji Agritech officially ships its first premium batch of enzymatic civet coffee to top-tier roasteries in Japan, marking a major milestone in our Asia-Pacific export strategy.</p>',
+                'content_id' => '<p>Lima Biji Agritech secara resmi mengirimkan batch premium pertama kopi luwak enzimatik ke roastery kelas atas di Jepang, menandai tonggak penting dalam strategi ekspor Asia-Pasifik kami.</p>',
+                'image' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=800&auto=format&fit=crop',
+                'author_id' => 1,
+                'status' => 'published',
+                'published_at' => now(),
+            ],
+            [
+                'title' => 'Sustainable Enzymatic Fermentation Process Achieves International Certification',
+                'slug' => 'sustainable-enzymatic-fermentation-certification',
+                'category' => 'Innovation',
+                'categories' => ['Innovation', 'Sustainability'],
+                'excerpt' => 'Our revolutionary cruelty-free enzymatic civet processing technique earns high acclaim for quality and sustainability.',
+                'content' => '<p>Our revolutionary cruelty-free enzymatic civet processing technique earns high acclaim for quality and sustainability from international coffee organizations.</p>',
+                'content_id' => '<p>Teknik pemrosesan luwak enzimatik bebas eksploitasi kami yang revolusioner mendapat pengakuan tinggi untuk kualitas dan keberlanjutan dari organisasi kopi internasional.</p>',
+                'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop',
+                'author_id' => 1,
+                'status' => 'published',
+                'published_at' => now(),
+            ],
+            [
+                'title' => 'New Partner Farm Partnership Program Launched Across West Java Highlands',
+                'slug' => 'partner-farm-program-west-java',
+                'category' => 'Sustainability',
+                'categories' => ['Sustainability'],
+                'excerpt' => 'Empowering local farmers through specialty green bean cultivation and ethical harvest standards across West Java highlands.',
+                'content' => '<p>Empowering local farmers through specialty green bean cultivation and ethical harvest standards across West Java highlands.</p>',
+                'content_id' => '<p>Memberdayakan petani lokal melalui budidaya green bean specialty dan standar panen etis di seluruh dataran tinggi Jawa Barat.</p>',
+                'image' => 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=800&auto=format&fit=crop',
+                'author_id' => 1,
+                'status' => 'published',
+                'published_at' => now(),
+            ],
+        ];
+
+        foreach ($articles as $artData) {
+            $catNames = $artData['categories'] ?? [];
+            unset($artData['categories']);
+
+            $article = Article::updateOrCreate(['slug' => $artData['slug']], $artData);
+
+            $catIds = [];
+            foreach ($catNames as $cName) {
+                if (isset($categoryModels[$cName])) {
+                    $catIds[] = $categoryModels[$cName]->id;
+                }
+            }
+            if (! empty($catIds)) {
+                $article->categories()->sync($catIds);
+            }
         }
     }
 
     private function seedTestimonials(): void
     {
         $testimonials = [
-            ['name' => 'Hiroshi Tanaka', 'company' => 'Tokyo Roastery', 'content' => "The enzymatic civet process produces an incredibly clean cup with zero bitterness. Our customers in Tokyo can't get enough.", 'content_id' => 'Proses luwak enzimatik menghasilkan cangkir yang sangat bersih tanpa rasa pahit. Pelanggan kami di Tokyo sangat menyukainya.', 'rating' => 5, 'is_featured' => true, 'order' => 1],
-            ['name' => 'Sarah Chen', 'company' => 'Melbourne Coffee Co.', 'content' => "Lima Biji's consistency across micro-lots is unmatched. Every batch meets our exacting specialty standards.", 'content_id' => 'Konsistensi Lima Biji di seluruh micro-lot tidak tertandingi. Setiap batch memenuhi standar specialty kami yang ketat.', 'rating' => 5, 'is_featured' => true, 'order' => 2],
-            ['name' => 'Marco Verdi', 'company' => 'Milan Espresso', 'content' => 'Finally — a true luxury civet experience without the ethical concerns. The fermentation precision is remarkable.', 'content_id' => 'Akhirnya — pengalaman luwak mewah sejati tanpa masalah etika. Presisi fermentasinya luar biasa.', 'rating' => 5, 'is_featured' => true, 'order' => 3],
+            ['name' => 'Hiroshi Tanaka', 'company' => 'Tokyo Roastery', 'content' => "The enzymatic civet process produces an incredibly clean cup with zero bitterness. Our customers in Tokyo can't get enough.", 'content_id' => 'Proses luwak enzimatik menghasilkan cangkir yang sangat bersih tanpa rasa pahit. Pelanggan kami di Tokyo sangat menyukainya.', 'is_featured' => true, 'order' => 1],
+            ['name' => 'Sarah Chen', 'company' => 'Melbourne Coffee Co.', 'content' => "Lima Biji's consistency across micro-lots is unmatched. Every batch meets our exacting specialty standards.", 'content_id' => 'Konsistensi Lima Biji di seluruh micro-lot tidak tertandingi. Setiap batch memenuhi standar specialty kami yang ketat.', 'is_featured' => true, 'order' => 2],
+            ['name' => 'Marco Verdi', 'company' => 'Milan Espresso', 'content' => 'Finally — a true luxury civet experience without the ethical concerns. The fermentation precision is remarkable.', 'content_id' => 'Akhirnya — pengalaman luwak mewah sejati tanpa masalah etika. Presisi fermentasinya luar biasa.', 'is_featured' => true, 'order' => 3],
         ];
         foreach ($testimonials as $testimonial) {
             Testimonial::updateOrCreate(

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -11,9 +12,13 @@ class MediaController extends Controller
 {
     public function index()
     {
-        $files = collect(Storage::disk('public')->files('media'))
+        $allFiles = Storage::disk('public')->allFiles();
+
+        $files = collect($allFiles)
+            ->filter(fn ($path) => ! str_starts_with(basename($path), '.'))
             ->map(fn ($path) => [
                 'name' => basename($path),
+                'path' => $path,
                 'url' => Storage::disk('public')->url($path),
                 'size' => Storage::disk('public')->size($path),
                 'modified' => Storage::disk('public')->lastModified($path),
@@ -24,10 +29,10 @@ class MediaController extends Controller
         return view('admin.media.index', compact('files'));
     }
 
-    public function upload(Request $request)
+    public function upload(Request $request, ImageOptimizer $optimizer)
     {
         $validated = $request->validate([
-            'file' => ['required', 'file', 'image', 'max:5120', 'mimes:jpg,jpeg,png,webp'],
+            'file' => ['required', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,svg,gif'],
             'context' => ['nullable', 'string', 'in:general,media,articles,origins'],
         ]);
 
@@ -35,17 +40,26 @@ class MediaController extends Controller
         $file = $request->file('file');
 
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
         $filename = Str::slug($originalName).'-'.uniqid().'.'.$extension;
+        $targetPath = "{$context}/{$filename}";
 
-        $path = $file->storeAs("{$context}", $filename, 'public');
+        // Compress and store image
+        $path = $optimizer->optimizeAndStore($file, $targetPath, 'public');
+        $url = '/storage/'.ltrim($path, '/');
 
-        return response()->json([
-            'success' => true,
-            'url' => '/storage/'.ltrim($path, '/'),
-            'path' => $path,
-            'name' => $filename,
-        ]);
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'url' => $url,
+                'path' => $path,
+                'name' => $filename,
+            ]);
+        }
+
+        return redirect()
+            ->route('admin.media.index')
+            ->with('success', 'File uploaded and compressed successfully.');
     }
 
     public function destroy(Request $request)
@@ -54,12 +68,26 @@ class MediaController extends Controller
             'path' => ['required', 'string'],
         ]);
 
-        if (Storage::disk('public')->exists($validated['path'])) {
-            Storage::disk('public')->delete($validated['path']);
+        $path = ltrim($validated['path'], '/');
 
-            return response()->json(['success' => true]);
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => true]);
+            }
+
+            return redirect()
+                ->route('admin.media.index')
+                ->with('success', 'File deleted successfully.');
         }
 
-        return response()->json(['success' => false, 'message' => 'File not found.'], 404);
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json(['success' => false, 'message' => 'File not found.'], 404);
+        }
+
+        return redirect()
+            ->route('admin.media.index')
+            ->with('error', 'File not found.');
     }
 }

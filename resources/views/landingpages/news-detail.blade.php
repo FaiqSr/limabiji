@@ -18,14 +18,20 @@
         {{-- Header --}}
         <header data-animate="fade-up" class="mb-10">
             <div class="flex items-center gap-3 mb-6">
-                <a href="{{ route('landingpages.news') }}" class="inline-flex items-center gap-2 text-sm text-light-grey hover:text-primary transition-colors">
+                <a href="{{ url('/news') }}" class="inline-flex items-center gap-2 text-sm text-light-grey hover:text-primary transition-colors">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                     </svg>
                     News
                 </a>
                 <span class="text-light-grey/40">/</span>
-                <span class="text-sm text-light-grey">{{ $article->category }}</span>
+                <span class="text-sm text-light-grey">
+                    @if($article->categories->isNotEmpty())
+                        {{ $article->categories->map(fn($c) => $c->getNameForLocale())->join(', ') }}
+                    @else
+                        {{ $article->category }}
+                    @endif
+                </span>
             </div>
 
             <h1 class="font-display text-6xl sm:text-7xl lg:text-8xl text-dark leading-[0.85] uppercase">
@@ -65,7 +71,7 @@
                     <p class="section-heading">Related Stories</p>
                     <h2 class="section-title">More From The Newsroom</h2>
                 </div>
-                <a href="{{ route('landingpages.news') }}" class="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors">
+                <a href="{{ url('/news') }}" class="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary-hover transition-colors">
                     View All News
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>

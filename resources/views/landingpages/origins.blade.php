@@ -171,7 +171,7 @@
             <p class="text-light-grey text-base max-w-xl mx-auto mb-8">
                 Request sample lots from our {{ $origin['name'] }} partner farms. Explore single-origin micro-lots processed with our enzymatic fermentation.
             </p>
-            <x-btn-primary href="{{ route('landingpages.contact') }}" label="Request Samples" />
+            <x-btn-primary href="{{ url('/contact') }}" label="Request Samples" />
         </div>
     </div>
 @endsection

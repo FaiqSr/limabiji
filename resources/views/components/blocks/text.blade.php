@@ -4,16 +4,17 @@
 ])
 
 @php
+    $hidden  = $data['field_hidden'] ?? [];
     $heading = $data['heading'] ?? '';
     $body    = $data['body']    ?? '';
 @endphp
 
-@if($heading || $body)
+@if((empty($hidden['heading']) && $heading) || (empty($hidden['body']) && $body))
 <div class="container mx-auto px-5 py-16">
-    @if($heading)
+    @if(empty($hidden['heading']) && $heading)
         <x-section-heading :title="$heading" />
     @endif
-    @if($body)
+    @if(empty($hidden['body']) && $body)
         <div class="prose prose-lg max-w-3xl text-dark/70 leading-relaxed">
             {!! nl2br(e($body)) !!}
         </div>

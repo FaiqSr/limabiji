@@ -1,590 +1,448 @@
 @extends('admin.layouts.app')
 @section('title', 'Edit ' . $page->title)
-@section('page_title', 'Edit Page: ' . $page->title)
+@section('page_title', 'CMS Content Editor: ' . $page->title)
 
 @section('content')
-<form action="{{ route('admin.content.update', $page) }}" method="POST">
-    @csrf
-    @method('PUT')
+<div x-data="blockEditor({{ \Illuminate\Support\Js::from($page->blocks) }}, {
+        previewUrl: '{{ route('admin.content.preview') }}',
+        mediaUrl: '{{ route('admin.media.index') }}',
+        mediaUploadUrl: '{{ route('admin.media.upload') }}',
+        csrfToken: '{{ csrf_token() }}',
+        pageTitle: @js($page->title),
+        metaDescription: @js($page->meta_description ?? ''),
+        slug: @js($page->slug)
+     })" 
+     class="space-y-6 relative">
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Main Editor -->
-        <div class="lg:col-span-2 space-y-6">
-            <!-- Page Info Card -->
-            <div class="card-modern">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                    <h3 class="text-base font-semibold text-slate-900">Page Information</h3>
-                    <a href="{{ route('admin.content.index') }}" class="text-xs text-slate-500 hover:text-indigo-600 font-medium flex items-center gap-1">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                        </svg>
-                        Back to Pages
-                    </a>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="title">Title</label>
-                        <input type="text" name="title" id="title" value="{{ old('title', $page->title) }}" required class="mt-1">
-                    </div>
-                    <div>
-                        <label for="slug">URL Slug</label>
-                        <div class="relative mt-1">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-mono text-slate-400">/</span>
-                            <input type="text" name="slug" id="slug" value="{{ old('slug', $page->slug) }}" required class="pl-7">
-                        </div>
-                    </div>
+    <form action="{{ route('admin.content.update', $page) }}" method="POST" id="page-editor-form" @submit="isDirty = false">
+        @csrf
+        @method('PUT')
+
+        <!-- Page Meta Header Bar -->
+        <div class="card-modern flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-4">
+                <a href="{{ route('admin.content.index') }}" 
+                   class="p-2 rounded-lg border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                   aria-label="Back to pages list">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                </a>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span>Editing Page: {{ $page->title }}</span>
+                        <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">/{{ $page->slug }}</span>
+                    </h2>
+                    <p class="text-xs text-slate-600">Modify dynamic blocks with real-time isolated iframe live preview on the right.</p>
                 </div>
             </div>
 
-            <!-- Content Blocks Editor Card -->
-            <div class="card-modern" x-data="blockEditor({{ json_encode($page->blocks->toArray()) }})">
-                <!-- Top Language Navigation Tabs Bar -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-100 p-2 rounded-lg border border-slate-200 mb-6">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wider px-2">Language Editor:</span>
-                        <button type="button"
-                                @click="activeTab = 'en'"
-                                :class="activeTab === 'en' ? 'bg-white text-indigo-600 shadow-2xs font-bold border border-slate-200' : 'text-slate-600 hover:text-slate-900 font-medium'"
-                                class="px-4 py-2 text-xs rounded-lg transition-all flex items-center gap-2">
-                            <span>🇬🇧</span>
-                            <span>English Content (EN)</span>
-                        </button>
-                        <button type="button"
-                                @click="activeTab = 'id'"
-                                :class="activeTab === 'id' ? 'bg-emerald-600 text-white shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
-                                class="px-4 py-2 text-xs rounded-lg transition-all flex items-center gap-2">
-                            <span>🇮🇩</span>
-                            <span>Konten Bahasa Indonesia (ID)</span>
-                        </button>
-                    </div>
-                    <div class="text-xs text-slate-600 font-medium px-2">
-                        Active View: <span class="font-bold" :class="activeTab === 'en' ? 'text-indigo-600' : 'text-emerald-700'" x-text="activeTab === 'en' ? '🇬🇧 English (EN)' : '🇮🇩 Bahasa Indonesia (ID)'"></span>
-                    </div>
-                </div>
+            <div class="flex items-center gap-3">
+                <!-- Page Layout Presets Button -->
+                <button type="button" 
+                        @click="presetModalOpen = true" 
+                        class="btn btn-secondary py-2 px-3 text-xs font-semibold flex items-center gap-1.5 shadow-2xs"
+                        aria-label="Open page layout presets modal">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+                    </svg>
+                    <span>Presets</span>
+                </button>
 
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100">
-                    <div>
-                        <h3 class="text-base font-semibold text-slate-900">Content Section Blocks</h3>
-                        <p class="text-xs text-slate-500">Drag to reorder page sections or add new block components.</p>
-                    </div>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button type="button" @click="addBlock('hero')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Hero</button>
-                        <button type="button" @click="addBlock('text')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Text</button>
-                        <button type="button" @click="addBlock('stats')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Stats</button>
-                        <button type="button" @click="addBlock('faq')" class="btn btn-secondary py-1 px-2.5 text-xs">+ FAQ</button>
-                        <button type="button" @click="addBlock('cta')" class="btn btn-secondary py-1 px-2.5 text-xs">+ CTA</button>
-                        <button type="button" @click="addBlock('process_steps')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Process Steps</button>
-                        <button type="button" @click="addBlock('text_with_stats')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Text+Stats</button>
-                        <button type="button" @click="addBlock('articles')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Articles</button>
-                        <button type="button" @click="addBlock('testimonials')" class="btn btn-secondary py-1 px-2.5 text-xs">+ Testimonials</button>
-                    </div>
-                </div>
+                <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 cursor-pointer select-none">
+                    <input type="checkbox" name="is_published" value="1" {{ $page->is_published ? 'checked' : '' }} class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
+                    <span>Published</span>
+                </label>
 
-                <div class="space-y-4" x-ref="blockList">
-                    <template x-for="(block, index) in blocks" :key="block.id">
-                        <div class="rounded-lg border border-slate-200 bg-slate-50/50 p-4 transition-all hover:border-slate-300"
-                             x-data="{ collapsed: false }"
-                             :class="{'ring-2 ring-indigo-300': collapsed === false}">
-                            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200/60 cursor-move">
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-slate-400 cursor-grab" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
-                                    </svg>
-                                    <span class="font-bold text-xs uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100" x-text="label(block)"></span>
-                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded border"
-                                          :class="activeTab === 'en' ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'"
-                                          x-text="activeTab === 'en' ? '🇬🇧 EN' : '🇮🇩 ID'"></span>
-                                    <span class="text-[10px] text-slate-400 ml-1" x-text="summary(block)"></span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <button type="button" @click="collapsed = !collapsed" class="text-xs text-slate-500 hover:text-slate-700 px-2 py-1 hover:bg-slate-100 rounded transition-colors" :title="collapsed ? 'Expand' : 'Collapse'">
-                                        <svg class="w-3.5 h-3.5 transition-transform" :class="{'rotate-180': !collapsed}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                        </svg>
-                                    </button>
-                                    <button type="button" @click="duplicateBlock(index)" class="text-xs text-slate-500 hover:text-indigo-600 px-2 py-1 hover:bg-indigo-50 rounded transition-colors" title="Duplicate Block">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
-                                        </svg>
-                                    </button>
-                                    <button type="button" @click="removeBlock(index)" class="text-xs text-rose-600 hover:text-rose-700 font-medium px-2 py-1 hover:bg-rose-50 rounded transition-colors">Remove</button>
-                                </div>
-                            </div>
-
-                            <div x-show="!collapsed">
-                                <input type="hidden" :name="'blocks['+index+'][id]'" :value="block.id">
-                                <input type="hidden" :name="'blocks['+index+'][block_type]'" :value="block.block_type">
-                                <input type="hidden" :name="'blocks['+index+'][order]'" :value="index">
-                                <input type="hidden" :name="'blocks['+index+'][is_visible]'" value="1">
-                                {{-- Preserve both locales --}}
-                                <input type="hidden" :name="'blocks['+index+'][content][en][_preserve]'" value="1">
-                                <input type="hidden" :name="'blocks['+index+'][content][id][_preserve]'" value="1">
-
-                                <template x-for="loc in ['en', 'id']" :key="loc">
-                                    <div x-show="loc === activeTab" class="space-y-4">
-                                        <!-- Hero Block -->
-                                        <template x-if="block.block_type === 'hero'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Badge Label</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][label]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).label">
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Main Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Subheading</label>
-                                                    <textarea :name="'blocks['+index+'][content]['+loc+'][subheading]'"
-                                                              x-model="content(block, loc).subheading"
-                                                              rows="3"
-                                                              class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                              placeholder="Subheading text..."></textarea>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Text Block -->
-                                        <template x-if="block.block_type === 'text'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Body Text</label>
-                                                    <textarea :name="'blocks['+index+'][content]['+loc+'][body]'"
-                                                              x-model="content(block, loc).body"
-                                                              rows="4"
-                                                              class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                              placeholder="Body text..."></textarea>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Stats Block -->
-                                        <template x-if="block.block_type === 'stats'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div class="space-y-2">
-                                                    <label class="text-xs font-semibold text-slate-700">Stat Items</label>
-                                                    <template x-for="(item, itemIndex) in items(block, loc)" :key="itemIndex">
-                                                        <div class="grid grid-cols-[1fr_1fr_auto] gap-2 items-start bg-white p-2 rounded-lg border border-slate-200">
-                                                            <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][label]'" x-model="item.label" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Label">
-                                                            <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][value]'" x-model="item.value" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Value">
-                                                            <div class="flex items-center gap-1">
-                                                                <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex - 1)" :disabled="itemIndex === 0" class="text-[10px] text-slate-400 hover:text-indigo-600 px-1 py-0.5 hover:bg-indigo-50 rounded disabled:opacity-20">&uarr;</button>
-                                                                <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex + 1)" class="text-[10px] text-slate-400 hover:text-indigo-600 px-1 py-0.5 hover:bg-indigo-50 rounded">&darr;</button>
-                                                                <button type="button" @click="items(block, loc).splice(itemIndex, 1)" class="text-xs text-rose-600 hover:text-rose-700 px-2 py-1 hover:bg-rose-50 rounded font-bold">✕</button>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                    <button type="button" @click="addItem(block, loc, { label: '', value: '' })" class="btn btn-secondary py-1 px-3 text-xs">+ Add Stat</button>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- FAQ Block -->
-                                        <template x-if="block.block_type === 'faq'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div class="space-y-2">
-                                                    <label class="text-xs font-semibold text-slate-700">FAQ Items</label>
-                                                    <template x-for="(item, itemIndex) in items(block, loc)" :key="itemIndex">
-                                                        <div class="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
-                                                            <div class="flex items-center justify-between gap-2">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][question]'" x-model="item.question" class="text-xs flex-1 bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Question">
-                                                                <div class="flex items-center gap-1">
-                                                                    <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex - 1)" :disabled="itemIndex === 0" class="text-[10px] text-slate-400 hover:text-indigo-600 px-1 py-0.5 hover:bg-indigo-50 rounded disabled:opacity-20">&uarr;</button>
-                                                                    <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex + 1)" class="text-[10px] text-slate-400 hover:text-indigo-600 px-1 py-0.5 hover:bg-indigo-50 rounded">&darr;</button>
-                                                                    <button type="button" @click="items(block, loc).splice(itemIndex, 1)" class="text-xs text-rose-600 hover:text-rose-700 px-2 py-1 hover:bg-rose-50 rounded font-bold">✕</button>
-                                                                </div>
-                                                            </div>
-                                                            <textarea :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][answer]'"
-                                                                      x-model="item.answer"
-                                                                      rows="3"
-                                                                      class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                                      placeholder="Answer..."></textarea>
-                                                        </div>
-                                                    </template>
-                                                    <button type="button" @click="addItem(block, loc, { question: '', answer: '' })" class="btn btn-secondary py-1 px-3 text-xs">+ Add FAQ</button>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- CTA Block -->
-                                        <template x-if="block.block_type === 'cta'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Body</label>
-                                                    <textarea :name="'blocks['+index+'][content]['+loc+'][body]'"
-                                                              x-model="content(block, loc).body"
-                                                              rows="3"
-                                                              class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                              placeholder="Body text..."></textarea>
-                                                </div>
-                                                <div class="grid grid-cols-2 gap-3">
-                                                    <div>
-                                                        <label class="text-xs font-semibold text-slate-700">Button Text</label>
-                                                        <input type="text" :name="'blocks['+index+'][content]['+loc+'][button_text]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).button_text">
-                                                    </div>
-                                                    <div>
-                                                        <label class="text-xs font-semibold text-slate-700">Button URL</label>
-                                                        <input type="text" :name="'blocks['+index+'][content]['+loc+'][button_url]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).button_url">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Process Steps Block -->
-                                        <template x-if="block.block_type === 'process_steps'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Section Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Section Subtitle</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][subtitle]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).subtitle">
-                                                </div>
-                                                <div class="space-y-2">
-                                                    <label class="text-xs font-semibold text-slate-700">Steps</label>
-                                                    <template x-for="(item, itemIndex) in items(block, loc)" :key="itemIndex">
-                                                        <div class="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
-                                                            <div class="grid grid-cols-2 gap-2">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][step]'" x-model="item.step" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Step #">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][title]'" x-model="item.title" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Title">
-                                                            </div>
-                                                            <input type="url" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][image]'" x-model="item.image" class="text-xs w-full bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Image URL">
-                                                            <div class="flex items-center gap-2">
-                                                                <input type="file" accept="image/*" class="text-xs" @change="uploadImage($event, block, loc, item)">
-                                                                <span x-show="item.image" class="text-[10px] text-slate-400 ml-auto">URL set</span>
-                                                            </div>
-                                                            <div x-show="item.image" class="w-20 h-20 rounded-lg overflow-hidden bg-slate-100">
-                                                                <img :src="item.image" class="w-full h-full object-cover" alt="Step preview">
-                                                            </div>
-                                                            <textarea :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][description]'"
-                                                                      x-model="item.description"
-                                                                      rows="3"
-                                                                      class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                                      placeholder="Description..."></textarea>
-                                                            <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][details]'" x-model="item.details" class="text-xs w-full bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Details (comma-separated)">
-                                                            <div class="flex items-center justify-between pt-1">
-                                                                <div class="flex gap-1">
-                                                                    <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex - 1)" :disabled="itemIndex === 0" class="text-[10px] text-slate-500 hover:text-indigo-600 px-1.5 py-0.5 hover:bg-indigo-50 rounded disabled:opacity-30">&uarr; Up</button>
-                                                                    <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex + 1)" class="text-[10px] text-slate-500 hover:text-indigo-600 px-1.5 py-0.5 hover:bg-indigo-50 rounded">&darr; Down</button>
-                                                                </div>
-                                                                <button type="button" @click="items(block, loc).splice(itemIndex, 1)" class="text-xs text-rose-600 hover:text-rose-700 font-bold">Remove Step</button>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                    <button type="button" @click="addItem(block, loc, { step: '', title: '', image: '', description: '', details: '' })" class="btn btn-secondary py-1 px-3 text-xs">+ Add Step</button>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Text+Stats Block -->
-                                        <template x-if="block.block_type === 'text_with_stats'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Body (Paragraph 1)</label>
-                                                    <textarea :name="'blocks['+index+'][content]['+loc+'][body]'"
-                                                              x-model="content(block, loc).body"
-                                                              rows="3"
-                                                              class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                              placeholder="Paragraph 1..."></textarea>
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Body (Paragraph 2)</label>
-                                                    <textarea :name="'blocks['+index+'][content]['+loc+'][body2]'"
-                                                              x-model="content(block, loc).body2"
-                                                              rows="3"
-                                                              class="w-full text-xs bg-white border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                              placeholder="Paragraph 2..."></textarea>
-                                                </div>
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Checklist Items (comma-separated)</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][checklist]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).checklist">
-                                                </div>
-                                                <div class="space-y-2">
-                                                    <label class="text-xs font-semibold text-slate-700">Stat Items</label>
-                                                    <template x-for="(item, itemIndex) in items(block, loc)" :key="itemIndex">
-                                                        <div class="grid grid-cols-[1fr_1fr_auto] gap-2 items-start bg-white p-2 rounded-lg border border-slate-200">
-                                                            <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][label]'" x-model="item.label" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Label">
-                                                            <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][value]'" x-model="item.value" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Value">
-                                                            <div class="flex items-center gap-1">
-                                                                <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex - 1)" :disabled="itemIndex === 0" class="text-[10px] text-slate-400 hover:text-indigo-600 px-1 py-0.5 hover:bg-indigo-50 rounded disabled:opacity-20">&uarr;</button>
-                                                                <button type="button" @click="moveItem(block, loc, itemIndex, itemIndex + 1)" class="text-[10px] text-slate-400 hover:text-indigo-600 px-1 py-0.5 hover:bg-indigo-50 rounded">&darr;</button>
-                                                                <button type="button" @click="items(block, loc).splice(itemIndex, 1)" class="text-xs text-rose-600 hover:text-rose-700 px-2 py-1 hover:bg-rose-50 rounded font-bold">✕</button>
-                                                            </div>
-                                                        </div>
-                                                    </template>
-                                                    <button type="button" @click="addItem(block, loc, { label: '', value: '' })" class="btn btn-secondary py-1 px-3 text-xs">+ Add Stat</button>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Articles Block -->
-                                        <template x-if="block.block_type === 'articles'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Section Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div class="space-y-2">
-                                                    <label class="text-xs font-semibold text-slate-700">Articles</label>
-                                                    <template x-for="(item, itemIndex) in items(block, loc)" :key="itemIndex">
-                                                        <div class="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
-                                                            <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][title]'" x-model="item.title" class="text-xs w-full bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Title">
-                                                            <div class="grid grid-cols-2 gap-2">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][category]'" x-model="item.category" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Category">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][date]'" x-model="item.date" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Date">
-                                                            </div>
-                                                            <input type="url" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][image]'" x-model="item.image" class="text-xs w-full bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Image URL">
-                                                            <textarea :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][excerpt]'"
-                                                                      x-model="item.excerpt"
-                                                                      rows="3"
-                                                                      class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                                      placeholder="Excerpt..."></textarea>
-                                                            <button type="button" @click="items(block, loc).splice(itemIndex, 1)" class="text-xs text-rose-600 hover:text-rose-700 font-bold">Remove Article</button>
-                                                        </div>
-                                                    </template>
-                                                    <button type="button" @click="addItem(block, loc, { title: '', category: '', date: '', image: '', excerpt: '' })" class="btn btn-secondary py-1 px-3 text-xs">+ Add Article</button>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Testimonials Block -->
-                                        <template x-if="block.block_type === 'testimonials'">
-                                            <div class="space-y-3">
-                                                <div>
-                                                    <label class="text-xs font-semibold text-slate-700">Section Heading</label>
-                                                    <input type="text" :name="'blocks['+index+'][content]['+loc+'][heading]'" class="text-xs w-full bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500" x-model="content(block, loc).heading">
-                                                </div>
-                                                <div class="space-y-2">
-                                                    <label class="text-xs font-semibold text-slate-700">Testimonials</label>
-                                                    <template x-for="(item, itemIndex) in items(block, loc)" :key="itemIndex">
-                                                        <div class="space-y-2 rounded-lg border border-slate-200 bg-white p-3">
-                                                            <div class="grid grid-cols-2 gap-2">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][name]'" x-model="item.name" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Name">
-                                                                <input type="text" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][company]'" x-model="item.company" class="text-xs bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Company">
-                                                            </div>
-                                                            <input type="number" :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][rating]'" x-model="item.rating" class="text-xs w-full bg-slate-50 border border-slate-200 rounded p-1.5" placeholder="Rating (1-5)" min="1" max="5">
-                                                            <textarea :name="'blocks['+index+'][content]['+loc+'][items]['+itemIndex+'][content]'"
-                                                                      x-model="item.content"
-                                                                      rows="3"
-                                                                      class="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 transition-all resize-y"
-                                                                      placeholder="Testimonial content..."></textarea>
-                                                            <button type="button" @click="items(block, loc).splice(itemIndex, 1)" class="text-xs text-rose-600 hover:text-rose-700 font-bold">Remove Testimonial</button>
-                                                        </div>
-                                                    </template>
-                                                    <button type="button" @click="addItem(block, loc, { name: '', company: '', rating: 5, content: '' })" class="btn btn-secondary py-1 px-3 text-xs">+ Add Testimonial</button>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                    </template>
-                </div>
+                <button type="submit" class="btn btn-primary py-2 px-4 text-xs font-bold shadow-sm flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Save</span>
+                </button>
             </div>
         </div>
 
-        <!-- Sidebar Options -->
-        <div class="space-y-6">
-            <!-- Save / Publish Card -->
-            <div class="card-modern">
-                <h3 class="text-base font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-100">Publish Settings</h3>
-                <div class="space-y-4">
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" name="is_published" value="1" {{ $page->is_published ? 'checked' : '' }} class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
-                        <span class="text-xs font-semibold text-slate-700">Published to Live Site</span>
-                    </label>
+        <!-- SEO Google & Social Share Card Preview Collapsible Box -->
+        @include('admin.content.partials.seo-preview')
 
-                    <button type="submit" class="btn btn-primary w-full py-2.5 text-xs font-semibold shadow-xs">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        Save Page Content (EN + ID)
-                    </button>
-                </div>
-            </div>
+        <!-- Split Editor Grid: Left = Input Editor, Right = Isolated Iframe Live Preview -->
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+            
+            <!-- LEFT COLUMN: Form Editor Inputs (XL: 6 cols) -->
+            <div class="xl:col-span-6 space-y-6">
+                <div class="card-modern relative">
+                    
+                    <!-- Top Sticky Toolbar: Language Selector + View Mode + Search Filter -->
+                    <div class=" bg-white/95 backdrop-blur-xs pt-1 pb-3 mb-6 border-b border-slate-100 space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-100 p-2.5 rounded-lg border border-slate-200">
+                            <div class="flex flex-col" role="group" aria-label="Language Mode Selector">
+                                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider px-1">Language:</span>
+                                <div class="flex gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+                                    <button type="button"
+                                            @click="switchLanguage('en')"
+                                            :class="activeTab === 'en' ? 'bg-white text-indigo-600 shadow-2xs font-bold border border-slate-200' : 'text-slate-600 hover:text-slate-900 font-medium'"
+                                            class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                                            aria-label="Switch to English mode">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-1 bg-slate-200 rounded">EN</span>
+                                        <span>English</span>
+                                    </button>
+                                    <button type="button"
+                                            @click="switchLanguage('id')"
+                                            :class="activeTab === 'id' ? 'bg-emerald-600 text-white shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+                                            class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5 focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                                            aria-label="Switch to Indonesian mode">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-1 bg-emerald-700 text-white rounded">ID</span>
+                                        <span>Indonesia</span>
+                                    </button>
+                                    <button type="button"
+                                            @click="switchLanguage('split')"
+                                            :class="activeTab === 'split' ? 'bg-indigo-600 text-white shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900 font-medium'"
+                                            class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                                            title="Edit EN and ID side-by-side simultaneously"
+                                            aria-label="Switch to Split view mode">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/>
+                                        </svg>
+                                        <span>Split View</span>
+                                    </button>
+                                </div>
+                            </div>
 
-            <!-- Version History Sidebar Card -->
-            @if ($page->versions->isNotEmpty())
-            <div class="card-modern">
-                <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
-                    <h3 class="text-base font-semibold text-slate-900">Version History</h3>
-                    <span class="text-xs font-mono text-slate-500">{{ count($page->versions) }} saved</span>
-                </div>
-                <div class="space-y-2 max-h-64 overflow-y-auto pr-1">
-                    @foreach ($page->versions as $version)
-                    <div class="p-3 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-between">
-                        <div>
-                            <p class="font-semibold text-xs text-slate-800">Version #{{ $version->version_number }}</p>
-                            <p class="text-[11px] text-slate-400 font-mono">{{ $version->created_at->diffForHumans() }}</p>
+                            <!-- Mini-Map Outline Drawer Button -->
+                            <button type="button" 
+                                    @click="outlineOpen = !outlineOpen" 
+                                    class="btn btn-secondary py-1 px-2.5 text-xs flex items-center gap-1"
+                                    :aria-expanded="outlineOpen"
+                                    aria-label="Toggle Block Navigator Mini-Map">
+                                <svg class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+                                </svg>
+                                <span>Outline Mini-Map</span>
+                            </button>
                         </div>
-                        <form action="{{ route('admin.content.restoreVersion', ['page' => $page, 'pageVersion' => $version]) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="btn btn-secondary py-1 px-2 text-[11px]">Restore</button>
-                        </form>
+
+                        <!-- Real-Time Block Search Filter Bar -->
+                        <div class="relative">
+                            {{-- <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </div> --}}
+                            <input type="text" 
+                                   x-model="searchQuery" 
+                                   placeholder="Filter blocks by type or title..." 
+                                   class="text-xs w-full pl-9 pr-8 py-2 border border-slate-200 rounded-lg bg-slate-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+                                   aria-label="Search content blocks">
+                            <button type="button" 
+                                    x-show="searchQuery" 
+                                    @click="searchQuery = ''" 
+                                    class="absolute inset-y-0 right-0 pr-3 flex items-center text-xs text-slate-400 hover:text-slate-600"
+                                    aria-label="Clear search query">✕</button>
+                        </div>
                     </div>
-                    @endforeach
+
+                    <!-- Floating Outline Mini-Map Drawer -->
+                    <div x-show="outlineOpen" x-transition class="p-3 bg-slate-50 border border-slate-200 rounded-xl mb-6 space-y-2">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-700 uppercase tracking-wider">
+                            <span>Block Navigator Mini-Map</span>
+                            <button type="button" @click="outlineOpen = false" class="text-slate-400 hover:text-slate-600" aria-label="Close mini-map">✕</button>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <template x-for="(block, idx) in blocks" :key="block.id">
+                                <button type="button" 
+                                        @click="scrollToBlock(block.id)" 
+                                        class="px-2 py-1 text-[11px] font-semibold rounded border border-slate-200 bg-white hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden">
+                                    <span class="font-mono text-[10px] text-slate-500" x-text="'#' + (idx + 1)"></span>
+                                    <span x-text="label(block)"></span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Add Block Toolbar (Opens Palette Modal & Expand/Collapse All) -->
+                    <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Content Section Blocks:</label>
+                        <div class="flex items-center gap-2">
+                            <button type="button" 
+                                    @click="toggleExpandAll()" 
+                                    class="btn btn-ghost border border-slate-200 bg-white hover:bg-slate-50 py-1.5 px-3 text-xs font-semibold text-slate-700 flex items-center gap-1.5 shadow-2xs"
+                                    :aria-label="isAllExpanded ? 'Collapse all blocks' : 'Expand all blocks'">
+                                <svg class="w-3.5 h-3.5 text-slate-500 transition-transform duration-200" :class="{'rotate-180': isAllExpanded}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                                <span x-text="isAllExpanded ? 'Collapse All' : 'Expand All'"></span>
+                            </button>
+
+                            <button type="button" 
+                                    @click="paletteModalOpen = true" 
+                                    class="btn btn-primary py-1.5 px-3 text-xs font-bold flex items-center gap-1.5 shadow-2xs"
+                                    aria-label="Open block palette modal">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span>Add Block Component</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Block List Editor Container (SortableJS Target) -->
+                    <div class="space-y-4" id="block-list-container">
+                        <template x-for="(block, index) in filteredBlocks" :key="block.id">
+                            <div :id="'block-card-' + block.id" 
+                                 class="rounded-xl border border-slate-200 bg-white p-4 shadow-2xs transition-all duration-200 block-card"
+                                 :class="{'opacity-60 bg-slate-50': !block.is_visible}">
+                                
+                                <!-- Block Header & Quick Actions -->
+                                <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <!-- SortableJS Handle -->
+                                        <div class="drag-handle cursor-grab hover:bg-slate-100 p-1 rounded text-slate-400 hover:text-slate-700 transition-colors" 
+                                             title="Drag to reorder block"
+                                             role="button"
+                                             tabindex="0"
+                                             aria-label="Drag handle to reorder block">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                                            </svg>
+                                        </div>
+
+                                        <span class="font-bold text-xs uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100" x-text="label(block)"></span>
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border"
+                                              :class="activeTab === 'en' ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : (activeTab === 'id' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-purple-50 text-purple-700 border-purple-200')"
+                                              x-text="activeTab === 'split' ? 'SPLIT (EN & ID)' : (activeTab === 'en' ? 'EN' : 'ID')"></span>
+                                        <span class="text-[11px] text-slate-500 truncate max-w-[140px]" x-text="summary(block)"></span>
+                                    </div>
+
+                                    <div class="flex items-center gap-1">
+                                        <!-- Toggle Visibility -->
+                                        <button type="button" 
+                                                @click="toggleVisibility(block)" 
+                                                class="p-1 rounded text-slate-400 hover:text-slate-700 transition-colors" 
+                                                :title="block.is_visible ? 'Hide Block' : 'Show Block'"
+                                                :aria-label="block.is_visible ? 'Hide block from live page' : 'Show block on live page'">
+                                            <svg x-show="block.is_visible" class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                            <svg x-show="!block.is_visible" class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908a8.88 8.88 0 012.122-.363c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18"/></svg>
+                                        </button>
+
+                                        <!-- Collapse/Expand -->
+                                        <button type="button" 
+                                                @click="block.collapsed = !block.collapsed" 
+                                                class="p-1 rounded text-slate-400 hover:text-slate-700 transition-colors"
+                                                :aria-label="block.collapsed ? 'Expand block form' : 'Collapse block form'">
+                                            <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-180': !block.collapsed}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                            </svg>
+                                        </button>
+
+                                        <!-- Duplicate -->
+                                        <button type="button" 
+                                                @click="duplicateBlock(index)" 
+                                                class="p-1 text-slate-400 hover:text-indigo-600 transition-colors" 
+                                                title="Duplicate block"
+                                                aria-label="Duplicate block">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                            </svg>
+                                        </button>
+
+                                        <!-- Delete -->
+                                        <button type="button" 
+                                                @click="removeBlock(index)" 
+                                                class="p-1 text-rose-500 hover:text-rose-700 transition-colors" 
+                                                title="Remove Block"
+                                                aria-label="Remove block">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Block Form Content -->
+                                <div x-show="!block.collapsed">
+                                    <!-- Hidden Inputs for Backend Persistence -->
+                                    <input type="hidden" :name="'blocks['+index+'][id]'" :value="block.id">
+                                    <input type="hidden" :name="'blocks['+index+'][block_type]'" :value="block.block_type">
+                                    <input type="hidden" :name="'blocks['+index+'][order]'" :value="index">
+                                    <input type="hidden" :name="'blocks['+index+'][is_visible]'" :value="block.is_visible ? 1 : 0">
+                                    <input type="hidden" :name="'blocks['+index+'][content][en][_preserve]'" value="1">
+                                    <input type="hidden" :name="'blocks['+index+'][content][id][_preserve]'" value="1">
+
+                                    <!-- Single-Language Mode (EN or ID) -->
+                                    <template x-for="loc in ['en', 'id']" :key="loc">
+                                        <div x-show="activeTab === loc" class="space-y-3 pt-2">
+                                            @include('admin.content.partials.block-form')
+                                        </div>
+                                    </template>
+
+                                    <!-- Dual-Pane Split View Mode (EN and ID Side-by-Side) -->
+                                    <div x-show="activeTab === 'split'" class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-3 border-t border-slate-100 mt-2">
+                                        <!-- EN Column (Indigo Accent) -->
+                                        <div x-data="{ loc: 'en' }" class="space-y-3 bg-indigo-50/40 p-3.5 rounded-xl border border-indigo-100 shadow-2xs">
+                                            <div class="flex items-center justify-between border-b border-indigo-200/80 pb-2">
+                                                <span class="text-xs font-bold uppercase tracking-wider text-indigo-800 flex items-center gap-1.5">
+                                                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                                                    English (EN)
+                                                </span>
+                                                <span class="text-[10px] font-mono text-indigo-600 bg-indigo-100/70 px-1.5 py-0.5 rounded">Source / Default</span>
+                                            </div>
+                                            @include('admin.content.partials.block-form')
+                                        </div>
+
+                                        <!-- ID Column (Emerald Accent) -->
+                                        <div x-data="{ loc: 'id' }" class="space-y-3 bg-emerald-50/40 p-3.5 rounded-xl border border-emerald-100 shadow-2xs">
+                                            <div class="flex items-center justify-between border-b border-emerald-200/80 pb-2">
+                                                <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                                                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                                    Indonesia (ID)
+                                                </span>
+                                                <span class="text-[10px] font-mono text-emerald-600 bg-emerald-100/70 px-1.5 py-0.5 rounded">Translation</span>
+                                            </div>
+                                            @include('admin.content.partials.block-form')
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
-            @endif
+
+            <!-- RIGHT COLUMN: Real-Time Isolated Iframe Live Preview (XL: 6 cols, Sticky) -->
+            <div class="xl:col-span-6 sticky top-20 space-y-4" :class="{'fixed inset-0 z-50 bg-white p-6 overflow-auto xl:col-span-12': isFullscreen}">
+                <div class="card-modern p-4">
+                    <!-- Responsive Viewport Switcher & Speed Indicator Header -->
+                    <div class="flex flex-wrap items-center justify-between border-b border-slate-100 pb-3 mb-4 gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Live Preview:</span>
+                            <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200" 
+                                  x-text="activeTab === 'en' ? 'EN Mode' : (activeTab === 'id' ? 'ID Mode' : 'Split View')"></span>
+                            
+                            <!-- Visual Syncing Pulse & Spinner Indicator -->
+                            <span x-show="isSyncing" class="inline-flex items-center gap-1.5 text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full animate-pulse">
+                                <svg class="w-3 h-3 animate-spin text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                </svg>
+                                <span>Syncing...</span>
+                            </span>
+
+                            <!-- Sync Error Warning -->
+                            <span x-show="syncError" class="text-[10px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                <svg class="w-3 h-3 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>Preview Sync Error</span>
+                            </span>
+                        </div>
+
+                        <!-- Page Weight & Load Speed Indicator -->
+                        <div class="flex items-center gap-2 text-[11px] font-mono text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200">
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <span>~0.4s</span>
+                            </span>
+                            <span>•</span>
+                            <span class="flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span x-text="blocks.length + ' blocks'"></span>
+                            </span>
+                        </div>
+
+                        <!-- Controls: Devices & Fullscreen -->
+                        <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200" role="group" aria-label="Device Viewport Switcher">
+                                <button type="button" 
+                                        @click="previewDevice = 'desktop'"
+                                        :class="previewDevice === 'desktop' ? 'bg-white text-indigo-600 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
+                                        class="px-2 py-1 text-xs rounded transition-all flex items-center gap-1 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden" 
+                                        title="Desktop View"
+                                        aria-label="Desktop preview viewport">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <span class="hidden sm:inline">Desktop</span>
+                                </button>
+                                <button type="button" 
+                                        @click="previewDevice = 'tablet'"
+                                        :class="previewDevice === 'tablet' ? 'bg-white text-indigo-600 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
+                                        class="px-2 py-1 text-xs rounded transition-all flex items-center gap-1 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden" 
+                                        title="Tablet View"
+                                        aria-label="Tablet preview viewport">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                    <span class="hidden sm:inline">Tablet</span>
+                                </button>
+                                <button type="button" 
+                                        @click="previewDevice = 'mobile'"
+                                        :class="previewDevice === 'mobile' ? 'bg-white text-indigo-600 font-bold shadow-2xs' : 'text-slate-600 hover:text-slate-900'"
+                                        class="px-2 py-1 text-xs rounded transition-all flex items-center gap-1 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden" 
+                                        title="Mobile View"
+                                        aria-label="Mobile preview viewport">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                    <span class="hidden sm:inline">Mobile</span>
+                                </button>
+                            </div>
+
+                            <!-- Fullscreen Toggle -->
+                            <button type="button" 
+                                    @click="isFullscreen = !isFullscreen" 
+                                    class="btn btn-secondary p-1.5 text-xs text-slate-600 hover:text-slate-900" 
+                                    :title="isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Preview'"
+                                    :aria-label="isFullscreen ? 'Exit fullscreen preview' : 'Open fullscreen preview'">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pixel-Perfect Isolated Iframe Container -->
+                    <div class="bg-slate-900/5 p-2 sm:p-4 rounded-xl border border-slate-200 overflow-x-auto min-h-[650px]">
+                        <div class="transition-all duration-300 shadow-2xl rounded-xl overflow-hidden border border-slate-800 bg-white"
+                             :class="{
+                                 'w-full': previewDevice === 'desktop',
+                                 'w-[768px] mx-auto': previewDevice === 'tablet',
+                                 'w-[375px] mx-auto': previewDevice === 'mobile',
+                                 'h-[85vh]': isFullscreen
+                             }">
+                            <iframe x-ref="previewIframe"
+                                    class="w-full h-[750px] border-0 rounded-xl"
+                                    :class="{'h-full': isFullscreen}"
+                                    title="Public Landing Page Live Preview">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <!-- Floating Sticky Unsaved Changes Bar -->
+    <div x-show="isDirty" 
+         x-transition.slide.bottom 
+         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-4 border border-slate-800"
+         style="display: none;">
+        <div class="flex items-center gap-2 text-xs">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+            <span class="font-semibold">Unsaved changes detected</span>
+            <span class="text-slate-400 font-mono hidden sm:inline">(Press Ctrl+S to save)</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button" @click="location.reload()" class="px-3 py-1 text-xs text-slate-300 hover:text-white font-medium">Discard</button>
+            <button type="button" @click="document.getElementById('page-editor-form').requestSubmit()" class="btn btn-primary py-1.5 px-4 text-xs font-bold shadow-xs">Save Changes</button>
         </div>
     </div>
-</form>
+
+    <!-- Modals Partial Inclusions -->
+    @include('admin.content.partials.modals.palette')
+    @include('admin.content.partials.modals.media-picker')
+    @include('admin.content.partials.modals.presets')
+    @include('admin.content.partials.modals.confirm')
+    @include('admin.content.partials.toast')
+
+</div>
+@endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
-<script>
-    function blockEditor(initialBlocks) {
-        return {
-            activeTab: 'en',
-            blocks: initialBlocks.map(b => {
-                let content = b.content;
-                if (typeof content === 'string') {
-                    try {
-                        content = JSON.parse(content);
-                        if (typeof content === 'string') {
-                            content = JSON.parse(content);
-                        }
-                    } catch (e) {
-                        content = {};
-                    }
-                }
-                return {
-                    ...b,
-                    id: b.id || Date.now(),
-                    content: content || { en: {}, id: {} }
-                };
-            }),
-            addBlock(type) {
-                this.blocks.push({
-                    id: Date.now(),
-                    block_type: type,
-                    order: this.blocks.length,
-                    content: { en: {}, id: {} },
-                    is_visible: true
-                });
-            },
-            label(block) {
-                const labels = {
-                    hero: 'Hero', text: 'Text', stats: 'Stats', faq: 'FAQ',
-                    cta: 'CTA', process_steps: 'Process Steps', text_with_stats: 'Text + Stats',
-                    articles: 'Articles', testimonials: 'Testimonials'
-                };
-                return labels[block.block_type] || block.block_type;
-            },
-            summary(block) {
-                const en = this.content(block, 'en') || {};
-                if (block.block_type === 'hero') return en.label || '';
-                if (block.block_type === 'text') return en.heading || '';
-                if (block.block_type === 'cta') return en.heading || '';
-                if (block.block_type === 'stats') return (en.items || []).length + ' stats';
-                if (block.block_type === 'faq') return (en.items || []).length + ' items';
-                if (block.block_type === 'process_steps') return (en.items || []).length + ' steps';
-                if (block.block_type === 'text_with_stats') return en.heading || '';
-                if (block.block_type === 'articles') return (en.items || []).length + ' articles';
-                if (block.block_type === 'testimonials') return (en.items || []).length + ' testimonials';
-                return '';
-            },
-            duplicateBlock(index) {
-                const clone = JSON.parse(JSON.stringify(this.blocks[index]));
-                clone.id = Date.now();
-                clone.order = this.blocks.length;
-                this.blocks.splice(index + 1, 0, clone);
-            },
-            removeBlock(index) {
-                if (!confirm('Remove this block?')) return;
-                this.blocks.splice(index, 1);
-            },
-            content(block, locale) {
-                if (typeof block.content === 'string') {
-                    try {
-                        block.content = JSON.parse(block.content);
-                        if (typeof block.content === 'string') {
-                            block.content = JSON.parse(block.content);
-                        }
-                    } catch (e) {
-                        block.content = {};
-                    }
-                }
-                block.content ??= {};
-                block.content[locale] ??= {};
-                return block.content[locale];
-            },
-items(block, locale) {
-                const c = this.content(block, locale);
-                if (typeof c.items === 'string') {
-                    try {
-                        c.items = JSON.parse(c.items || '[]');
-                    } catch (e) {
-                        c.items = [];
-                    }
-                }
-                c.items ??= [];
-                return c.items;
-            },
-            addItem(block, locale, item) {
-                this.items(block, locale).push(item);
-            },
-            moveItem(block, locale, from, to) {
-                const items = this.items(block, locale);
-                if (to < 0 || to >= items.length) return;
-                const moved = items.splice(from, 1)[0];
-                items.splice(to, 0, moved);
-            },
-            async uploadImage(event, block, locale, item) {
-                const file = event.target.files[0];
-                if (!file) return;
-                const form = new FormData();
-                form.append('file', file);
-                try {
-                    const res = await fetch('{{ route('admin.media.upload') }}', {
-                        method: 'POST',
-                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                        body: form,
-                    });
-                    const data = await res.json();
-                    if (data.url) {
-                        item.image = data.url;
-                    }
-                } catch (e) {
-                    alert('Upload failed');
-                }
-            },
-            init() {
-                const list = this.$refs.blockList;
-                new Sortable(list, {
-                    handle: '.cursor-move',
-                    animation: 150,
-                    ghostClass: 'opacity-50',
-                    onEnd: (evt) => {
-                        const moved = this.blocks.splice(evt.oldIndex, 1)[0];
-                        this.blocks.splice(evt.newIndex, 0, moved);
-                    }
-                });
-            }
-        }
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+@include('admin.content.partials.editor-script')
 @endpush
-@endsection

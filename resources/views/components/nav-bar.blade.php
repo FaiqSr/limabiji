@@ -1,16 +1,16 @@
 <header class=" flex justify-between items-center px-6 lg:px-12 py-5 bg-surface">
     <nav>
-        <a href="{{ route('landingpages.index') }}">
+        <a href="{{ url('/') }}">
             <img src="{{ asset('assets/images/logo/logo-lima-biji.webp') }}" alt="Lima Biji Agritech — specialty enzymatic civet coffee" class="h-12 sm:h-16 w-auto">
         </a>
     </nav>
 
     {{-- Desktop Nav --}}
     <nav class="gap-2 hidden lg:flex items-center">
-        <a href="{{ route('landingpages.innovation') }}" class="nav-link">{{ __('nav.innovation') }}</a>
-        <a href="{{ route('landingpages.news') }}" class="nav-link">{{ __('nav.news') }}</a>
-        <a href="{{ route('landingpages.testimonials') }}" class="nav-link">{{ __('nav.testimonials') }}</a>
-        <a href="{{ route('landingpages.contact') }}" class="nav-link">{{ __('nav.contact') }}</a>
+        <a href="{{ url('/innovation') }}" class="nav-link">{{ __('nav.innovation') }}</a>
+        <a href="{{ url('/news') }}" class="nav-link">{{ __('nav.news') }}</a>
+        <a href="{{ url('/testimonials') }}" class="nav-link">{{ __('nav.testimonials') }}</a>
+        <a href="{{ url('/contact') }}" class="nav-link">{{ __('nav.contact') }}</a>
 
         {{-- Language Switcher --}}
         <div class="flex items-center gap-0.5 rounded-lg border border-border bg-surface-alt p-1 ml-2">
@@ -45,7 +45,7 @@
 {{-- Sidebar Panel --}}
 <aside id="sidebar">
     <div class="sidebar-header">
-        <a href="{{ route('landingpages.index') }}">
+        <a href="{{ url('/') }}">
             <img src="{{ asset('assets/images/logo/logo-lima-biji.webp') }}" alt="Lima Biji Agritech — specialty enzymatic civet coffee" class="h-10 w-auto">
         </a>
         <button id="sidebar-close" aria-label="Close menu">
@@ -56,23 +56,23 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="{{ route('landingpages.index') }}" class="sidebar-link">
+        <a href="{{ url('/') }}" class="sidebar-link">
             <span>{{ __('nav.home') }}</span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
-        <a href="{{ route('landingpages.innovation') }}" class="sidebar-link">
+        <a href="{{ url('/innovation') }}" class="sidebar-link">
             <span>{{ __('nav.innovation') }}</span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
-        <a href="{{ route('landingpages.news') }}" class="sidebar-link">
+        <a href="{{ url('/news') }}" class="sidebar-link">
             <span>{{ __('nav.news') }}</span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
-        <a href="{{ route('landingpages.testimonials') }}" class="sidebar-link">
+        <a href="{{ url('/testimonials') }}" class="sidebar-link">
             <span>{{ __('nav.testimonials') }}</span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
-        <a href="{{ route('landingpages.contact') }}" class="sidebar-link">
+        <a href="{{ url('/contact') }}" class="sidebar-link">
             <span>{{ __('nav.contact') }}</span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>

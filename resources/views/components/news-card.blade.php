@@ -1,10 +1,20 @@
 @props(['news'])
-@php($isArray = is_array($news))
-@php($title = $isArray ? ($news['title'] ?? '') : $news->getTitleForLocale(app()->getLocale()))
-@php($category = $isArray ? ($news['category'] ?? '') : $news->category)
-@php($image = $isArray ? ($news['image'] ?? '') : $news->image)
-@php($excerpt = $isArray ? ($news['excerpt'] ?? '') : $news->getExcerptForLocale(app()->getLocale()))
-@php($slug = $isArray ? ($news['slug'] ?? '') : $news->slug)
+@php
+    $isArray = is_array($news);
+    $title = $isArray ? ($news['title'] ?? '') : $news->getTitleForLocale(app()->getLocale());
+    $image = $isArray ? ($news['image'] ?? '') : $news->image;
+    $excerpt = $isArray ? ($news['excerpt'] ?? '') : $news->getExcerptForLocale(app()->getLocale());
+    $slug = $isArray ? ($news['slug'] ?? '') : $news->slug;
+
+    $categoriesList = [];
+    if (!$isArray && isset($news->categories) && $news->categories->isNotEmpty()) {
+        $categoriesList = $news->categories->map(fn($c) => $c->getNameForLocale())->toArray();
+    } elseif ($isArray && !empty($news['category'])) {
+        $categoriesList = [$news['category']];
+    } elseif (!$isArray && !empty($news->category)) {
+        $categoriesList = [$news->category];
+    }
+@endphp
 
 @if($slug)
 <a href="{{ route('landingpages.news.detail', $slug) }}" class="group card-solid overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 hover:-translate-y-2">
@@ -15,9 +25,15 @@
         <img src="{{ $image }}" alt="{{ $title }}"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80"></div>
-        <span class="absolute top-4 left-4 bg-primary/90 text-dark text-xs font-bold px-4 py-1.5 rounded-lg">
-            {{ $category }}
-        </span>
+        @if(!empty($categoriesList))
+            <div class="absolute top-4 left-4 flex flex-wrap gap-1.5 max-w-[80%]">
+                @foreach($categoriesList as $catLabel)
+                    <span class="bg-primary/90 text-dark text-xs font-bold px-3 py-1 rounded-lg">
+                        {{ $catLabel }}
+                    </span>
+                @endforeach
+            </div>
+        @endif
     </div>
     <div class="p-6 flex flex-col flex-1">
         <div class="flex items-center gap-2 text-xs text-light-grey/60 mb-3">

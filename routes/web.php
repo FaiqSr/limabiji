@@ -5,14 +5,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [LandingPages::class, 'index'])->name('landingpages.index');
+// --- Specific Detail Routes (Parameter-based) ---
 Route::get('/origin/{name}', [LandingPages::class, 'origins'])->name('landingpages.origins');
-Route::get('/innovation', [LandingPages::class, 'innovation'])->name('landingpages.innovation');
-Route::get('/news', [LandingPages::class, 'news'])->name('landingpages.news');
 Route::get('/news/{article:slug}', [LandingPages::class, 'newsDetail'])->name('landingpages.news.detail');
-Route::get('/testimonials', [LandingPages::class, 'testimonials'])->name('landingpages.testimonials');
-Route::get('/contact', [LandingPages::class, 'contact'])->name('landingpages.contact');
 
+// Utility Routes
 Route::post('/locale', function (Request $request) {
     $locale = $request->input('locale');
 
@@ -35,3 +32,8 @@ Route::get('/storage/{path}', function (string $path) {
 
     return response()->file($filePath);
 })->where('path', '.*');
+
+// Catch-all route untuk seluruh CMS pages (termasuk home, news, testimonials, contact, dll.)
+Route::get('/{slug?}', [LandingPages::class, 'show'])
+    ->where('slug', '^(?!admin|login|logout|storage|api|locales|news/|origin/).*')
+    ->name('landingpages.show');

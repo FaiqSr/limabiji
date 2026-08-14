@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
+use App\Models\ExportDestination;
+use App\Models\Origin;
 use App\Models\Page;
 use App\Models\PageVersion;
+use App\Models\SiteSetting;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -87,7 +92,7 @@ class PageController extends Controller
             'is_published' => ['boolean'],
             'blocks' => ['array'],
             'blocks.*.id' => ['nullable', 'integer'],
-            'blocks.*.block_type' => ['required', 'string', 'in:hero,text,stats,faq,cta,process_steps,text_with_stats,articles,testimonials'],
+            'blocks.*.block_type' => ['required', 'string', 'in:hero,text,stats,faq,cta,process_steps,text_with_stats,articles,testimonials,origins,export_map,contact'],
             'blocks.*.order' => ['required', 'integer', 'min:0'],
             'blocks.*.content' => ['required', 'array'],
             'blocks.*.content.en' => ['array'],
@@ -169,9 +174,21 @@ class PageController extends Controller
 
     private function normalizeBlockContent(string $type, array $content): array
     {
-        if (! in_array($type, ['stats', 'faq', 'process_steps', 'text_with_stats', 'articles', 'testimonials'])) {
+        if (! in_array($type, ['stats', 'faq', 'process_steps', 'text_with_stats', 'articles', 'testimonials', 'origins', 'export_map'])) {
             return $content;
         }
+
+        // Sync 'limit' and 'show_all' across locales if set in any locale
+        $sharedShowAll = ! empty($content['en']['show_all']) || ! empty($content['id']['show_all']);
+        $sharedLimit = $sharedShowAll ? 0 : ($content['en']['limit'] ?? ($content['id']['limit'] ?? null));
+
+        if ($sharedLimit !== null && $sharedLimit !== '') {
+            $content['en']['limit'] = $sharedLimit;
+            $content['id']['limit'] = $sharedLimit;
+        }
+
+        $content['en']['show_all'] = $sharedShowAll;
+        $content['id']['show_all'] = $sharedShowAll;
 
         foreach (['en', 'id'] as $locale) {
             $items = $content[$locale]['items'] ?? [];
@@ -207,5 +224,73 @@ class PageController extends Controller
         return redirect()
             ->route('admin.content.edit', $page)
             ->with('success', "Restored to version {$version->version_number}.");
+    }
+
+    public function preview(Request $request)
+    {
+        $blocksData = $request->input('blocks', []);
+        $locale = $request->input('locale', 'en');
+
+        $origins = Origin::active()->ordered()->get();
+        $testimonials = Testimonial::orderBy('order')->take(24)->get();
+        $settings = SiteSetting::all()->keyBy('key');
+        $exportDestinations = ExportDestination::active()->orderBy('order')->get();
+        $articles = Article::where('status', 'published')->forLocale($locale)->latest()->take(24)->get();
+
+        $blocks = collect($blocksData)->map(function ($blockData, $index) {
+            $content = $blockData['content'] ?? [];
+            if (is_string($content)) {
+                try {
+                    $content = json_decode($content, true) ?: [];
+                } catch (\Throwable $e) {
+                }
+            }
+
+            return new class($blockData, $content, $index)
+            {
+                public $id;
+
+                public $block_type;
+
+                public $order;
+
+                public $is_visible;
+
+                public $content;
+
+                public function __construct($data, $content, $index)
+                {
+                    $this->id = $data['id'] ?? ($index + 1);
+                    $this->block_type = $data['block_type'] ?? 'hero';
+                    $this->order = $data['order'] ?? $index;
+                    $this->is_visible = isset($data['is_visible']) ? filter_var($data['is_visible'], FILTER_VALIDATE_BOOLEAN) : true;
+                    $this->content = $content;
+                }
+
+                public function getContent($locale = 'en')
+                {
+                    if (isset($this->content[$locale]) && is_array($this->content[$locale])) {
+                        return $this->content[$locale];
+                    }
+
+                    return is_array($this->content) ? $this->content : [];
+                }
+            };
+        });
+
+        $page = (object) [
+            'title' => $request->input('title', 'Preview Page'),
+            'blocks' => $blocks,
+        ];
+
+        return view('admin.content.preview_iframe', compact(
+            'page',
+            'origins',
+            'articles',
+            'testimonials',
+            'settings',
+            'exportDestinations',
+            'locale'
+        ));
     }
 }

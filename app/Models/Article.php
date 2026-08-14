@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 
 class Article extends Model
@@ -19,6 +20,12 @@ class Article extends Model
         'approved_at' => 'datetime',
         'views' => 'integer',
     ];
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'article_category')
+            ->withTimestamps();
+    }
 
     public function author(): BelongsTo
     {
@@ -38,7 +45,13 @@ class Article extends Model
 
     public function scopeByCategory($query, string $category)
     {
-        return $query->where('category', $category);
+        return $query->where(function ($q) use ($category) {
+            $q->whereHas('categories', function ($catQ) use ($category) {
+                $catQ->where('slug', $category)
+                    ->orWhere('name', $category)
+                    ->orWhere('name_id', $category);
+            })->orWhere('category', $category);
+        });
     }
 
     public function scopeForLocale($query, ?string $locale = null)
@@ -46,10 +59,16 @@ class Article extends Model
         $locale = $locale ?: app()->getLocale();
 
         if ($locale === 'id') {
-            return $query->whereNotNull('content_id')->where('content_id', '!=', '');
+            return $query->whereNotNull('title_id')
+                ->where('title_id', '!=', '')
+                ->whereNotNull('content_id')
+                ->where('content_id', '!=', '');
         }
 
-        return $query->whereNotNull('content')->where('content', '!=', '');
+        return $query->whereNotNull('title')
+            ->where('title', '!=', '')
+            ->whereNotNull('content')
+            ->where('content', '!=', '');
     }
 
     public function getTitleForLocale(string $locale = 'en'): string

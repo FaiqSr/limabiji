@@ -5,6 +5,7 @@
 ])
 
 @php
+    $hidden = $data['field_hidden'] ?? [];
     // Primary: use DB collection from controller
     // Fallback: use items from block content JSON
     $items = $origins;
@@ -15,16 +16,27 @@
         }
     }
 
+    $showAll = !empty($data['show_all']);
+    $limit   = isset($data['limit']) && is_numeric($data['limit']) ? intval($data['limit']) : 6;
+
+    if (!empty($items) && !$showAll && $limit > 0) {
+        $items = collect($items)->take($limit);
+    }
+
+    $heading  = !empty($data['heading']) ? $data['heading'] : __('landing.origins_title');
+    $subtitle = !empty($data['subtitle']) ? $data['subtitle'] : __('landing.about_subtitle');
     $hasOrigins = !empty($items) && is_countable($items) && count($items) > 0;
 @endphp
 
 @if($hasOrigins)
 <div data-animate="fade-up" class="container mx-auto px-5 pt-5 pb-15">
-    <x-section-heading :title="__('landing.origins_title')" :subtitle="__('landing.about_subtitle')" />
+    @if(empty($hidden['heading']) && $heading)
+        <x-section-heading :title="$heading" :subtitle="empty($hidden['subtitle']) ? $subtitle : null" />
+    @endif
 </div>
 
-<div>
-    <div class="swiper swiper-card pb-5">
+<div class="mb-20">
+    <div class="swiper swiper-card">
         <div class="swiper-wrapper">
             @foreach ($items as $origin)
                 @php($originName  = is_object($origin) ? $origin->name  : ($origin['name']  ?? ''))
@@ -47,7 +59,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="container mx-auto">
+        <div class="container mx-auto mb-5">
             <div class="swiper-scrollbar !relative !bottom-0 mt-6 !h-4  hover:cursor-pointer border-dark rounded-lg"></div>
         </div>
     </div>

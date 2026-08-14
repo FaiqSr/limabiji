@@ -15,11 +15,11 @@
             <div class="lg:col-span-2">
                 <h5 class="text-dark font-medium text-sm mb-5 uppercase tracking-wider">Navigation</h5>
                 <ul class="space-y-3 text-sm">
-                    <li><a href="{{ route('landingpages.index') }}" class="text-light-grey hover:text-dark transition-colors">Home</a></li>
-                    <li><a href="{{ route('landingpages.innovation') }}" class="text-light-grey hover:text-dark transition-colors">Innovation</a></li>
-                    <li><a href="{{ route('landingpages.news') }}" class="text-light-grey hover:text-dark transition-colors">News</a></li>
-                    <li><a href="{{ route('landingpages.testimonials') }}" class="text-light-grey hover:text-dark transition-colors">Testimonials</a></li>
-                    <li><a href="{{ route('landingpages.contact') }}" class="text-light-grey hover:text-dark transition-colors">Contact</a></li>
+                    <li><a href="{{ url('/') }}" class="text-light-grey hover:text-dark transition-colors">Home</a></li>
+                    <li><a href="{{ url('/innovation') }}" class="text-light-grey hover:text-dark transition-colors">Innovation</a></li>
+                    <li><a href="{{ url('/news') }}" class="text-light-grey hover:text-dark transition-colors">News</a></li>
+                    <li><a href="{{ url('/testimonials') }}" class="text-light-grey hover:text-dark transition-colors">Testimonials</a></li>
+                    <li><a href="{{ url('/contact') }}" class="text-light-grey hover:text-dark transition-colors">Contact</a></li>
                 </ul>
             </div>
 

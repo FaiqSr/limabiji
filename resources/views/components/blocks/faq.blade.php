@@ -4,6 +4,7 @@
 ])
 
 @php
+    $hidden  = $data['field_hidden'] ?? [];
     $heading = $data['heading'] ?? '';
     $faqs    = $data['items']   ?? [];
     if (is_string($faqs)) {
@@ -18,7 +19,9 @@
 <div class="container mx-auto px-5 py-24">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
         <div>
-            <x-section-heading title="{{ $heading }}" subtitle="{{ $subtitle }}" />
+            @if(empty($hidden['heading']) && $heading)
+                <x-section-heading title="{{ $heading }}" subtitle="{{ $subtitle }}" />
+            @endif
         </div>
 
         <div>

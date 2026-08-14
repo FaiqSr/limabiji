@@ -4,10 +4,11 @@
 ])
 
 @php
-    $heading   = $data['heading']   ?? '';
-    $body      = $data['body']      ?? '';
-    $body2     = $data['body2']     ?? '';
-    $checklist = $data['checklist'] ?? '';
+    $hidden     = $data['field_hidden'] ?? [];
+    $heading    = $data['heading']   ?? '';
+    $body       = $data['body']      ?? '';
+    $body2      = $data['body2']     ?? '';
+    $checklist  = $data['checklist'] ?? '';
     $statsItems = $data['items']    ?? [];
     if (is_string($statsItems)) {
         $statsItems = json_decode($statsItems, true) ?: [];
@@ -15,21 +16,21 @@
     $checklistItems = array_filter(array_map('trim', explode(',', $checklist)));
 @endphp
 
-@if($heading || $body || !empty($statsItems))
+@if((empty($hidden['heading']) && $heading) || (empty($hidden['body']) && $body) || !empty($statsItems))
 <div class="container mx-auto px-5 py-24">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         {{-- Left: Text + Checklist --}}
         <div>
-            @if($heading)
+            @if(empty($hidden['heading']) && $heading)
                 <h2 class="font-display text-4xl sm:text-5xl text-dark uppercase leading-tight mb-6">{{ $heading }}</h2>
             @endif
-            @if($body)
+            @if(empty($hidden['body']) && $body)
                 <p class="text-dark/70 text-base leading-relaxed mb-4">{{ $body }}</p>
             @endif
-            @if($body2)
+            @if(empty($hidden['body2']) && $body2)
                 <p class="text-dark/70 text-base leading-relaxed mb-6">{{ $body2 }}</p>
             @endif
-            @if(count($checklistItems) > 0)
+            @if(empty($hidden['checklist']) && count($checklistItems) > 0)
                 <ul class="space-y-2 mt-6">
                     @foreach($checklistItems as $item)
                     <li class="flex items-center gap-3 text-dark/80 text-sm font-medium">

@@ -4,6 +4,7 @@
 ])
 
 @php
+    $hidden     = $data['field_hidden'] ?? [];
     $heading    = $data['heading'] ?? '';
     $statsItems = $data['items']   ?? [];
     if (is_string($statsItems)) {
@@ -11,16 +12,18 @@
     }
 @endphp
 
-@if($heading || (is_array($statsItems) && count($statsItems) > 0))
-<div class="container mx-auto px-5 py-24">
+@if((empty($hidden['heading']) && $heading) || (is_array($statsItems) && count($statsItems) > 0))
+<div class="container mx-auto px-5 my-24">
     <div data-animate="scale-in" class="card-solid p-10 sm:p-16">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-                <p class="text-dark text-2xl lg:text-3xl font-medium leading-tight">
-                    {{ $heading }}
-                </p>
+                @if(empty($hidden['heading']) && $heading)
+                    <p class="text-dark text-2xl lg:text-3xl font-medium leading-tight">
+                        {{ $heading }}
+                    </p>
+                @endif
                 <div class="mt-8">
-                    <x-btn-primary href="{{ route('landingpages.innovation') }}" label="{{ __('nav.innovation') }}" />
+                    <x-btn-primary href="{{ url('/innovation') }}" label="{{ __('nav.innovation') }}" />
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-8">

@@ -81,11 +81,48 @@ class PageBlock extends Model
             return [];
         }
 
+        // Fallback 'limit' and 'show_all' from EN locale or top-level if not explicitly set for this locale
+        if (! isset($localeContent['limit']) || $localeContent['limit'] === '' || $localeContent['limit'] === null) {
+            $fallbackLimit = $content['en']['limit'] ?? ($content['id']['limit'] ?? ($content['limit'] ?? null));
+            if ($fallbackLimit !== null && $fallbackLimit !== '') {
+                $localeContent['limit'] = $fallbackLimit;
+            }
+        }
+
+        if (! isset($localeContent['show_all'])) {
+            $localeContent['show_all'] = $content['en']['show_all'] ?? ($content['id']['show_all'] ?? ($content['show_all'] ?? false));
+        }
+
         // Auto-decode stringified 'items' array if stored as string from admin block editor
         if (isset($localeContent['items']) && is_string($localeContent['items'])) {
             $localeContent['items'] = json_decode($localeContent['items'], true) ?: [];
         }
 
         return $localeContent;
+    }
+
+    /**
+     * Determine whether an individual field is marked as hidden for a given locale.
+     */
+    public function isFieldHidden(string $locale, string $field): bool
+    {
+        $content = $this->getContent($locale);
+        $hidden = $content['field_hidden'] ?? [];
+
+        if (is_string($hidden)) {
+            $hidden = json_decode($hidden, true) ?: [];
+        }
+
+        if (! is_array($hidden)) {
+            return false;
+        }
+
+        $val = $hidden[$field] ?? null;
+
+        if ($val === null || $val === 0 || $val === '0' || $val === false || $val === 'false') {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -39,21 +39,12 @@
                 @enderror
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label for="rating" class="block text-xs font-semibold text-slate-700 mb-1">Rating Score (1 to 5) <span class="text-rose-500">*</span></label>
-                    <input type="number" name="rating" id="rating" value="{{ old('rating', $testimonial->rating ?: 5) }}" min="1" max="5" required class="w-full text-xs bg-white border @error('rating') border-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
-                    @error('rating')
-                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
-                    @enderror
-                </div>
-                <div>
-                    <label for="order" class="block text-xs font-semibold text-slate-700 mb-1">Display Index Order</label>
-                    <input type="number" name="order" id="order" value="{{ old('order', $testimonial->order ?: 0) }}" min="0" class="w-full text-xs bg-white border @error('order') border-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
-                    @error('order')
-                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div>
+                <label for="order" class="block text-xs font-semibold text-slate-700 mb-1">Display Index Order</label>
+                <input type="number" name="order" id="order" value="{{ old('order', $testimonial->order ?: 0) }}" min="0" class="w-full text-xs bg-white border @error('order') border-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
+                @error('order')
+                    <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="pt-2">

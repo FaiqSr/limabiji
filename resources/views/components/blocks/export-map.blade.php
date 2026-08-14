@@ -5,19 +5,23 @@
 ])
 
 @php
+    $hidden   = $data['field_hidden'] ?? [];
     $heading  = $data['heading']  ?? ($locale === 'id' ? 'Peta Ekspor' : 'Export Experience');
     $subtitle = $data['subtitle'] ?? ($locale === 'id' ? 'Jelajahi jangkauan global dan komitmen kami terhadap kualitas' : 'Explore our global reach and commitment to quality');
 
-    // Build locations array for OpenLayers
-    $destList = $exportDestinations ?? collect();
+    // Build locations array for OpenLayers (Primary source: database ExportDestination model)
+    $destList = (!empty($exportDestinations) && count($exportDestinations) > 0) ? $exportDestinations : ($data['items'] ?? []);
+    if (is_string($destList)) {
+        $destList = json_decode($destList, true) ?: [];
+    }
     $mapLocations = array_map(function($dest) use ($locale) {
         return [
             'name'        => is_object($dest) ? $dest->getNameForLocale($locale) : ($dest['name'] ?? ''),
             'code'        => is_object($dest) ? $dest->country_code              : ($dest['country_code'] ?? 'jp'),
-            'coords'      => is_object($dest) ? [$dest->longitude, $dest->latitude] : [0, 0],
+            'coords'      => is_object($dest) ? [$dest->longitude, $dest->latitude] : [floatval($dest['longitude'] ?? 0), floatval($dest['latitude'] ?? 0)],
             'description' => is_object($dest) ? $dest->getDescriptionForLocale($locale) : ($dest['description'] ?? ''),
         ];
-    }, is_array($destList) ? $destList : $destList->all());
+    }, is_array($destList) ? $destList : (is_object($destList) && method_exists($destList, 'all') ? $destList->all() : []));
 @endphp
 
 @once
@@ -76,8 +80,10 @@
 @endpush
 @endonce
 
-<div class="container m-auto px-5 relative mt-20">
-    <x-section-heading :title="$heading" :subtitle="$subtitle" />
+<div class="container m-auto px-5 relative my-20">
+    @if(empty($hidden['heading']) && $heading)
+        <x-section-heading :title="$heading" :subtitle="empty($hidden['subtitle']) ? $subtitle : null" />
+    @endif
     <div class="relative">
         <div id="map"></div>
 
@@ -99,6 +105,7 @@
 @once
 @push('scripts')
 <script>
+(function() {
     const initialCenter = [70.0, 10.0];
     const initialZoom = 2.3;
 
@@ -134,6 +141,8 @@
     const content = document.getElementById('popup-content');
     const closer = document.getElementById('popup-closer');
 
+    if (!container || !content || !closer) return;
+
     const overlay = new ol.Overlay({
         element: container,
         autoPan: { animation: { duration: 250 } },
@@ -150,6 +159,9 @@
         zoom: initialZoom,
         minZoom: 1.5,
     });
+
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
 
     const map = new ol.Map({
         controls: controls,
@@ -180,10 +192,14 @@
         map.getTargetElement().style.cursor = hit ? 'pointer' : '';
     });
 
-    document.getElementById('btn-reset-map').addEventListener('click', function () {
-        overlay.setPosition(undefined);
-        view.animate({ center: ol.proj.fromLonLat(initialCenter), zoom: initialZoom, duration: 600 });
-    });
+    const resetBtn = document.getElementById('btn-reset-map');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+            overlay.setPosition(undefined);
+            view.animate({ center: ol.proj.fromLonLat(initialCenter), zoom: initialZoom, duration: 600 });
+        });
+    }
+})();
 </script>
 @endpush
 @endonce

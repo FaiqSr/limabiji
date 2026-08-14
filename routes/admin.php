@@ -1,14 +1,13 @@
 <?php
 
 use App\Http\Controllers\Admin\AnalyticsController;
-use App\Http\Controllers\Admin\ApprovalController;
 use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExportDestinationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\OriginController;
 use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -24,20 +23,22 @@ Route::middleware('guest')->group(function () {
 
 // --- Admin Routes (auth + editor/admin) ---
 Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Dashboard
+    // Dashboard & Integrated Settings
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::put('/dashboard/settings', [DashboardController::class, 'updateSettings'])->name('dashboard.settings');
 
     // Content / Pages
     Route::get('/content', [PageController::class, 'index'])->name('content.index');
     Route::get('/content/create', [PageController::class, 'create'])->name('content.create');
     Route::post('/content', [PageController::class, 'store'])->name('content.store');
+    Route::post('/content/preview', [PageController::class, 'preview'])->name('content.preview');
     Route::get('/content/{page}/edit', [PageController::class, 'edit'])->name('content.edit');
     Route::put('/content/{page}', [PageController::class, 'update'])->name('content.update');
     Route::delete('/content/{page}', [PageController::class, 'destroy'])->name('content.destroy');
     Route::post('/content/{page}/restore/{pageVersion}', [PageController::class, 'restoreVersion'])->name('content.restoreVersion');
 
     // Export Destinations Map
-    Route::resource('export-destinations', ExportDestinationController::class);
+    Route::resource('export-destinations', ExportDestinationController::class)->except(['show']);
 
     // Origins
     Route::get('/origins', [OriginController::class, 'index'])->name('origins.index');
@@ -55,6 +56,9 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     Route::put('/news/{article}', [ArticleController::class, 'update'])->name('news.update');
     Route::delete('/news/{article}', [ArticleController::class, 'destroy'])->name('news.destroy');
 
+    // News Categories
+    Route::resource('categories', CategoryController::class)->except(['show']);
+
     // Testimonials
     Route::get('/testimonials', [TestimonialController::class, 'index'])->name('testimonials.index');
     Route::get('/testimonials/create', [TestimonialController::class, 'create'])->name('testimonials.create');
@@ -62,17 +66,6 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     Route::get('/testimonials/{testimonial}/edit', [TestimonialController::class, 'edit'])->name('testimonials.edit');
     Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
     Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
-
-    // Approvals (admin only)
-    Route::middleware('admin')->group(function () {
-        Route::get('/approvals', [ApprovalController::class, 'index'])->name('approvals.index');
-        Route::post('/approvals/{article}/approve', [ApprovalController::class, 'approve'])->name('approvals.approve');
-        Route::post('/approvals/{article}/reject', [ApprovalController::class, 'reject'])->name('approvals.reject');
-    });
-
-    // Settings
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
 
     // Users (admin only)
     Route::middleware('admin')->group(function () {

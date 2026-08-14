@@ -283,6 +283,18 @@ class PageSeeder extends Seeder
                             ],
                         ],
                     ],
+                    [
+                        'block_type' => 'articles',
+                        'order' => 1,
+                        'content' => [
+                            'en' => [
+                                'heading' => 'NEWS & ARTICLES',
+                            ],
+                            'id' => [
+                                'heading' => 'BERITA & ARTIKEL',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             [
@@ -309,6 +321,18 @@ class PageSeeder extends Seeder
                             ],
                         ],
                     ],
+                    [
+                        'block_type' => 'testimonials',
+                        'order' => 1,
+                        'content' => [
+                            'en' => [
+                                'heading' => 'WHAT THEY SAY',
+                            ],
+                            'id' => [
+                                'heading' => 'APA KATA MEREKA',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             [
@@ -332,6 +356,26 @@ class PageSeeder extends Seeder
                                 'label' => 'Hubungi Kami',
                                 'heading' => 'MARI<br>BICARA.',
                                 'subheading' => 'Masing-masing dari kami ahli di pasar yang berbeda dan dapat membantu Anda dengan semua kebutuhan roastery Anda.',
+                            ],
+                        ],
+                    ],
+                    [
+                        'block_type' => 'contact',
+                        'order' => 1,
+                        'content' => [
+                            'en' => [
+                                'heading' => 'GET IN TOUCH',
+                                'subtitle' => "Each one of us is an expert in a different market and can help you with all of your roastery's requirements.",
+                                'email' => 'export@limabijiagritech.com',
+                                'phone' => '+62 812 3456 7890',
+                                'address' => 'Bogor, West Java, Indonesia',
+                            ],
+                            'id' => [
+                                'heading' => 'HUBUNGI KAMI',
+                                'subtitle' => 'Masing-masing dari kami ahli di pasar yang berbeda dan dapat membantu Anda dengan semua kebutuhan roastery Anda.',
+                                'email' => 'export@limabijiagritech.com',
+                                'phone' => '+62 812 3456 7890',
+                                'address' => 'Bogor, Jawa Barat, Indonesia',
                             ],
                         ],
                     ],

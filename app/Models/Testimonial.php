@@ -8,11 +8,10 @@ class Testimonial extends Model
 {
     protected $fillable = [
         'name', 'company', 'content', 'content_id',
-        'rating', 'image', 'is_featured', 'order',
+        'image', 'is_featured', 'order',
     ];
 
     protected $casts = [
-        'rating' => 'integer',
         'is_featured' => 'boolean',
         'order' => 'integer',
     ];
