@@ -7,6 +7,7 @@
 
     {{-- Desktop Nav --}}
     <nav class="gap-2 hidden lg:flex items-center">
+        <a href="{{ url('/about') }}" class="nav-link">{{ __('nav.about') }}</a>
         <a href="{{ url('/innovation') }}" class="nav-link">{{ __('nav.innovation') }}</a>
         <a href="{{ url('/news') }}" class="nav-link">{{ __('nav.news') }}</a>
         <a href="{{ url('/testimonials') }}" class="nav-link">{{ __('nav.testimonials') }}</a>
@@ -58,6 +59,10 @@
     <nav class="sidebar-nav">
         <a href="{{ url('/') }}" class="sidebar-link">
             <span>{{ __('nav.home') }}</span>
+            <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+        <a href="{{ url('/about') }}" class="sidebar-link">
+            <span>{{ __('nav.about') }}</span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
         </a>
         <a href="{{ url('/innovation') }}" class="sidebar-link">

@@ -7,7 +7,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExportDestinationController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\OriginController;
-use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -26,16 +25,6 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     // Dashboard & Integrated Settings
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::put('/dashboard/settings', [DashboardController::class, 'updateSettings'])->name('dashboard.settings');
-
-    // Content / Pages
-    Route::get('/content', [PageController::class, 'index'])->name('content.index');
-    Route::get('/content/create', [PageController::class, 'create'])->name('content.create');
-    Route::post('/content', [PageController::class, 'store'])->name('content.store');
-    Route::post('/content/preview', [PageController::class, 'preview'])->name('content.preview');
-    Route::get('/content/{page}/edit', [PageController::class, 'edit'])->name('content.edit');
-    Route::put('/content/{page}', [PageController::class, 'update'])->name('content.update');
-    Route::delete('/content/{page}', [PageController::class, 'destroy'])->name('content.destroy');
-    Route::post('/content/{page}/restore/{pageVersion}', [PageController::class, 'restoreVersion'])->name('content.restoreVersion');
 
     // Export Destinations Map
     Route::resource('export-destinations', ExportDestinationController::class)->except(['show']);

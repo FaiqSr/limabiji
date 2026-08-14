@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AnalyticsEvent;
 use App\Models\Article;
+use App\Models\ExportDestination;
 use App\Models\Origin;
-use App\Models\Page;
 use App\Models\SiteSetting;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class DashboardController extends Controller
     public function index()
     {
         $stats = [
-            'pages_count' => Page::count(),
+            'export_destinations_count' => ExportDestination::count(),
             'articles_count' => Article::count(),
             'articles_published' => Article::where('status', 'published')->count(),
             'articles_draft' => Article::where('status', 'draft')->count(),

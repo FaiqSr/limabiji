@@ -3,96 +3,83 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\ExportDestination;
 use App\Models\Origin;
-use App\Models\Page;
-use App\Models\SiteSetting;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
 class LandingPages extends Controller
 {
-    public function show(Request $request, ?string $slug = null)
+    public function index()
     {
-        $slug = $slug ?: 'home';
-
-        $page = Page::where('slug', $slug)->with('blocks')->first();
-
-        if (! $page) {
-            abort(404);
-        }
-
         $origins = Origin::active()->ordered()->get();
-        $settings = SiteSetting::all()->keyBy('key');
         $exportDestinations = ExportDestination::active()->orderBy('order')->get();
+        $articles = Article::with('categories')
+            ->where('status', 'published')
+            ->forLocale()
+            ->latest()
+            ->take(3)
+            ->get();
+        $testimonials = Testimonial::orderBy('order')->take(3)->get();
 
-        if ($slug === 'news' || $request->filled('q') || $request->filled('category')) {
-            $articlesQuery = Article::with('categories')->where('status', 'published')->forLocale();
-
-            if ($request->filled('q')) {
-                $searchTerm = $request->q;
-                $articlesQuery->where(function ($q) use ($searchTerm) {
-                    $q->where('title', 'like', '%'.$searchTerm.'%')
-                        ->orWhere('title_id', 'like', '%'.$searchTerm.'%');
-                });
-            }
-
-            if ($request->filled('category') && $request->category !== 'All') {
-                $categoryFilter = $request->category;
-                $articlesQuery->where(function ($q) use ($categoryFilter) {
-                    $q->whereHas('categories', function ($catQ) use ($categoryFilter) {
-                        $catQ->where('slug', $categoryFilter)
-                            ->orWhere('name', $categoryFilter)
-                            ->orWhere('name_id', $categoryFilter);
-                    })->orWhere('category', $categoryFilter);
-                });
-            }
-
-            $articles = $articlesQuery->latest()->paginate(9)->withQueryString();
-        } else {
-            $articles = Article::with('categories')->where('status', 'published')->forLocale()->latest()->take(24)->get();
-        }
-
-        if ($slug === 'testimonials') {
-            $testimonials = Testimonial::orderBy('order')->paginate(12)->withQueryString();
-        } else {
-            $testimonials = Testimonial::orderBy('order')->take(24)->get();
-        }
-
-        return view('landingpages.show', compact(
-            'page',
+        return view('landingpages.index', compact(
             'origins',
-            'articles',
-            'testimonials',
-            'settings',
             'exportDestinations',
-            'slug'
+            'articles',
+            'testimonials'
         ));
     }
 
-    public function index(Request $request)
+    public function about()
     {
-        return $this->show($request, 'home');
+        return view('landingpages.about');
     }
 
-    public function innovation(Request $request)
+    public function innovation()
     {
-        return $this->show($request, 'innovation');
+        return view('landingpages.innovation');
     }
 
     public function news(Request $request)
     {
-        return $this->show($request, 'news');
+        $categories = Category::orderBy('name')->get();
+        $articlesQuery = Article::with('categories')->where('status', 'published')->forLocale();
+
+        if ($request->filled('q')) {
+            $searchTerm = $request->q;
+            $articlesQuery->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('title_id', 'like', '%'.$searchTerm.'%');
+            });
+        }
+
+        if ($request->filled('category') && $request->category !== 'All') {
+            $categoryFilter = $request->category;
+            $articlesQuery->where(function ($q) use ($categoryFilter) {
+                $q->whereHas('categories', function ($catQ) use ($categoryFilter) {
+                    $catQ->where('slug', $categoryFilter)
+                        ->orWhere('name', $categoryFilter)
+                        ->orWhere('name_id', $categoryFilter);
+                })->orWhere('category', $categoryFilter);
+            });
+        }
+
+        $articles = $articlesQuery->latest()->paginate(9)->withQueryString();
+
+        return view('landingpages.news', compact('articles', 'categories'));
     }
 
-    public function testimonials(Request $request)
+    public function testimonials()
     {
-        return $this->show($request, 'testimonials');
+        $testimonials = Testimonial::orderBy('order')->paginate(12)->withQueryString();
+
+        return view('landingpages.testimonials', compact('testimonials'));
     }
 
-    public function contact(Request $request)
+    public function contact()
     {
-        return $this->show($request, 'contact');
+        return view('landingpages.contact');
     }
 
     public function origins(string $originName)

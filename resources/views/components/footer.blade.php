@@ -16,6 +16,7 @@
                 <h5 class="text-dark font-medium text-sm mb-5 uppercase tracking-wider">Navigation</h5>
                 <ul class="space-y-3 text-sm">
                     <li><a href="{{ url('/') }}" class="text-light-grey hover:text-dark transition-colors">Home</a></li>
+                    <li><a href="{{ url('/about') }}" class="text-light-grey hover:text-dark transition-colors">About</a></li>
                     <li><a href="{{ url('/innovation') }}" class="text-light-grey hover:text-dark transition-colors">Innovation</a></li>
                     <li><a href="{{ url('/news') }}" class="text-light-grey hover:text-dark transition-colors">News</a></li>
                     <li><a href="{{ url('/testimonials') }}" class="text-light-grey hover:text-dark transition-colors">Testimonials</a></li>

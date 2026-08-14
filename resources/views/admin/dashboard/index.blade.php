@@ -33,8 +33,8 @@
                 <a href="{{ route('admin.news.create') }}" class="btn btn-primary text-xs py-2 px-3.5 shadow-2xs">
                     + New Article
                 </a>
-                <a href="{{ route('admin.content.create') }}" class="btn btn-secondary text-xs py-2 px-3">
-                    + New Page
+                <a href="{{ route('admin.origins.create') }}" class="btn btn-secondary text-xs py-2 px-3">
+                    + New Origin
                 </a>
             </div>
         </div>
@@ -43,10 +43,10 @@
     <!-- CORE KPI METRICS ROW -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
-            <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">CMS Pages</span>
+            <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Export Destinations</span>
             <div class="flex items-baseline justify-between mt-2">
-                <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight">{{ number_format($stats['pages_count']) }}</span>
-                <span class="text-[11px] font-mono font-medium px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">ACTIVE</span>
+                <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight">{{ number_format($stats['export_destinations_count']) }}</span>
+                <span class="text-[11px] font-mono font-medium px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">GLOBAL</span>
             </div>
         </div>
 

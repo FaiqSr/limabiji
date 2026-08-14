@@ -1,22 +1,152 @@
 <?php
 
 return [
+    // Brand & General
     'hero_label' => 'LIMA BIJI AGRITECH',
-    'hero_heading' => 'KOPI LUWAK ENZIMATIK SPECIALTY',
+    'hero_heading' => 'KOPI LUWAK<br>ENZIMATIK SPECIALTY',
     'hero_subheading' => 'Profil kopi luwak mewah — tanpa eksploitasi hewan. Fermentasi enzimatik proprietary kami mereplikasi proses luwak alami dengan presisi ilmiah.',
+    'cta_innovations' => 'Jelajahi Proses Kami',
+    'cta_news' => 'Berita',
     'cta_primary' => 'Jelajahi Proses Kami',
     'cta_secondary' => 'Hubungi Kami',
-    'about_title' => 'PENGALAMAN EKSPOR',
-    'about_subtitle' => 'Kopi luwak enzimatik specialty kami menjangkau roastery di seluruh dunia.',
+
+    // About Us Page
+    'about_hero_label' => 'TENTANG KAMI',
+    'about_hero_heading' => 'PELOPOR AGRITECH &<br>KOPI LUWAK ENZIMATIK',
+    'about_hero_subheading' => 'Mempelopori bioteknologi enzimatik etis dan bebas eksploitasi untuk meningkatkan mutu kopi specialty Nusantara bagi pasar roastery global.',
+    'about_story_label' => 'CERITA KAMI',
+    'about_story_heading' => 'Mendefinisikan Ulang Kopi Mewah Melalui Sains & Welas Asih',
+    'about_story_p1' => 'Selama puluhan tahun, kopi luwak tradisional dipandang sebagai salah satu cangkir kopi terlangka dan paling berharga di dunia. Namun, tingginya permintaan komersial memicu pengandangan satwa liar secara kejam, standar higienitas yang tidak konsisten, dan kecaman kesejahteraan hewan di seluruh komunitas specialty coffee global.',
+    'about_story_p2' => 'Lima Biji Agritech hadir menjawab dilema tersebut. Melalui riset bio-agrikultur mendalam, tim ilmuwan kami mengembangkan fermentasi enzimatik bio-identik terobosan yang mereplikasi persis pemecahan protein pencernaan luwak alami—tanpa melibatkan atau mengurung satu ekor hewan pun.',
+    'about_story_p3' => 'Kini, kami bermitra langsung dengan petani kecil di daerah dataran tinggi terbaik Indonesia untuk memanen ceri merah matang terbaik, memprosesnya dengan presisi biokimia ilmiah, dan menghadirkan skor cupping 84+ SCA yang konsisten bagi roaster internasional.',
+
+    'about_vision_title' => 'Visi Kami',
+    'about_vision_desc' => 'Menjadi tolok ukur global bagi inovasi kopi specialty berkelanjutan dari Indonesia—membuktikan bahwa profil rasa mewah kelas dunia dapat dicapai secara 100% bebas eksploitasi hewan.',
+
+    'about_mission_title' => 'Misi Kami',
+    'about_mission_1' => 'Mengembangkan bioteknologi bebas eksploitasi yang menghentikan sepenuhnya praktik pengandangan satwa.',
+    'about_mission_2' => 'Memberdayakan petani kecil kopi Nusantara melalui insentif harga premium dan praktik regeneratif.',
+    'about_mission_3' => 'Menjamin konsistensi rasa, keterlacakan ilmiah (*traceability*), dan mutu berstandar ekspor global.',
+    'about_mission_4' => 'Memperkenalkan kekayaan terroir dan single-origin khas Indonesia ke panggung specialty dunia.',
+
+    'about_values_label' => 'NILAI UTAMA KAMI',
+    'about_values_title' => 'Prinsip Yang Memandu Karya Kami',
+    'about_values_subtitle' => 'Dari riset bioreaktor laboratorium hingga kemasan ekspor GrainPro, nilai-nilai ini mendasari setiap micro-lot yang kami hasilkan.',
+
+    'about_val_1_title' => 'Etika Bebas Eksploitasi',
+    'about_val_1_desc' => 'Proses enzimatik 100% berbasis tanaman dengan nol eksploitasi atau pengandangan satwa liar.',
+    'about_val_2_title' => 'Ketelitian Ilmiah',
+    'about_val_2_desc' => 'Pemantauan suhu, pH, dan kadar Brix secara real-time dalam bioreaktor stainless steel demi konsistensi batch.',
+    'about_val_3_title' => 'Perdagangan Langsung',
+    'about_val_3_desc' => 'Kemitraan langsung yang memberikan harga beli premium dan dukungan teknis bagi kelompok tani binaan.',
+    'about_val_4_title' => 'Keterlacakan Penuh',
+    'about_val_4_desc' => 'Transparansi penuh mulai dari koordinat kebun pegunungan hingga kantong GrainPro kedap udara.',
+
+    'about_timeline_label' => 'PERJALANAN KAMI',
+    'about_timeline_title' => 'Milestone & Terobosan Inovasi',
+    'about_timeline_subtitle' => 'Perjalanan transformasi dari riset bioteknologi laboratorium menjadi eksportir kopi specialty global.',
+
+    'about_time_1_period' => 'Fase 01 • Riset & Inovasi',
+    'about_time_1_title' => 'Isolasi & Formulasi Enzim',
+    'about_time_1_desc' => 'Ilmuwan bio mengisolasi enzim proteolitik tanaman yang mencerminkan biokimia pencernaan luwak alami.',
+
+    'about_time_2_period' => 'Fase 02 • Prototipe',
+    'about_time_2_title' => 'Fasilitas Bioreaktor Terkontrol',
+    'about_time_2_desc' => 'Membangun fasilitas fermentasi presisi di Jawa Barat dan mencetak skor cupping 84+ SCA secara konsisten.',
+
+    'about_time_3_period' => 'Fase 03 • Ekspansi Asal',
+    'about_time_3_title' => 'Kemitraan Petani Multi-Daerah',
+    'about_time_3_desc' => 'Memperluas rantai pasok ceri etis ke koperasi mitra di Jawa Barat, Toraja, Aceh Gayo, dan Malang.',
+
+    'about_time_4_period' => 'Fase 04 • Ekspor Global',
+    'about_time_4_title' => 'Distribusi Pasar Internasional',
+    'about_time_4_desc' => 'Memasok roaster specialty, importir, dan barista champion di lebih dari 7+ negara tujuan ekspor.',
+
+    'about_cta_heading' => 'Bermitra dengan Lima Biji Agritech',
+    'about_cta_body' => 'Rasakan masa depan kopi specialty berkelanjutan. Minta kit sampel biji hijau, protokol cupping, atau diskusikan lot fermentasi kustom.',
+    'about_cta_btn' => 'Hubungi Meja Ekspor',
+
+    // Export Map & Origins
+    'export_map_title' => 'PETA EKSPOR',
+    'export_map_subtitle' => 'Jaringan distribusi global kami.',
+    'origins_title' => 'ASAL KOPI',
+    'origins_subtitle' => 'Jelajahi daerah mitra kami di Indonesia.',
+
+    // Stats Section (Home)
     'stats_title' => 'Kami menyediakan kopi untuk',
-    'origins_title' => 'ASAL KAMI',
-    'news_title' => 'TERBARU',
+    'stat_export_countries' => 'Negara Ekspor',
+    'stat_partner_farms' => 'Petani Mitra',
+    'stat_cruelty_free' => 'Bebas Eksploitasi',
+    'stat_origins' => 'Asal Daerah',
+
+    // News Section (Home & Library)
+    'news_title' => 'BERITA & CERITA',
+    'news_library_heading' => 'PERPUSTAKAAN<br>BERITA',
+    'news_library_subheading' => 'Pembaruan ekspor, terobosan fermentasi, dan cerita dari petani mitra kami.',
+    'news_subtitle' => 'Berita terbaru dari meja ekspor dan lab fermentasi kami.',
+    'news_view_all' => 'Lihat Semua Berita',
+    'news_search_placeholder' => 'Cari berita...',
+    'news_search_btn' => 'Cari',
+    'news_no_articles' => 'Tidak ada berita yang ditemukan.',
+
+    // CTA Cards
+    'cta_home_heading' => 'Siap Meningkatkan Penawaran Specialty Anda?',
+    'cta_home_body' => 'Bermitra dengan kami untuk perdagangan langsung, pengadaan etis, dan lot mikro pemrosesan enzimatik kustom.',
+    'cta_home_btn' => 'Minta Sampel & Penawaran',
+
+    'cta_innovation_heading' => 'Tertarik dengan Proses Kami?',
+    'cta_innovation_body' => 'Minta sampel lot, dokumentasi teknis, atau jadwalkan tur virtual fasilitas fermentasi kami.',
+    'cta_innovation_btn' => 'Minta Sampel',
+
+    // Testimonials
     'testimonials_title' => 'APA KATA MEREKA',
+    'testimonials_heading' => 'APA KATA<br>MEREKA',
+    'testimonials_subheading' => 'Dipercaya oleh roaster kopi specialty, importir, dan juara barista di seluruh dunia.',
+    'testimonials_view_all' => 'Lihat Semua Testimoni',
+
+    // FAQs
     'faq_title' => 'TANYA JAWAB',
     'faq_subtitle' => 'Semua yang perlu Anda ketahui tentang proses kopi luwak enzimatik bebas eksploitasi kami, pengadaan, dan pengiriman ekspor global.',
-    'cta_title' => 'Siap Meningkatkan Menu Kopi Anda?',
-    'cta_body' => 'Bermitra dengan Lima Biji untuk kopi luwak enzimatik specialty yang konsisten dan berkualitas tinggi. Tersedia dalam lot sampel, kontainer penuh, dan micro-lot kustom.',
-    'cta_button' => 'Hubungi Kami',
+
+    // Innovation Page
+    'innovation_hero_label' => 'Inovasi',
+    'innovation_hero_heading' => 'PROSES<br>LUWAK ENZIMATIK',
+    'innovation_hero_subheading' => 'Bioteknologi proprietary kami mereplikasi proses fermentasi luwak alami — tanpa melibatkan satu hewan pun. Profil mewah yang sama. Tanpa kompromi etika.',
+    'innovation_steps_title' => 'CARA KERJA',
+    'innovation_steps_subtitle' => 'Enam langkah presisi dari panen hingga ekspor — setiap batch dibuat dengan ketelitian ilmiah.',
+    'innovation_matters_heading' => 'Mengapa Bebas Eksploitasi Itu Penting',
+    'innovation_matters_body' => 'Kopi luwak tradisional (Kopi Luwak) bergantung pada musang liar yang dikurung dan dicekok paksa ceri kopi — praktik yang dikutuk luas oleh organisasi kesejahteraan hewan dan asosiasi kopi specialty.',
+    'innovation_matters_body2' => 'Proses enzimatik kami mencapai pemecahan proteolitik identik dari protein kopi tanpa mengeksploitasi hewan apa pun. Hasilnya adalah kopi yang:',
+    'innovation_matters_stats_cupping' => 'Skor Cupping SCA',
+    'innovation_matters_stats_animals' => 'Hewan Terlibat',
+    'innovation_matters_stats_fermentation' => 'Fermentasi',
+    'innovation_matters_stats_quality' => 'Langkah Kualitas',
+    'innovation_matters_stats_export' => 'Negara Ekspor',
+
+    // Contact Page
+    'contact_hero_label' => 'Hubungi Kami',
+    'contact_hero_heading' => 'MARI<br>BICARA.',
+    'contact_hero_subheading' => 'Masing-masing dari kami ahli di pasar yang berbeda dan dapat membantu Anda dengan semua kebutuhan roastery Anda.',
+    'contact_title' => 'HUBUNGI KAMI',
+    'contact_subtitle' => 'Masing-masing dari kami ahli di pasar yang berbeda dan dapat membantu Anda dengan semua kebutuhan roastery Anda.',
+    'contact_email_label' => 'Email Ekspor',
+    'contact_phone_label' => 'Telepon / WhatsApp',
+    'contact_office_label' => 'Kantor Ekspor',
+    'contact_address' => 'Bogor, Jawa Barat, Indonesia',
+    'contact_form_name' => 'Nama Lengkap',
+    'contact_form_email' => 'Alamat Email',
+    'contact_form_company' => 'Nama Perusahaan / Roastery',
+    'contact_form_subject' => 'Subjek Pertanyaan',
+    'contact_form_subj_sample' => 'Permintaan Sampel Biji Hijau',
+    'contact_form_subj_bulk' => 'Penawaran Ekspor Curah (FCL/LCL)',
+    'contact_form_subj_partnership' => 'Kemitraan Pemrosesan Enzimatik',
+    'contact_form_subj_general' => 'Pertanyaan Umum',
+    'contact_form_message' => 'Pesan',
+    'contact_form_message_placeholder' => 'Tuliskan detail kebutuhan kopi specialty Anda...',
+    'contact_form_submit' => 'Kirim Pesan',
+    'contact_form_alert' => 'Pesan Anda berhasil terkirim. Tim ekspor kami akan segera menghubungi Anda!',
+
+    // Footer
     'footer_company' => 'Lima Biji Agritech',
     'footer_location' => 'Bogor, Jawa Barat, Indonesia',
     'footer_export' => 'Eksportir Kopi Luwak Enzimatik Specialty',
