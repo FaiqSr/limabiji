@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Article;
 use App\Models\Category;
-use App\Models\Origin;
 use App\Models\Page;
 use App\Models\PageBlock;
 use App\Models\SiteSetting;
@@ -19,7 +18,7 @@ class ContentSeeder extends Seeder
         $this->call(PageSeeder::class);
 
         // --- Origins (idempotent) ---
-        $this->seedOrigins();
+        $this->call(OriginSeeder::class);
 
         // --- Articles (idempotent) ---
         $this->seedArticles();
@@ -194,22 +193,6 @@ class ContentSeeder extends Seeder
                 'is_visible' => true, 'created_at' => now(), 'updated_at' => now(),
             ],
         ]);
-    }
-
-    private function seedOrigins(): void
-    {
-        $origins = [
-            ['name' => 'Bogor', 'slug' => 'bogor', 'province' => 'West Java', 'image' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop', 'altitude' => '1200–1600m', 'varietals' => 'Typica, Catimor, S795', 'process' => 'Enzymatic, Washed', 'harvest' => 'Apr – Aug', 'score' => '85+', 'overview' => "Bogor's highland farms sit on volcanic slopes of Mount Salak, producing bright, complex Arabica with distinctive floral notes.", 'overview_id' => 'Perkebunan dataran tinggi Bogor berada di lereng vulkanik Gunung Salak, menghasilkan Arabika cerah dan kompleks dengan aroma bunga yang khas.', 'flavor' => ['Floral', 'Citrus', 'Brown Sugar', 'Medium Body', 'Bright Acidity'], 'farms' => ['Cisarua Highland Farm', 'Megamendung Estate', 'Ciawi Cooperative'], 'order' => 1],
-            ['name' => 'Bandung', 'slug' => 'bandung', 'province' => 'West Java', 'image' => 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1200&auto=format&fit=crop', 'altitude' => '1300–1700m', 'varietals' => 'Typica, Lini S, Kartika', 'process' => 'Washed, Honey', 'harvest' => 'May – Sep', 'score' => '84+', 'overview' => "The Preanger highlands around Bandung have been Java's coffee heartland since Dutch colonial times.", 'overview_id' => 'Dataran tinggi Preanger di sekitar Bandung telah menjadi jantung kopi Jawa sejak zaman kolonial Belanda.', 'flavor' => ['Chocolate', 'Nutty', 'Caramel', 'Full Body', 'Low Acidity'], 'farms' => ['Ciwidey Estate', 'Pangalengan Farm', 'Lembang Growers'], 'order' => 2],
-            ['name' => 'Malang', 'slug' => 'malang', 'province' => 'East Java', 'image' => 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200&auto=format&fit=crop', 'altitude' => '1000–1500m', 'varietals' => 'Kartika, S795, USDA', 'process' => 'Washed, Natural', 'harvest' => 'Jun – Oct', 'score' => '83+', 'overview' => "Nestled between Mount Kawi and Mount Arjuna, Malang's coffee farms benefit from mineral-rich volcanic soil.", 'overview_id' => 'Terletak di antara Gunung Kawi dan Gunung Arjuna, perkebunan kopi Malang mendapat manfaat dari tanah vulkanik kaya mineral.', 'flavor' => ['Earthy', 'Spice', 'Dark Chocolate', 'Heavy Body', 'Low Acidity'], 'farms' => ['Dampit Highland', 'Tirtoyudo Estate', 'Ngantang Cooperative'], 'order' => 3],
-            ['name' => 'Toraja', 'slug' => 'toraja', 'province' => 'South Sulawesi', 'image' => 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1200&auto=format&fit=crop', 'altitude' => '1400–1900m', 'varietals' => 'S795, Typica, Lini S', 'process' => 'Washed, Semi-Washed', 'harvest' => 'May – Nov', 'score' => '86+', 'overview' => "Toraja's legendary coffee grows in the remote highlands of Sulawesi, prized by specialty roasters worldwide.", 'overview_id' => 'Kopi legendaris Toraja tumbuh di dataran tinggi terpencil Sulawesi, dihargai oleh roaster specialty di seluruh dunia.', 'flavor' => ['Cedar', 'Dark Chocolate', 'Spice', 'Syrupy Body', 'Earthy Finish'], 'farms' => ['Sapan Village', 'Bittuang Highland', 'Rantepao Growers'], 'order' => 4],
-            ['name' => 'Aceh', 'slug' => 'aceh', 'province' => 'Aceh', 'image' => 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200&auto=format&fit=crop', 'altitude' => '1200–1600m', 'varietals' => 'Gayo 1, Gayo 2, Timtim', 'process' => 'Washed, Natural', 'harvest' => 'Oct – Jun', 'score' => '85+', 'overview' => 'Aceh Gayo coffee is grown in the lush Gayo Highlands around Lake Tawar with remarkable complexity.', 'overview_id' => 'Kopi Aceh Gayo ditanam di Dataran Tinggi Gayo yang subur di sekitar Danau Tawar dengan kompleksitas luar biasa.', 'flavor' => ['Herbal', 'Lemon', 'Brown Sugar', 'Medium Body', 'Clean Finish'], 'farms' => ['Takengon Estate', 'Bener Meriah Farm', 'Central Aceh Cooperative'], 'order' => 5],
-            ['name' => 'Yogyakarta', 'slug' => 'yogyakarta', 'province' => 'Yogyakarta', 'image' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop', 'altitude' => '800–1300m', 'varietals' => 'S795, Kartika, Typica', 'process' => 'Washed, Honey', 'harvest' => 'May – Aug', 'score' => '83+', 'overview' => "The slopes of Mount Merapi provide unique growing conditions for Yogyakarta's emerging specialty coffee scene.", 'overview_id' => 'Lereng Gunung Merapi menyediakan kondisi pertumbuhan unik untuk kopi specialty Yogyakarta yang sedang berkembang.', 'flavor' => ['Balanced', 'Sweet', 'Tobacco', 'Medium Body', 'Smooth Finish'], 'farms' => ['Sleman Estate', 'Merapi Highland Farm', 'Kulon Progo Growers'], 'order' => 6],
-        ];
-        foreach ($origins as $origin) {
-            $origin['gallery'] = [$origin['image']];
-            Origin::updateOrCreate(['slug' => $origin['slug']], $origin);
-        }
     }
 
     private function seedArticles(): void

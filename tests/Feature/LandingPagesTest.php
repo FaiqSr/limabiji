@@ -22,7 +22,7 @@ class LandingPagesTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee('LIMA BIJI AGRITECH');
+        $response->assertSee('Lima Biji Agritech');
         $response->assertSee('SPECIALTY ENZYMATIC');
     }
 

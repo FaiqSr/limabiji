@@ -21,7 +21,7 @@
         <p data-animate="fade-up" class="text-sm lg:text-2xl font-bold tracking-[0.3em] uppercase text-light-grey mb-6">
             {{ __('landing.contact_hero_label') }}
         </p>
-        <h1 data-animate="fade-up" data-delay="0.1" class="font-display text-8xl sm:text-9xl lg:text-[12rem] text-dark leading-[0.85] uppercase">
+        <h1 data-animate="fade-up" data-delay="0.1" class="font-display text-8xl sm:text-9xl lg:text-[12rem] text-white leading-[0.85] uppercase">
             {!! __('landing.contact_hero_heading') !!}
         </h1>
         <p data-animate="fade-up" data-delay="0.2" class="text-light-grey text-lg mt-8 max-w-xl">
@@ -48,19 +48,19 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-dark font-bold text-base mb-1">{{ __('landing.contact_email_label') }}</h4>
+                        <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_email_label') }}</h4>
                         <a href="mailto:export@limabijiagritech.com" class="text-light-grey hover:text-primary transition-colors text-sm font-medium">export@limabijiagritech.com</a>
                     </div>
                 </div>
 
                 <div class="flex items-start gap-4">
-                    <div class="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary flex-shrink-0">
+                    <div class="w-12 h-12 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary flex-shrink-0">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-dark font-bold text-base mb-1">{{ __('landing.contact_phone_label') }}</h4>
+                        <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_phone_label') }}</h4>
                         <a href="tel:+6281234567890" class="text-light-grey hover:text-primary transition-colors text-sm font-medium">+62 812 3456 7890</a>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-dark font-bold text-base mb-1">{{ __('landing.contact_office_label') }}</h4>
+                        <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_office_label') }}</h4>
                         <p class="text-light-grey text-sm leading-relaxed">{{ __('landing.contact_address') }}</p>
                     </div>
                 </div>
@@ -86,34 +86,34 @@
                 <form action="#" method="POST" onsubmit="event.preventDefault(); alert('{{ __('landing.contact_form_alert') }}');" class="space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-dark font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_name') }} *</label>
-                            <input type="text" required class="w-full bg-surface border border-border rounded-lg p-3 text-dark text-sm focus:border-primary focus:outline-none transition-colors" placeholder="John Doe">
+                            <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_name') }} *</label>
+                            <input type="text" required class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="John Doe">
                         </div>
                         <div>
-                            <label class="block text-dark font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_email') }} *</label>
-                            <input type="email" required class="w-full bg-surface border border-border rounded-lg p-3 text-dark text-sm focus:border-primary focus:outline-none transition-colors" placeholder="john@example.com">
+                            <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_email') }} *</label>
+                            <input type="email" required class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="john@example.com">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-dark font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_company') }}</label>
-                            <input type="text" class="w-full bg-surface border border-border rounded-lg p-3 text-dark text-sm focus:border-primary focus:outline-none transition-colors" placeholder="Specialty Roastery Co.">
+                            <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_company') }}</label>
+                            <input type="text" class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="Specialty Roastery Co.">
                         </div>
                         <div>
-                            <label class="block text-dark font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_subject') }}</label>
-                            <select class="w-full bg-surface border border-border rounded-lg p-3 text-dark text-sm focus:border-primary focus:outline-none transition-colors">
-                                <option>{{ __('landing.contact_form_subj_sample') }}</option>
-                                <option>{{ __('landing.contact_form_subj_bulk') }}</option>
-                                <option>{{ __('landing.contact_form_subj_partnership') }}</option>
-                                <option>{{ __('landing.contact_form_subj_general') }}</option>
+                            <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_subject') }}</label>
+                            <select class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white text-sm focus:border-primary focus:outline-none transition-colors">
+                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_sample') }}</option>
+                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_bulk') }}</option>
+                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_partnership') }}</option>
+                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_general') }}</option>
                             </select>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-dark font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_message') }} *</label>
-                        <textarea required rows="4" class="w-full bg-surface border border-border rounded-lg p-3 text-dark text-sm focus:border-primary focus:outline-none transition-colors" placeholder="{{ __('landing.contact_form_message_placeholder') }}"></textarea>
+                        <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_message') }} *</label>
+                        <textarea required rows="4" class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="{{ __('landing.contact_form_message_placeholder') }}"></textarea>
                     </div>
 
                     <button type="submit" class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-medium text-base transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto">

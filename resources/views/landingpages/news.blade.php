@@ -23,7 +23,7 @@
         <p data-animate="fade-up" class="text-sm lg:text-2xl font-bold tracking-[0.3em] uppercase text-light-grey mb-6">
             {{ $locale === 'id' ? 'Berita & Cerita' : 'News & Stories' }}
         </p>
-        <h1 data-animate="fade-up" data-delay="0.1" class="font-display text-8xl sm:text-9xl lg:text-[12rem] text-dark leading-[0.85] uppercase">
+        <h1 data-animate="fade-up" data-delay="0.1" class="font-display text-8xl sm:text-9xl lg:text-[12rem] text-white leading-[0.85] uppercase">
             {!! __('landing.news_library_heading') !!}
         </h1>
         <p data-animate="fade-up" data-delay="0.2" class="text-light-grey text-lg mt-8 max-w-xl">
@@ -34,9 +34,6 @@
 
 {{-- 2. News Library & Filter Section --}}
 <div data-animate="fade-up" class="container mx-auto px-5 py-24">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
-        <x-section-heading :title="__('landing.news_title')" :subtitle="__('landing.news_subtitle')" />
-    </div>
 
     {{-- Search & Filter Bar --}}
     <div data-animate="fade-up" class="flex flex-col md:flex-row justify-between items-center gap-6 mb-12">
@@ -65,7 +62,7 @@
                 @endphp
                 <a href="{{ $catUrl }}"
                     class="px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300
-                    {{ $isActive ? 'bg-primary text-dark shadow-md' : 'bg-surface-alt border border-border text-light-grey hover:border-primary/30 hover:text-dark' }}">
+                    {{ $isActive ? 'bg-primary text-white shadow-md' : 'bg-surface-alt border border-border text-light-grey hover:border-primary/40 hover:text-white' }}">
                     {{ $catName }}
                 </a>
             @endforeach
@@ -78,12 +75,12 @@
             @endif
             <div class="relative w-full md:w-64">
                 <input type="text" name="q" value="{{ $searchQuery }}" placeholder="{{ __('landing.news_search_placeholder') }}"
-                    class="w-full px-4 py-2 pl-10 text-sm bg-surface-alt border border-border rounded-lg text-dark focus:outline-none focus:border-primary transition-colors">
+                    class="w-full px-4 py-2 pl-10 text-sm bg-surface-alt border border-border rounded-lg text-white placeholder:text-light-grey/50 focus:outline-none focus:border-primary transition-colors">
                 <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-light-grey" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
-            <button type="submit" class="px-4 py-2 bg-primary text-dark font-medium rounded-lg text-sm hover:bg-primary-hover transition-colors">
+            <button type="submit" class="px-4 py-2 bg-primary text-white font-medium rounded-lg text-sm hover:bg-primary-hover transition-colors">
                 {{ __('landing.news_search_btn') }}
             </button>
         </form>

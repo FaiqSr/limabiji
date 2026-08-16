@@ -2,32 +2,28 @@
 
 return [
     // Brand & General
-    'hero_label' => 'LIMA BIJI AGRITECH',
+    'hero_label' => 'Lima Biji Agritech',
     'hero_heading' => 'KOPI LUWAK<br>ENZIMATIK SPECIALTY',
-    'hero_subheading' => 'Profil kopi luwak mewah — tanpa eksploitasi hewan. Fermentasi enzimatik proprietary kami mereplikasi proses luwak alami dengan presisi ilmiah.',
+    'hero_subheading' => 'Profil kopi luwak mewah — tanpa eksploitasi hewan. Fermentasi enzimatik proprietary kami mereplikasi proses luwak alami dengan presisi ilmiah, secara konsisten meraih skor SCA 84+.',
     'cta_innovations' => 'Jelajahi Proses Kami',
     'cta_news' => 'Berita',
-    'cta_primary' => 'Jelajahi Proses Kami',
-    'cta_secondary' => 'Hubungi Kami',
+    'cta_primary' => 'Minta Sampel Gratis',
+    'cta_secondary' => 'Lihat Proses',
 
     // About Us Page
     'about_hero_label' => 'TENTANG KAMI',
-    'about_hero_heading' => 'PELOPOR AGRITECH &<br>KOPI LUWAK ENZIMATIK',
-    'about_hero_subheading' => 'Mempelopori bioteknologi enzimatik etis dan bebas eksploitasi untuk meningkatkan mutu kopi specialty Nusantara bagi pasar roastery global.',
-    'about_story_label' => 'CERITA KAMI',
-    'about_story_heading' => 'Mendefinisikan Ulang Kopi Mewah Melalui Sains & Welas Asih',
-    'about_story_p1' => 'Selama puluhan tahun, kopi luwak tradisional dipandang sebagai salah satu cangkir kopi terlangka dan paling berharga di dunia. Namun, tingginya permintaan komersial memicu pengandangan satwa liar secara kejam, standar higienitas yang tidak konsisten, dan kecaman kesejahteraan hewan di seluruh komunitas specialty coffee global.',
-    'about_story_p2' => 'Lima Biji Agritech hadir menjawab dilema tersebut. Melalui riset bio-agrikultur mendalam, tim ilmuwan kami mengembangkan fermentasi enzimatik bio-identik terobosan yang mereplikasi persis pemecahan protein pencernaan luwak alami—tanpa melibatkan atau mengurung satu ekor hewan pun.',
-    'about_story_p3' => 'Kini, kami bermitra langsung dengan petani kecil di daerah dataran tinggi terbaik Indonesia untuk memanen ceri merah matang terbaik, memprosesnya dengan presisi biokimia ilmiah, dan menghadirkan skor cupping 84+ SCA yang konsisten bagi roaster internasional.',
+    'about_hero_heading' => 'PELOPOR AGRI-BIOTEK',
+    'about_hero_subheading' => 'Berdedikasi untuk mentransformasi agrikultur melalui praktik berkelanjutan, inovasi, dan bioteknologi guna menghadirkan kopi etis kelas dunia ke pasar global.',
+    'about_story_label' => 'TENTANG LIMA BIJI',
+    'about_story_heading' => 'Mentransformasi Agrikultur Melalui Inovasi & Bioteknologi',
+    'about_story_p1' => 'Kami adalah perusahaan agri-bioteknologi yang berdedikasi untuk mentransformasi agrikultur melalui praktik berkelanjutan, inovasi, dan bioteknologi. Produk utama kami mencakup kopi (specialty dan komersial) serta kopi luwak enzimatik, sebuah inovasi terobosan yang terinspirasi dari alam.',
+    'about_story_p2' => 'Dengan menghubungkan petani lokal ke pasar global, kami bertujuan memberdayakan masyarakat sekaligus menghadirkan produk pertanian berkualitas tinggi dan etis.',
 
     'about_vision_title' => 'Visi Kami',
-    'about_vision_desc' => 'Menjadi tolok ukur global bagi inovasi kopi specialty berkelanjutan dari Indonesia—membuktikan bahwa profil rasa mewah kelas dunia dapat dicapai secara 100% bebas eksploitasi hewan.',
+    'about_vision_desc' => 'Menjadi pemimpin global dalam inovasi agrikultur berkelanjutan, mentransformasi cara dunia menikmati kopi dan produk berbasis bio lainnya.',
 
     'about_mission_title' => 'Misi Kami',
-    'about_mission_1' => 'Mengembangkan bioteknologi bebas eksploitasi yang menghentikan sepenuhnya praktik pengandangan satwa.',
-    'about_mission_2' => 'Memberdayakan petani kecil kopi Nusantara melalui insentif harga premium dan praktik regeneratif.',
-    'about_mission_3' => 'Menjamin konsistensi rasa, keterlacakan ilmiah (*traceability*), dan mutu berstandar ekspor global.',
-    'about_mission_4' => 'Memperkenalkan kekayaan terroir dan single-origin khas Indonesia ke panggung specialty dunia.',
+    'about_mission_desc' => 'Memajukan agrikultur melalui inovasi dan bioteknologi, menghadirkan kopi berkelanjutan ke pasar global sembari memberdayakan petani dan komunitas lokal.',
 
     'about_values_label' => 'NILAI UTAMA KAMI',
     'about_values_title' => 'Prinsip Yang Memandu Karya Kami',
@@ -72,10 +68,17 @@ return [
     'origins_title' => 'ASAL KOPI',
     'origins_subtitle' => 'Jelajahi daerah mitra kami di Indonesia.',
 
+    // Home Feature Section
+    'home_feature_badge' => 'BIOTEKNOLOGI ETIS',
+    'home_feature_heading' => 'MEREVOLUSI KOPI SPECIALTY TANPA EKSPLOITASI',
+    'home_feature_desc' => 'Bioproses enzimatik kami mereplikasi biokimia pencernaan luwak alami dalam bioreaktor terkontrol, menghasilkan kemanisan luar biasa dan keasaman seimbang secara 100% bebas eksploitasi.',
+    'home_feature_card_title' => 'Perdagangan Langsung & Kualitas Micro-Lot',
+    'home_feature_card_desc' => 'Konsisten meraih skor 84+ SCA oleh Q-grader berlisensi dan juara barista di berbagai negara.',
+
     // Stats Section (Home)
     'stats_title' => 'Kami menyediakan kopi untuk',
-    'stat_export_countries' => 'Negara Ekspor',
-    'stat_partner_farms' => 'Petani Mitra',
+    'stat_export_countries' => 'Negara',
+    'stat_partner_farms' => 'Asal Daerah',
     'stat_cruelty_free' => 'Bebas Eksploitasi',
     'stat_origins' => 'Asal Daerah',
 
@@ -148,6 +151,14 @@ return [
 
     // Footer
     'footer_company' => 'Lima Biji Agritech',
-    'footer_location' => 'Bogor, Jawa Barat, Indonesia',
+    'footer_desc' => 'Mempelopori fermentasi bioteknologi untuk biji hijau kopi specialty Indonesia berkualitas tinggi.',
+    'footer_location' => 'Bogor • Jawa Barat, Indonesia',
+    'footer_navigation' => 'Navigasi',
+    'footer_origins' => 'Asal Daerah Mitra',
+    'footer_export_office' => 'Kantor Ekspor',
+    'footer_address' => 'Bogor, Jawa Barat, Indonesia',
+    'footer_rights' => 'Hak cipta dilindungi.',
+    'footer_privacy' => 'Kebijakan Privasi',
+    'footer_terms' => 'Syarat & Ketentuan',
     'footer_export' => 'Eksportir Kopi Luwak Enzimatik Specialty',
 ];

@@ -14,6 +14,15 @@
 @endpush
 
 @section('content')
+
+        {{-- Featured Image --}}
+        @if($article->image)
+            <div data-animate="fade-in" class="container mx-auto mb-12">
+                <img src="{{ $article->image }}" alt="{{ $article->title }}"
+                    class="w-full h-80 sm:h-96 lg:h-[28rem] object-cover rounded-lg shadow-md border border-border">
+            </div>
+        @endif
+
     <article class="container mx-auto px-5 pb-12 lg:pb-16 pt-6 lg:pt-8 max-w-4xl">
         {{-- Header --}}
         <header data-animate="fade-up" class="mb-10">
@@ -34,7 +43,7 @@
                 </span>
             </div>
 
-            <h1 class="font-display text-6xl sm:text-7xl lg:text-8xl text-dark leading-[0.85] uppercase">
+            <h1 class="font-display text-6xl sm:text-7xl lg:text-8xl text-white leading-[0.85] uppercase">
                 {{ $article->getTitleForLocale(app()->getLocale()) }}
             </h1>
 
@@ -49,13 +58,6 @@
             </div>
         </header>
 
-        {{-- Featured Image --}}
-        @if($article->image)
-            <div data-animate="fade-in" class="mb-12">
-                <img src="{{ $article->image }}" alt="{{ $article->title }}"
-                    class="w-full h-80 sm:h-96 lg:h-[28rem] object-cover rounded-lg shadow-md">
-            </div>
-        @endif
 
         {{-- Body Content (sanitized) --}}
         <div data-animate="fade-up" data-delay="0.1" class="article-body">

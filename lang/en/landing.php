@@ -2,32 +2,28 @@
 
 return [
     // Brand & General
-    'hero_label' => 'LIMA BIJI AGRITECH',
+    'hero_label' => 'Lima Biji Agritech',
     'hero_heading' => 'SPECIALTY ENZYMATIC<br>CIVET COFFEE',
-    'hero_subheading' => 'Luxury civet coffee profile — zero animal cruelty. Our proprietary enzymatic fermentation replicates the natural civet process with scientific precision.',
+    'hero_subheading' => 'Luxury civet coffee profile — zero animal cruelty. Our proprietary enzymatic fermentation replicates the natural civet process with scientific precision, consistently scoring 84+ SCA.',
     'cta_innovations' => 'Our Innovations',
     'cta_news' => 'News',
-    'cta_primary' => 'Explore Our Process',
-    'cta_secondary' => 'Contact Us',
+    'cta_primary' => 'Request a Free Sample',
+    'cta_secondary' => 'See the Process',
 
     // About Us Page
     'about_hero_label' => 'ABOUT US',
-    'about_hero_heading' => 'SPECIALTY ENZYMATIC<br>CIVET COFFEE & AGRITECH',
-    'about_hero_subheading' => 'Pioneering ethical, cruelty-free enzymatic biotechnology to elevate Indonesian specialty coffee for discerning roasteries across the globe.',
-    'about_story_label' => 'OUR STORY',
-    'about_story_heading' => 'Redefining Luxury Coffee Through Science & Compassion',
-    'about_story_p1' => 'For decades, traditional civet coffee (Kopi Luwak) was prized as one of the world\'s rarest and most complex cups. However, rising commercial demand led to cruel wildlife caging, inconsistent sanitary standards, and severe animal welfare concerns condemned across the specialty coffee world.',
-    'about_story_p2' => 'Lima Biji Agritech was born to solve this dilemma. Through years of rigorous bio-agricultural research, our team developed a breakthrough, bio-identical enzymatic fermentation that precisely replicates the natural civet digestive breakdown—without exploiting a single animal.',
-    'about_story_p3' => 'Today, we partner directly with high-altitude smallholder farmers across Indonesia\'s prime origins to source the finest ripe cherries, process them with scientific precision, and deliver consistent, 84+ SCA cup scores to international roasters.',
+    'about_hero_heading' => 'AGRI-BIOTECH PIONEER',
+    'about_hero_subheading' => 'Dedicated to transforming agriculture through sustainable practices, innovation, and biotechnology to deliver world-class ethical coffee to global markets.',
+    'about_story_label' => 'ABOUT LIMA BIJI',
+    'about_story_heading' => 'Transforming Agriculture Through Innovation & Bio-Tech',
+    'about_story_p1' => 'We are an agri-biotech company dedicated to transforming agriculture through sustainable practices, innovation, and biotechnology. Our core products include coffee (specialty and commercial) and enzymatic civet coffee, a breakthrough innovation inspired by nature.',
+    'about_story_p2' => 'By connecting local farmers with global markets, we aim to uplift communities while delivering high-quality and ethical agricultural products.',
 
     'about_vision_title' => 'Our Vision',
-    'about_vision_desc' => 'To be the global benchmark for sustainable, ethically-engineered specialty coffee from Indonesia—proving that world-class luxury cup profiles can be achieved with zero animal exploitation.',
+    'about_vision_desc' => 'To be a global leader in sustainable agricultural innovation, transforming how the world enjoys coffee and other bio-based products.',
 
     'about_mission_title' => 'Our Mission',
-    'about_mission_1' => 'Advance cruelty-free biotechnology that renders wildlife caging entirely obsolete.',
-    'about_mission_2' => 'Empower Indonesian coffee smallholders through fair premiums and regenerative practices.',
-    'about_mission_3' => 'Deliver unmatched cup consistency, scientific traceability, and export-grade quality.',
-    'about_mission_4' => 'Share the rich heritage and distinct terroir of Indonesian single-origins with the world.',
+    'about_mission_desc' => 'To advance agriculture through innovation and biotechnology, delivering sustainable coffee to global markets while empowering farmers and communities.',
 
     'about_values_label' => 'OUR CORE VALUES',
     'about_values_title' => 'Principles That Guide Our Craft',
@@ -72,10 +68,17 @@ return [
     'origins_title' => 'COFFEE ORIGINS',
     'origins_subtitle' => 'Explore our partner regions across Indonesia.',
 
+    // Home Feature Section
+    'home_feature_badge' => 'ETHICAL BIOTECHNOLOGY',
+    'home_feature_heading' => 'REVOLUTIONIZING SPECIALTY COFFEE WITH ZERO CRUELTY',
+    'home_feature_desc' => 'Our proprietary enzymatic bioprocessing replicates natural civet digestive biochemistry in temperature-controlled bioreactors, unlocking extraordinary sweetness and cup clarity with 100% cruelty-free integrity.',
+    'home_feature_card_title' => 'Global Direct Trade & Micro-Lot Quality',
+    'home_feature_card_desc' => 'Consistently scored 84+ SCA points by licensed Q-graders and barista champions across the globe.',
+
     // Stats Section (Home)
     'stats_title' => 'We provide coffee for',
     'stat_export_countries' => 'Export Countries',
-    'stat_partner_farms' => 'Partner Farms',
+    'stat_partner_farms' => 'Origins',
     'stat_cruelty_free' => 'Cruelty-Free',
     'stat_origins' => 'Origins',
 
@@ -148,6 +151,14 @@ return [
 
     // Footer
     'footer_company' => 'Lima Biji Agritech',
-    'footer_location' => 'Bogor, West Java, Indonesia',
+    'footer_desc' => 'Pioneering biotechnology fermentation for premium Indonesian specialty green beans.',
+    'footer_location' => 'Bogor • West Java, Indonesia',
+    'footer_navigation' => 'Navigation',
+    'footer_origins' => 'Partner Origins',
+    'footer_export_office' => 'Export Office',
+    'footer_address' => 'Bogor, West Java, Indonesia',
+    'footer_rights' => 'All rights reserved.',
+    'footer_privacy' => 'Privacy Policy',
+    'footer_terms' => 'Terms of Use',
     'footer_export' => 'Specialty Enzymatic Civet Coffee Exporter',
 ];

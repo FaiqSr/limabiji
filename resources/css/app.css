@@ -10,26 +10,27 @@
     --font-display: "Bebas Neue", sans-serif;
     --font-body: "Rubik", sans-serif;
 
-    /* Lima Biji — Light "Roastery Lab" Palette */
-    --color-dark: #1a1a1a;
-    --color-surface: #FAFAF8;
-    --color-surface-alt: #F0EDE8;
-    --color-primary: #08A679;
-    --color-primary-hover: #0ABE8A;
-    --color-secondary: #067A58;
-    --color-mint: #7DD4B8;
-    --color-light-grey: #6b7280;
-    --color-card: #FFFFFF;
-    --color-accent-gold: #d4924f;
-    --color-border: #E5E2DC;
-    --color-border-subtle: #EDE9E3;
+    /* Lima Biji — Dark Forest & Roasted Coffee Palette */
+    --color-dark: #1C332E;
+    --color-surface: #1C332E;
+    --color-surface-alt: #142622;
+    --color-primary: #069F80;
+    --color-primary-hover: #08B894;
+    --color-secondary: #9E4906;
+    --color-secondary-hover: #BA5708;
+    --color-mint: #4EBA9F;
+    --color-light-grey: #A3B8B2;
+    --color-card: #233F39;
+    --color-accent-gold: #9E4906;
+    --color-border: #2D4E46;
+    --color-border-subtle: #24413B;
 }
 
 @layer base {
     body {
         font-family: var(--font-body);
         background-color: var(--color-surface);
-        color: var(--color-dark);
+        color: #FFFFFF;
     }
 }
 
@@ -37,7 +38,7 @@
     /* Pill-shaped navigation links */
     .nav-link {
         @apply font-medium text-sm px-5 py-2.5 rounded-lg border border-transparent
-               text-dark/70 hover:text-dark hover:border-border hover:bg-surface-alt
+               text-white/80 hover:text-white hover:border-border hover:bg-surface-alt
                transition-all duration-300;
     }
 
@@ -47,28 +48,28 @@
     }
 
     .section-title {
-        @apply font-display text-4xl sm:text-5xl lg:text-6xl text-dark leading-tight;
+        @apply font-display text-4xl sm:text-5xl lg:text-6xl text-white leading-tight;
     }
 
     .section-subtitle {
         @apply text-light-grey text-base sm:text-lg max-w-2xl;
     }
 
-    /* Solid card — replaces glass-card (no blur, no transparency) */
+    /* Solid card — dark elevated container with subtle border */
     .card-solid {
         @apply bg-card border border-border-subtle rounded-lg shadow-sm;
     }
 
     /* Rich text article body — styled markup from Trix editor */
     .article-body {
-        @apply text-dark/80 text-lg leading-relaxed;
+        @apply text-white/80 text-lg leading-relaxed;
     }
 
     .article-body h1,
     .article-body h2,
     .article-body h3,
     .article-body h4 {
-        @apply font-display text-dark leading-tight mt-10 mb-4 uppercase;
+        @apply font-display text-white leading-tight mt-10 mb-4 uppercase;
     }
 
     .article-body h1 {
@@ -100,7 +101,7 @@
     }
 
     .article-body blockquote {
-        @apply border-l-4 border-primary pl-5 my-6 italic text-dark/60;
+        @apply border-l-4 border-primary pl-5 my-6 italic text-white/70;
     }
 
     .article-body a {
@@ -116,10 +117,10 @@
     }
 
     .article-body pre {
-        @apply bg-surface-alt rounded-lg p-4 my-6 overflow-x-auto font-mono text-sm;
+        @apply bg-surface-alt text-light-grey rounded-lg p-4 my-6 overflow-x-auto font-mono text-sm border border-border;
     }
 
     .article-body code {
-        @apply font-mono text-sm bg-surface-alt px-1.5 py-0.5 rounded;
+        @apply font-mono text-sm bg-surface-alt text-primary px-1.5 py-0.5 rounded border border-border;
     }
 }

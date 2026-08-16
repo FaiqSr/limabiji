@@ -15,7 +15,7 @@
     @endif
 
     <!-- Sticky Top Action Bar -->
-    <div class="sticky top-30 lg:top-20 z-30 mb-6 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="mb-6 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3 min-w-0">
             <a href="{{ route('admin.news.index') }}" class="btn btn-secondary text-xs py-2 px-3 shrink-0" title="Back to Articles list">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

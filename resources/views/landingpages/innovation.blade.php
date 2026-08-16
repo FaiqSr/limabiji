@@ -21,7 +21,7 @@
         <p data-animate="fade-up" class="text-sm lg:text-2xl font-bold tracking-[0.3em] uppercase text-light-grey mb-6">
             {{ __('landing.innovation_hero_label') }}
         </p>
-        <h1 data-animate="fade-up" data-delay="0.1" class="font-display text-8xl sm:text-9xl lg:text-[12rem] text-dark leading-[0.85] uppercase">
+        <h1 data-animate="fade-up" data-delay="0.1" class="font-display text-8xl sm:text-9xl lg:text-[12rem] text-white leading-[0.85] uppercase">
             {!! __('landing.innovation_hero_heading') !!}
         </h1>
         <p data-animate="fade-up" data-delay="0.2" class="text-light-grey text-lg mt-8 max-w-xl">
@@ -126,7 +126,7 @@
 
     <div data-animate="fade-up" class="space-y-24">
         @foreach ($steps as $index => $step)
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div class="step-card grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 {{-- Image --}}
                 <div class="{{ $index % 2 === 1 ? 'lg:order-2' : '' }} relative">
                     <div class="rounded-lg overflow-hidden h-80 lg:h-96 bg-surface-alt border border-border">
@@ -135,14 +135,14 @@
                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
                         @endif
                     </div>
-                    <div class="absolute -bottom-4 -left-4 bg-primary text-dark w-16 h-16 rounded-lg flex items-center justify-center font-display text-2xl shadow-lg">
+                    <div class="step-badge absolute -bottom-4 -left-4 bg-primary text-white w-16 h-16 rounded-lg flex items-center justify-center font-display text-2xl shadow-lg will-change-transform">
                         {{ $step['step'] }}
                     </div>
                 </div>
 
                 {{-- Content --}}
                 <div class="{{ $index % 2 === 1 ? 'lg:order-1' : '' }}">
-                    <h3 class="text-dark font-display text-3xl lg:text-4xl mb-4">{{ $step['title'] }}</h3>
+                    <h3 class="text-white font-display text-3xl lg:text-4xl mb-4">{{ $step['title'] }}</h3>
                     <p class="text-light-grey text-base leading-relaxed mb-6">{!! $step['description'] !!}</p>
                     @if(!empty($step['details']))
                         <div class="flex flex-wrap gap-3">
@@ -188,18 +188,18 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         {{-- Left: Text + Checklist --}}
         <div>
-            <h2 class="font-display text-4xl sm:text-5xl text-dark uppercase leading-tight mb-6">
+            <h2 class="font-display text-4xl sm:text-5xl text-white uppercase leading-tight mb-6">
                 {{ __('landing.innovation_matters_heading') }}
             </h2>
-            <p class="text-dark/70 text-base leading-relaxed mb-4">
+            <p class="text-white/80 text-base leading-relaxed mb-4">
                 {{ __('landing.innovation_matters_body') }}
             </p>
-            <p class="text-dark/70 text-base leading-relaxed mb-6">
+            <p class="text-white/80 text-base leading-relaxed mb-6">
                 {{ __('landing.innovation_matters_body2') }}
             </p>
             <ul class="space-y-2 mt-6">
                 @foreach($checklistItems as $item)
-                <li class="flex items-center gap-3 text-dark/80 text-sm font-medium">
+                <li class="flex items-center gap-3 text-white/90 text-sm font-medium">
                     <span class="w-5 h-5 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center flex-shrink-0">
                         <svg class="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
@@ -215,8 +215,8 @@
         <div class="grid grid-cols-2 gap-6">
             @foreach($mattersStats as $stat)
             <div class="card-solid p-6 text-center">
-                <p class="font-display text-5xl text-dark">{{ $stat['value'] }}</p>
-                <p class="text-dark/40 text-sm mt-2">{{ $stat['label'] }}</p>
+                <p class="font-display text-5xl text-white">{{ $stat['value'] }}</p>
+                <p class="text-light-grey text-sm mt-2">{{ $stat['label'] }}</p>
             </div>
             @endforeach
         </div>
@@ -227,11 +227,11 @@
 <div class="container mx-auto px-5 py-24">
     <div data-animate="scale-in" class="card-solid p-10 sm:p-16 relative overflow-hidden">
         <div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none select-none">
-            <span class="font-display text-[12rem] text-dark leading-none">5</span>
+            <span class="font-display text-[12rem] text-white leading-none">5</span>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
             <div class="lg:col-span-7">
-                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl text-dark leading-tight uppercase">
+                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl text-white leading-tight uppercase">
                     {{ __('landing.cta_innovation_heading') }}
                 </h2>
             </div>
@@ -247,6 +247,25 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof Motion !== 'undefined' && typeof Motion.scroll === 'function' && typeof Motion.animate === 'function') {
+            const { scroll, animate } = Motion;
+            document.querySelectorAll('.step-card').forEach((card) => {
+                const badge = card.querySelector('.step-badge');
+                if (badge) {
+                    scroll(
+                        animate(badge, { y: [0, -200] }, { duration: 1 }),
+                        {
+                            target: card,
+                            offset: ["start center", "center start"]
+                        }
+                    );
+                }
+            });
+        }
+    });
+</script>
 <script type="application/ld+json">
     {!! json_encode([
         '@context' => 'https://schema.org',

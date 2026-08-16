@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ImageOptimizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class MediaController extends Controller
@@ -31,35 +32,61 @@ class MediaController extends Controller
 
     public function upload(Request $request, ImageOptimizer $optimizer)
     {
-        $validated = $request->validate([
+        $isJsonRequest = $request->expectsJson() || $request->wantsJson() || $request->ajax() || $request->header('Accept') === 'application/json' || $request->has('context');
+
+        $validator = Validator::make($request->all(), [
             'file' => ['required', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,svg,gif'],
             'context' => ['nullable', 'string', 'in:general,media,articles,origins'],
         ]);
 
+        if ($validator->fails()) {
+            if ($isJsonRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first('file') ?: 'The uploaded file is invalid or not supported.',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $validated = $validator->validated();
         $context = $validated['context'] ?? 'media';
         $file = $request->file('file');
 
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
-        $filename = Str::slug($originalName).'-'.uniqid().'.'.$extension;
-        $targetPath = "{$context}/{$filename}";
+        try {
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+            $filename = Str::slug($originalName).'-'.uniqid().'.'.$extension;
+            $targetPath = "{$context}/{$filename}";
 
-        // Compress and store image
-        $path = $optimizer->optimizeAndStore($file, $targetPath, 'public');
-        $url = '/storage/'.ltrim($path, '/');
+            // Compress and store image
+            $path = $optimizer->optimizeAndStore($file, $targetPath, 'public');
+            $url = '/storage/'.ltrim($path, '/');
 
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'url' => $url,
-                'path' => $path,
-                'name' => $filename,
-            ]);
+            if ($isJsonRequest) {
+                return response()->json([
+                    'success' => true,
+                    'url' => $url,
+                    'path' => $path,
+                    'name' => $filename,
+                ]);
+            }
+
+            return redirect()
+                ->route('admin.media.index')
+                ->with('success', 'File uploaded and compressed successfully.');
+        } catch (\Throwable $e) {
+            if ($isJsonRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to process and store the image: '.$e->getMessage(),
+                ], 500);
+            }
+
+            return redirect()->back()->with('error', 'Upload failed: '.$e->getMessage());
         }
-
-        return redirect()
-            ->route('admin.media.index')
-            ->with('success', 'File uploaded and compressed successfully.');
     }
 
     public function destroy(Request $request)

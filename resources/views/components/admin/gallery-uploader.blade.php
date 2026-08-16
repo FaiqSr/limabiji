@@ -43,16 +43,33 @@ $initialImages = array_values(array_filter($initialImages));
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                         'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
                     },
                     body: formData,
                 })
-                .then(res => res.json().then(data => ({ ok: res.ok, data })))
-                .then(({ ok, data }) => {
-                    if (ok && data.success) {
+                .then(async (res) => {
+                    const contentType = res.headers.get('content-type') || '';
+                    let data = null;
+                    if (contentType.includes('application/json')) {
+                        try {
+                            data = await res.json();
+                        } catch (_) {
+                            data = null;
+                        }
+                    }
+                    return { ok: res.ok, status: res.status, data };
+                })
+                .then(({ ok, status, data }) => {
+                    if (ok && data && data.success) {
                         this.images = [...this.images, data.url];
+                    } else if (data && (data.message || (data.errors && data.errors.file))) {
+                        this.error = (data.errors && data.errors.file) ? data.errors.file[0] : data.message;
+                    } else if (status === 419) {
+                        this.error = 'Session expired. Please refresh the page and try again.';
+                    } else if (status === 413) {
+                        this.error = 'File is too large. Maximum allowed size is 10MB.';
                     } else {
-                        const msg = (data.errors && data.errors.file) ? data.errors.file[0] : (data.message || 'Upload failed');
-                        this.error = msg;
+                        this.error = 'Upload failed (HTTP ' + status + '). Please try another image.';
                     }
                 })
                 .catch(err => {
