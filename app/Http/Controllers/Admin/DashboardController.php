@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AnalyticsEvent;
 use App\Models\Article;
+use App\Models\ContactMessage;
 use App\Models\ExportDestination;
 use App\Models\Origin;
 use App\Models\SiteSetting;
@@ -22,6 +23,8 @@ class DashboardController extends Controller
             'articles_draft' => Article::where('status', 'draft')->count(),
             'origins_count' => Origin::count(),
             'testimonials_count' => Testimonial::count(),
+            'messages_count' => ContactMessage::count(),
+            'messages_unread' => ContactMessage::unread()->count(),
             'page_views_7d' => AnalyticsEvent::pageViews(7),
             'unique_visitors_7d' => AnalyticsEvent::uniqueVisitors(7),
             'top_pages' => AnalyticsEvent::topPages(7, 5),
@@ -29,9 +32,10 @@ class DashboardController extends Controller
 
         $origins = Origin::ordered()->get();
         $recentArticles = Article::with('author')->latest()->take(5)->get();
+        $recentMessages = ContactMessage::latest()->take(5)->get();
         $siteSettings = SiteSetting::all()->groupBy('group');
 
-        return view('admin.dashboard.index', compact('stats', 'origins', 'recentArticles', 'siteSettings'));
+        return view('admin.dashboard.index', compact('stats', 'origins', 'recentArticles', 'recentMessages', 'siteSettings'));
     }
 
     public function updateSettings(Request $request)

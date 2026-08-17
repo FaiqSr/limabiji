@@ -41,7 +41,7 @@
     </div>
 
     <!-- CORE KPI METRICS ROW -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
             <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Export Destinations</span>
             <div class="flex items-baseline justify-between mt-2">
@@ -67,6 +67,20 @@
         </div>
 
         <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs">
+            <a href="{{ route('admin.messages.index') }}" class="block group">
+                <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block group-hover:text-indigo-600 transition-colors">Inquiries</span>
+                <div class="flex items-baseline justify-between mt-2">
+                    <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{{ number_format($stats['messages_count']) }}</span>
+                    @if ($stats['messages_unread'] > 0)
+                        <span class="text-[11px] font-mono font-medium px-2 py-0.5 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200">{{ number_format($stats['messages_unread']) }} NEW</span>
+                    @else
+                        <span class="text-[11px] font-mono font-medium px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">0 NEW</span>
+                    @endif
+                </div>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-lg border border-slate-200 p-4 shadow-2xs col-span-2 md:col-span-1">
             <span class="text-xs font-medium text-slate-500 uppercase tracking-wider block">Page Views (7D)</span>
             <div class="flex items-baseline justify-between mt-2">
                 <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight">{{ number_format($stats['page_views_7d']) }}</span>
@@ -141,13 +155,42 @@
         </div>
     </div>
 
-    <!-- BOTTOM GRID: Recent News Articles & Top Page Traffic -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- BOTTOM GRID: Recent Inquiries, Recent News Articles & Top Page Traffic -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Inquiries Feed -->
+        <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-2xs">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                <h3 class="text-base font-semibold text-slate-900">Recent Inquiries</h3>
+                <a href="{{ route('admin.messages.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">View All &rarr;</a>
+            </div>
+            <div class="space-y-3">
+                @forelse($recentMessages as $msg)
+                <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between gap-3 hover:border-slate-300 transition-all">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            @if(!$msg->is_read)
+                                <span class="badge badge-pending text-[10px]">Unread</span>
+                            @else
+                                <span class="badge text-[10px] bg-slate-100 text-slate-600 border-slate-200">Read</span>
+                            @endif
+                            <span class="text-[11px] text-slate-400 font-mono">{{ $msg->created_at ? $msg->created_at->diffForHumans() : '' }}</span>
+                        </div>
+                        <p class="text-xs font-semibold text-slate-900 truncate">{{ $msg->name }}</p>
+                        <p class="text-[11px] text-slate-500 truncate">{{ $msg->subject ?: Str::limit($msg->message, 40) }}</p>
+                    </div>
+                    <a href="{{ route('admin.messages.show', $msg) }}" class="btn btn-secondary py-1 px-2.5 text-xs">View</a>
+                </div>
+                @empty
+                <p class="text-xs text-slate-400 text-center py-6">No inquiries received yet.</p>
+                @endforelse
+            </div>
+        </div>
+
         <!-- Recent Articles Feed -->
         <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-2xs">
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                <h3 class="text-base font-semibold text-slate-900">Recent News & Stories</h3>
-                <a href="{{ route('admin.news.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">View All News &rarr;</a>
+                <h3 class="text-base font-semibold text-slate-900">Recent News</h3>
+                <a href="{{ route('admin.news.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">View All &rarr;</a>
             </div>
             <div class="space-y-3">
                 @forelse($recentArticles as $recent)
@@ -173,8 +216,8 @@
         <!-- Top Pages Analytics Matrix -->
         <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-2xs">
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                <h3 class="text-base font-semibold text-slate-900">Top Pages (Last 7 Days)</h3>
-                <a href="{{ route('admin.analytics.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">Full Analytics &rarr;</a>
+                <h3 class="text-base font-semibold text-slate-900">Top Pages (7D)</h3>
+                <a href="{{ route('admin.analytics.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">Analytics &rarr;</a>
             </div>
             <div class="space-y-2.5">
                 @forelse($stats['top_pages'] as $pageItem)
@@ -186,7 +229,7 @@
                 </div>
                 @empty
                 <div class="p-6 text-center text-xs text-slate-400">
-                    No analytics event recorded in past 7 days.
+                    No analytics recorded.
                 </div>
                 @endforelse
             </div>

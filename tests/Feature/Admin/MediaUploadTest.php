@@ -66,7 +66,7 @@ class MediaUploadTest extends TestCase
     {
         Storage::fake('public');
 
-        $svgContent = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><!-- Comment --><circle cx="50" cy="50" r="50"/></svg>';
+        $svgContent = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 100 100"><!-- Comment --><circle cx="50" cy="50" r="50"/></svg>';
         $file = UploadedFile::fake()->createWithContent('icon.svg', $svgContent);
 
         $response = $this->actingAs($this->admin)->postJson(route('admin.media.upload'), [
@@ -85,7 +85,7 @@ class MediaUploadTest extends TestCase
     public function test_image_optimizer_service_handles_resizing_large_images(): void
     {
         $optimizer = new ImageOptimizer;
-        $svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><!-- Test -->   <rect width="100" height="100" /> </svg>';
+        $svg = '<svg xmlns="https://www.w3.org/2000/svg" width="100" height="100"><!-- Test -->   <rect width="100" height="100" /> </svg>';
 
         $tempFile = tempnam(sys_get_temp_dir(), 'test_img_').'.svg';
         file_put_contents($tempFile, $svg);

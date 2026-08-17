@@ -39,8 +39,12 @@
             {{-- Contact --}}
             <div class="lg:col-span-3">
                 <h5 class="text-white font-medium text-sm mb-5 uppercase tracking-wider">{{ __('landing.footer_export_office') }}</h5>
-                <p class="text-light-grey text-sm mb-2">{{ __('landing.footer_address') }}</p>
-                <p class="text-white/80 font-medium text-sm">export@limabijiagritech.com</p>
+                @php
+                    $footerEmail = \App\Models\SiteSetting::get('contact_email', null, 'export@limabijiagritech.com');
+                    $footerAddress = \App\Models\SiteSetting::get('contact_address', app()->getLocale(), __('landing.footer_address'));
+                @endphp
+                <p class="text-light-grey text-sm mb-2">{{ $footerAddress }}</p>
+                <a href="mailto:{{ $footerEmail }}" class="text-white/80 hover:text-primary transition-colors font-medium text-sm">{{ $footerEmail }}</a>
             </div>
         </div>
 

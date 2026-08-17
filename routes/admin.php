@@ -3,10 +3,14 @@
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExportDestinationController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\InnovationStepController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\OriginController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -56,6 +60,20 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     Route::put('/testimonials/{testimonial}', [TestimonialController::class, 'update'])->name('testimonials.update');
     Route::delete('/testimonials/{testimonial}', [TestimonialController::class, 'destroy'])->name('testimonials.destroy');
 
+    // Innovation / Process Steps
+    Route::resource('innovation-steps', InnovationStepController::class)->except(['show']);
+    Route::post('/innovation-steps/{innovation_step}/toggle-active', [InnovationStepController::class, 'toggleActive'])->name('innovation-steps.toggle-active');
+
+    // FAQs (Frequently Asked Questions)
+    Route::resource('faqs', FaqController::class)->except(['show']);
+    Route::post('/faqs/{faq}/toggle-active', [FaqController::class, 'toggleActive'])->name('faqs.toggle-active');
+
+    // Contact Messages / Inquiries
+    Route::get('/messages', [ContactMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{message}', [ContactMessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{message}/toggle-read', [ContactMessageController::class, 'toggleRead'])->name('messages.toggle-read');
+    Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
+
     // Users (admin only)
     Route::middleware('admin')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -73,6 +91,10 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     Route::get('/media', [MediaController::class, 'index'])->name('media.index');
     Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
     Route::delete('/media', [MediaController::class, 'destroy'])->name('media.destroy');
+
+    // Site Settings (Contact & Brand Info)
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
     // Logout
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

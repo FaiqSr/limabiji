@@ -30,6 +30,7 @@ class ContentSeeder extends Seeder
         SiteSetting::set('site_name', 'Lima Biji Agritech', 'en', 'general');
         SiteSetting::set('site_name', 'Lima Biji Agritech', 'id', 'general');
         SiteSetting::set('contact_email', 'export@limabijiagritech.com', null, 'contact');
+        SiteSetting::set('contact_phone', '+62 812 3456 7890', null, 'contact');
         SiteSetting::set('contact_address', 'Bogor, West Java, Indonesia', 'en', 'contact');
         SiteSetting::set('contact_address', 'Bogor, Jawa Barat, Indonesia', 'id', 'contact');
         SiteSetting::set('contact_hours', 'Mon – Fri, 8:00 – 16:00 WIB', null, 'contact');

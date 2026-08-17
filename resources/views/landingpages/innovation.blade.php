@@ -31,122 +31,41 @@
 </div>
 
 {{-- 2. Process Steps Section --}}
-@php
-    $steps = $locale === 'id' ? [
-        [
-            'step' => '01',
-            'title' => 'Pengadaan Ceri Etis',
-            'image' => 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Kami bermitra langsung dengan petani kecil dataran tinggi di seluruh Jawa Barat, Toraja, dan Aceh. Hanya ceri merah 100% matang yang dipetik tangan dengan kadar gula di atas 20° Brix yang diterima.',
-            'details' => 'Petik tangan ceri merah, Kadar gula 20°+ Brix, Dataran tinggi (1200m+)',
-        ],
-        [
-            'step' => '02',
-            'title' => 'Isolasi & Formulasi Enzim',
-            'image' => 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Ilmuwan bio kami mengisolasi enzim proteolitik dan lipolitik alami yang mencerminkan biokimia pencernaan Musang Luwak Asia (Paradoxurus hermaphroditus).',
-            'details' => 'Enzim berbasis tanaman, Proses bio-identik, Tanpa keterlibatan hewan',
-        ],
-        [
-            'step' => '03',
-            'title' => 'Fermentasi Terkontrol',
-            'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Biji yang telah dikupas menjalani bio-fermentasi 36 jam dalam bioreaktor stainless steel. Suhu, pH, dan konsentrasi enzim dipantau secara real-time.',
-            'details' => 'Durasi 36 jam, Kontrol pH real-time, Tangki stainless steel',
-        ],
-        [
-            'step' => '04',
-            'title' => 'Pencucian & Pengeringan Matahari',
-            'image' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Biji dicuci menyeluruh dengan air mata air pegunungan untuk menghentikan fermentasi, lalu dikeringkan di atas bedengan surya untuk mencapai kadar air optimal 11%.',
-            'details' => 'Cuci air mata air, Pengeringan bedengan, Target kadar air 11%',
-        ],
-        [
-            'step' => '05',
-            'title' => 'Penyimpanan & Kondisioning',
-            'image' => 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Kopi parchment disimpan dalam gudang dengan suhu terkontrol selama 30–60 hari. Ini memungkinkan prekursor rasa stabil sebelum pengupasan.',
-            'details' => 'Istirahat 30–60 hari, Kontrol iklim, Penuaan parchment',
-        ],
-        [
-            'step' => '06',
-            'title' => 'Grading Kualitas & Ekspor',
-            'image' => 'https://images.unsplash.com/photo-1587080413959-06b859fb107d?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Setiap lot menjalani cupping, penyortiran densitas, dan sizing. Hanya biji dengan skor 84+ yang disetujui untuk ekspor. Dikemas vakum dalam kantong GrainPro food-grade.',
-            'details' => 'Skor SCA: 84+, Screen: 16–18, Kemasan GrainPro',
-        ],
-    ] : [
-        [
-            'step' => '01',
-            'title' => 'Ethical Cherry Sourcing',
-            'image' => 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?q=80&w=800&auto=format&fit=crop',
-            'description' => 'We partner directly with high-altitude smallholder farms across West Java, Toraja, and Aceh. Only 100% ripe, hand-picked red cherries with sugar levels above 20° Brix are accepted.',
-            'details' => 'Hand-picked red cherries, 20°+ Brix sugar level, High altitude (1200m+)',
-        ],
-        [
-            'step' => '02',
-            'title' => 'Enzyme Isolation & Formulation',
-            'image' => 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Our bio-scientists isolate natural proteolytic and lipolytic enzymes that mirror the digestive biochemistry of the Asian Palm Civet (Paradoxurus hermaphroditus).',
-            'details' => 'Plant-based enzymes, Bio-identical process, Zero animal involvement',
-        ],
-        [
-            'step' => '03',
-            'title' => 'Controlled Fermentation',
-            'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Depulped beans undergo a 36-hour bio-fermentation in stainless steel bioreactors. Temperature, pH, and enzyme concentration are monitored in real time.',
-            'details' => '36-hour duration, Real-time pH control, Stainless steel tanks',
-        ],
-        [
-            'step' => '04',
-            'title' => 'Washing & Solar Drying',
-            'image' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Beans are thoroughly washed with mountain spring water to stop fermentation, then dried on raised solar beds to achieve an optimal 11% moisture content.',
-            'details' => 'Spring water wash, Raised bed drying, 11% target moisture',
-        ],
-        [
-            'step' => '05',
-            'title' => 'Resting & Conditioning',
-            'image' => 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Parchment coffee rests in temperature-controlled warehouses for 30–60 days. This allows flavor precursors to stabilize before hulling.',
-            'details' => '30–60 days rest, Climate-controlled, Parchment aging',
-        ],
-        [
-            'step' => '06',
-            'title' => 'Quality Grading & Export',
-            'image' => 'https://images.unsplash.com/photo-1587080413959-06b859fb107d?q=80&w=800&auto=format&fit=crop',
-            'description' => 'Every lot undergoes cupping, density sorting, and screen sizing. Only beans scoring 84+ points are approved for export. Vacuum-packed in food-grade GrainPro bags.',
-            'details' => 'SCA score: 84+, Screen: 16–18, GrainPro packed',
-        ],
-    ];
-@endphp
-
 <div class="container mx-auto px-5 py-24">
     <x-section-heading :title="__('landing.innovation_steps_title')" :subtitle="__('landing.innovation_steps_subtitle')" />
 
     <div data-animate="fade-up" class="space-y-24">
         @foreach ($steps as $index => $step)
+            @php
+                $stepNumber = is_array($step) 
+                    ? ($step['step'] ?? str_pad($index + 1, 2, '0', STR_PAD_LEFT)) 
+                    : ($step->step_number ? str_pad($step->step_number, 2, '0', STR_PAD_LEFT) : str_pad($index + 1, 2, '0', STR_PAD_LEFT));
+                $stepTitle = is_array($step) ? ($step['title'] ?? '') : $step->getTitleForLocale($locale);
+                $stepDesc = is_array($step) ? ($step['description'] ?? '') : $step->getDescriptionForLocale($locale);
+                $stepDetails = is_array($step) ? ($step['details'] ?? '') : $step->getDetailsForLocale($locale);
+                $stepImage = is_array($step) ? ($step['image'] ?? '') : $step->image;
+            @endphp
             <div class="step-card grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 {{-- Image --}}
                 <div class="{{ $index % 2 === 1 ? 'lg:order-2' : '' }} relative">
                     <div class="rounded-lg overflow-hidden h-80 lg:h-96 bg-surface-alt border border-border">
-                        @if(!empty($step['image']))
-                            <img src="{{ $step['image'] }}" alt="{{ $step['title'] }}"
+                        @if(!empty($stepImage))
+                            <img src="{{ $stepImage }}" alt="{{ $stepTitle }}"
                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
                         @endif
                     </div>
                     <div class="step-badge absolute -bottom-4 -left-4 bg-primary text-white w-16 h-16 rounded-lg flex items-center justify-center font-display text-2xl shadow-lg will-change-transform">
-                        {{ $step['step'] }}
+                        {{ $stepNumber }}
                     </div>
                 </div>
 
                 {{-- Content --}}
                 <div class="{{ $index % 2 === 1 ? 'lg:order-1' : '' }}">
-                    <h3 class="text-white font-display text-3xl lg:text-4xl mb-4">{{ $step['title'] }}</h3>
-                    <p class="text-light-grey text-base leading-relaxed mb-6">{!! $step['description'] !!}</p>
-                    @if(!empty($step['details']))
+                    <h3 class="text-white font-display text-3xl lg:text-4xl mb-4">{{ $stepTitle }}</h3>
+                    <p class="text-light-grey text-base leading-relaxed mb-6">{!! $stepDesc !!}</p>
+                    @if(!empty($stepDetails))
                         <div class="flex flex-wrap gap-3">
-                            @foreach (array_map('trim', explode(',', $step['details'])) as $detail)
+                            @foreach (array_map('trim', explode(',', $stepDetails)) as $detail)
                                 @if ($detail)
                                     <span class="text-xs font-bold text-primary bg-primary/10 border border-primary/30 px-4 py-1.5 rounded-lg">
                                         {{ $detail }}
@@ -272,14 +191,17 @@
         '@type' => 'HowTo',
         'name' => __('landing.innovation_steps_title'),
         'description' => __('landing.innovation_steps_subtitle'),
-        'step' => array_map(function ($step, $idx) {
+        'step' => collect($steps)->map(function ($step, $idx) use ($locale) {
+            $num = is_array($step) ? intval($step['step'] ?? ($idx + 1)) : intval($step->step_number ?: ($idx + 1));
+            $title = is_array($step) ? ($step['title'] ?? '') : $step->getTitleForLocale($locale);
+            $desc = is_array($step) ? ($step['description'] ?? '') : $step->getDescriptionForLocale($locale);
             return [
                 '@type' => 'HowToStep',
-                'position' => intval($step['step']),
-                'name' => $step['title'],
-                'text' => strip_tags($step['description']),
+                'position' => $num,
+                'name' => $title,
+                'text' => strip_tags($desc),
             ];
-        }, $steps, array_keys($steps)),
+        })->values()->all(),
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
 </script>
 @endpush

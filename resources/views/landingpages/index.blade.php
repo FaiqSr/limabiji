@@ -250,7 +250,7 @@
                 <div id="map"></div>
 
                 <button id="btn-reset-map" class="reset-view-btn" title="Kembali ke posisi awal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="https://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                         <path d="M3 3v5h5" />
@@ -293,99 +293,43 @@
 
 
         {{-- 7. FAQs Section --}}
-        @php
-            $faqs =
-                $locale === 'id'
-                    ? [
-                        [
-                            'question' => 'Bagaimana proses kopi luwak enzimatik Anda bekerja tanpa hewan?',
-                            'answer' =>
-                                'Kami mereplikasi proses fermentasi alami musang luwak liar menggunakan enzim berbasis tanaman bio-identik dan fermentasi terkontrol suhu presisi. Ini menghasilkan profil luwak mewah yang lembut dan rendah keasaman secara 100% bebas eksploitasi.',
-                        ],
-                        [
-                            'question' => 'Berapa Jumlah Pesanan Minimum (MOQ) untuk ekspor internasional?',
-                            'answer' =>
-                                'Untuk kargo udara dan lot sampel, pesanan minimum kami mulai dari 20 kg dalam kantong food-grade tersegel vakum. Untuk kargo laut kontainer penuh (FCL/LCL), kami melayani pesanan mulai dari 500 kg hingga pasokan curah.',
-                        ],
-                        [
-                            'question' => 'Asal daerah dan varietas kopi apa saja yang Anda tawarkan?',
-                            'answer' =>
-                                'Kami utamanya memproses biji hijau Arabika specialty single-origin dari perkebunan dataran tinggi Jawa Barat (Preanger), serta lot terkurasi dari Toraja, Aceh Gayo, Malang, dan Yogyakarta.',
-                        ],
-                        [
-                            'question' => 'Apakah Anda menyediakan sampel biji hijau untuk roastery sebelum membeli?',
-                            'answer' =>
-                                'Ya. Kami menyediakan paket sampel 250g–1kg untuk roaster berlisensi dan importir kopi secara global. Anda dapat meminta kit sampel dengan menghubungi tim penjualan kami melalui formulir kontak ekspor.',
-                        ],
-                        [
-                            'question' => 'Sertifikasi dan dokumentasi ekspor apa yang Anda sediakan?',
-                            'answer' =>
-                                'Setiap pengiriman ekspor dilengkapi dengan Surat Keterangan Asal (COO), Sertifikat Fitosanitari, Bill of Lading, Faktur Komersial, Packing List, dan Laporan Hasil Analisis Kualitas Lab.',
-                        ],
-                    ]
-                    : [
-                        [
-                            'question' => 'How does your enzymatic civet coffee process work without animals?',
-                            'answer' =>
-                                'We replicate the natural fermentation process of wild civets using bio-identical plant-based enzymes and precise temperature-controlled fermentation. This yields the signature smooth, low-acidity profile of luxury civet coffee with 100% cruelty-free consistency.',
-                        ],
-                        [
-                            'question' => 'What is the Minimum Order Quantity (MOQ) for international exports?',
-                            'answer' =>
-                                'For air freight and sample lots, our minimum order starts at 20 kg in vacuum-sealed food-grade bags. For full container ocean freight (FCL/LCL), we accommodate orders starting from 500 kg up to bulk supply.',
-                        ],
-                        [
-                            'question' => 'Which coffee origins and varieties do you offer?',
-                            'answer' =>
-                                'We primarily process single-origin specialty Arabica green beans harvested from West Java high-altitude farms (Preanger), as well as curated lots from Toraja, Aceh Gayo, Malang, and Yogyakarta.',
-                        ],
-                        [
-                            'question' => 'Do you provide green bean samples for roasteries before purchasing?',
-                            'answer' =>
-                                'Yes. We provide 250g–1kg sample packs for licensed roasters and coffee importers globally. You can request a sample kit by contacting our sales team via the export contact form.',
-                        ],
-                        [
-                            'question' => 'What export certifications and documentation do you provide?',
-                            'answer' =>
-                                'Every export shipment comes complete with a Certificate of Origin (COO), Phytosanitary Certificate, Bill of Lading, Commercial Invoice, Packing List, and Quality Analysis Lab Reports.',
-                        ],
-                    ];
-        @endphp
-        <div class="container mx-auto px-5 py-20 lg:py-24">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <div>
-                    <x-section-heading :title="__('landing.faq_title')" :subtitle="__('landing.faq_subtitle')" />
-                </div>
+        @if ($faqs->isNotEmpty())
+            <div class="container mx-auto px-5 py-20 lg:py-24">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <div>
+                        <x-section-heading :title="__('landing.faq_title')" :subtitle="__('landing.faq_subtitle')" />
+                    </div>
 
-                <div>
-                    @foreach ($faqs as $faq)
-                        <details data-animate="fade-up"
-                            class="faq-item group border-y border-border transition-colors duration-300 hover:border-primary/30 [&[open]]:border-primary/50 [&[open]]:bg-primary/5 overflow-hidden">
-                            <summary
-                                class="flex justify-between items-center cursor-pointer p-6 sm:p-8 font-bold text-white text-lg sm:text-xl select-none list-none gap-4">
-                                <span>{{ $faq['question'] }}</span>
-                                <span
-                                    class="faq-icon flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 group-hover:border-primary flex items-center justify-center text-primary transition-transform duration-300">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </span>
-                            </summary>
-                            <div
-                                class="faq-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out">
-                                <div class="overflow-hidden">
-                                    <div
-                                        class="px-6 sm:px-8 pb-6 sm:pb-8 pt-0 text-white/80 text-sm sm:text-base leading-relaxed border-t border-border mt-2 pt-4">
-                                        {!! $faq['answer'] !!}
+                    <div>
+                        @foreach ($faqs as $faq)
+                            <details data-animate="fade-up"
+                                class="faq-item group border-y border-border transition-colors duration-300 hover:border-primary/30 [&[open]]:border-primary/50 [&[open]]:bg-primary/5 overflow-hidden">
+                                <summary
+                                    class="flex justify-between items-center cursor-pointer p-6 sm:p-8 font-bold text-white text-lg sm:text-xl select-none list-none gap-4">
+                                    <span>{{ $faq->getQuestionForLocale($locale) }}</span>
+                                    <span
+                                        class="faq-icon flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 group-hover:border-primary flex items-center justify-center text-primary transition-transform duration-300">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div
+                                    class="faq-content grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out">
+                                    <div class="overflow-hidden">
+                                        <div
+                                            class="px-6 sm:px-8 pb-6 sm:pb-8 pt-0 text-white/80 text-sm sm:text-base leading-relaxed border-t border-border mt-2 pt-4">
+                                            {!! $faq->getAnswerForLocale($locale) !!}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </details>
-                    @endforeach
+                            </details>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
 
         {{-- 5. News & Stories Section --}}
         @if ($articles->isNotEmpty())

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\ExportDestination;
+use App\Models\Faq;
+use App\Models\InnovationStep;
 use App\Models\Origin;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
@@ -22,12 +25,14 @@ class LandingPages extends Controller
             ->take(3)
             ->get();
         $testimonials = Testimonial::orderBy('order')->take(3)->get();
+        $faqs = Faq::active()->ordered()->get();
 
         return view('landingpages.index', compact(
             'origins',
             'exportDestinations',
             'articles',
-            'testimonials'
+            'testimonials',
+            'faqs'
         ));
     }
 
@@ -38,7 +43,9 @@ class LandingPages extends Controller
 
     public function innovation()
     {
-        return view('landingpages.innovation');
+        $steps = InnovationStep::active()->ordered()->get();
+
+        return view('landingpages.innovation', compact('steps'));
     }
 
     public function news(Request $request)
@@ -80,6 +87,21 @@ class LandingPages extends Controller
     public function contact()
     {
         return view('landingpages.contact');
+    }
+
+    public function submitContact(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'company' => ['nullable', 'string', 'max:255'],
+            'subject' => ['nullable', 'string', 'max:255'],
+            'message' => ['required', 'string', 'max:5000'],
+        ]);
+
+        ContactMessage::create($validated);
+
+        return redirect()->route('landingpages.contact')->with('success', __('landing.contact_form_alert'));
     }
 
     public function origins(string $originName)

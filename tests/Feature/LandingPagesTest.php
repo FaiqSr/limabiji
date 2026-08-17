@@ -24,6 +24,16 @@ class LandingPagesTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Lima Biji Agritech');
         $response->assertSee('SPECIALTY ENZYMATIC');
+        $response->assertSee('How does your enzymatic civet coffee process work without animals?');
+    }
+
+    public function test_homepage_renders_faqs_in_indonesian(): void
+    {
+        $this->post('/locale', ['locale' => 'id']);
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $response->assertSee('Bagaimana proses kopi luwak enzimatik Anda bekerja tanpa hewan?');
     }
 
     public function test_about_page_renders_successfully(): void
@@ -43,6 +53,17 @@ class LandingPagesTest extends TestCase
         $response->assertSee('ENZYMATIC');
         $response->assertSee('CIVET PROCESS');
         $response->assertSee('Ethical Cherry Sourcing');
+        $response->assertSee('Enzyme Isolation & Formulation', false);
+    }
+
+    public function test_innovation_page_renders_steps_in_indonesian(): void
+    {
+        $this->post('/locale', ['locale' => 'id']);
+        $response = $this->get('/innovation');
+
+        $response->assertStatus(200);
+        $response->assertSee('Pengadaan Ceri Etis');
+        $response->assertSee('Isolasi & Formulasi Enzim', false);
     }
 
     public function test_testimonials_page_renders_successfully(): void
@@ -107,5 +128,37 @@ class LandingPagesTest extends TestCase
         $response = $this->post('/locale', ['locale' => 'id']);
         $response->assertRedirect();
         $response->assertSessionHas('locale', 'id');
+    }
+
+    public function test_contact_form_submission_creates_message_and_redirects(): void
+    {
+        $payload = [
+            'name' => 'John Roaster',
+            'email' => 'john@roastery.com',
+            'company' => 'Craft Coffee Co.',
+            'subject' => 'Green Bean Sample Request',
+            'message' => 'We would love to sample your anaerobic civet beans.',
+        ];
+
+        $response = $this->post(route('landingpages.contact.submit'), $payload);
+
+        $response->assertRedirect(route('landingpages.contact'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('contact_messages', [
+            'name' => 'John Roaster',
+            'email' => 'john@roastery.com',
+            'company' => 'Craft Coffee Co.',
+            'is_read' => false,
+        ]);
+    }
+
+    public function test_contact_form_validation_fails_on_missing_required_fields(): void
+    {
+        $response = $this->post(route('landingpages.contact.submit'), [
+            'company' => 'Incomplete Roastery',
+        ]);
+
+        $response->assertSessionHasErrors(['name', 'email', 'message']);
     }
 }

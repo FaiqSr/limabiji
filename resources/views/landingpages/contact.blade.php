@@ -2,6 +2,11 @@
 
 @php
     $locale = app()->getLocale();
+    $contactEmail = \App\Models\SiteSetting::get('contact_email', null, 'export@limabijiagritech.com');
+    $contactPhone = \App\Models\SiteSetting::get('contact_phone', null, '+62 812 3456 7890');
+    $contactHours = \App\Models\SiteSetting::get('contact_hours', null, 'Mon – Fri, 8:00 – 16:00 WIB');
+    $contactAddress = \App\Models\SiteSetting::get('contact_address', $locale, __('landing.contact_address'));
+    $phoneSanitized = preg_replace('/[^0-9+]/', '', $contactPhone);
 @endphp
 
 @push('title', ($locale === 'id' ? 'Hubungi Kami' : 'Contact Us') . ' — Lima Biji Agritech')
@@ -49,7 +54,7 @@
                     </div>
                     <div>
                         <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_email_label') }}</h4>
-                        <a href="mailto:export@limabijiagritech.com" class="text-light-grey hover:text-primary transition-colors text-sm font-medium">export@limabijiagritech.com</a>
+                        <a href="mailto:{{ $contactEmail }}" class="text-light-grey hover:text-primary transition-colors text-sm font-medium">{{ $contactEmail }}</a>
                     </div>
                 </div>
 
@@ -61,7 +66,7 @@
                     </div>
                     <div>
                         <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_phone_label') }}</h4>
-                        <a href="tel:+6281234567890" class="text-light-grey hover:text-primary transition-colors text-sm font-medium">+62 812 3456 7890</a>
+                        <a href="tel:{{ $phoneSanitized }}" class="text-light-grey hover:text-primary transition-colors text-sm font-medium">{{ $contactPhone }}</a>
                     </div>
                 </div>
 
@@ -74,46 +79,90 @@
                     </div>
                     <div>
                         <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_office_label') }}</h4>
-                        <p class="text-light-grey text-sm leading-relaxed">{{ __('landing.contact_address') }}</p>
+                        <p class="text-light-grey text-sm leading-relaxed">{{ $contactAddress }}</p>
                     </div>
                 </div>
+
+                @if ($contactHours)
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary flex-shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-base mb-1">{{ __('landing.contact_hours_label') }}</h4>
+                        <p class="text-light-grey text-sm leading-relaxed">{{ $contactHours }}</p>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
 
         {{-- Contact Form Column --}}
         <div class="lg:col-span-7">
             <div class="card-solid p-8 sm:p-10">
-                <form action="#" method="POST" onsubmit="event.preventDefault(); alert('{{ __('landing.contact_form_alert') }}');" class="space-y-6">
+                @if (session('success'))
+                    <div class="mb-8 p-4 rounded-xl bg-primary/20 border border-primary/40 text-white flex items-start gap-3.5 shadow-lg">
+                        <div class="w-7 h-7 rounded-full bg-primary/30 flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-primary">{{ $locale === 'id' ? 'Terkirim!' : 'Message Sent!' }}</h4>
+                            <p class="text-xs text-white/90 mt-0.5">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('landingpages.contact.submit') }}" method="POST" class="space-y-6">
+                    @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_name') }} *</label>
-                            <input type="text" required class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="John Doe">
+                            <input type="text" name="name" value="{{ old('name') }}" required class="w-full bg-surface-alt border @error('name') border-rose-500 @else border-border @enderror rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="John Doe">
+                            @error('name')
+                                <p class="text-rose-400 text-xs mt-1.5">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_email') }} *</label>
-                            <input type="email" required class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="john@example.com">
+                            <input type="email" name="email" value="{{ old('email') }}" required class="w-full bg-surface-alt border @error('email') border-rose-500 @else border-border @enderror rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="john@example.com">
+                            @error('email')
+                                <p class="text-rose-400 text-xs mt-1.5">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_company') }}</label>
-                            <input type="text" class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="Specialty Roastery Co.">
+                            <input type="text" name="company" value="{{ old('company') }}" class="w-full bg-surface-alt border @error('company') border-rose-500 @else border-border @enderror rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="Specialty Roastery Co.">
+                            @error('company')
+                                <p class="text-rose-400 text-xs mt-1.5">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_subject') }}</label>
-                            <select class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white text-sm focus:border-primary focus:outline-none transition-colors">
-                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_sample') }}</option>
-                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_bulk') }}</option>
-                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_partnership') }}</option>
-                                <option class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_general') }}</option>
+                            <select name="subject" class="w-full bg-surface-alt border @error('subject') border-rose-500 @else border-border @enderror rounded-lg p-3 text-white text-sm focus:border-primary focus:outline-none transition-colors">
+                                <option value="{{ __('landing.contact_form_subj_sample') }}" {{ old('subject') === __('landing.contact_form_subj_sample') ? 'selected' : '' }} class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_sample') }}</option>
+                                <option value="{{ __('landing.contact_form_subj_bulk') }}" {{ old('subject') === __('landing.contact_form_subj_bulk') ? 'selected' : '' }} class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_bulk') }}</option>
+                                <option value="{{ __('landing.contact_form_subj_partnership') }}" {{ old('subject') === __('landing.contact_form_subj_partnership') ? 'selected' : '' }} class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_partnership') }}</option>
+                                <option value="{{ __('landing.contact_form_subj_general') }}" {{ old('subject') === __('landing.contact_form_subj_general') ? 'selected' : '' }} class="bg-surface-alt text-white">{{ __('landing.contact_form_subj_general') }}</option>
                             </select>
+                            @error('subject')
+                                <p class="text-rose-400 text-xs mt-1.5">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_message') }} *</label>
-                        <textarea required rows="4" class="w-full bg-surface-alt border border-border rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="{{ __('landing.contact_form_message_placeholder') }}"></textarea>
+                        <textarea name="message" required rows="4" class="w-full bg-surface-alt border @error('message') border-rose-500 @else border-border @enderror rounded-lg p-3 text-white placeholder:text-light-grey/50 text-sm focus:border-primary focus:outline-none transition-colors" placeholder="{{ __('landing.contact_form_message_placeholder') }}">{{ old('message') }}</textarea>
+                        @error('message')
+                            <p class="text-rose-400 text-xs mt-1.5">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button type="submit" class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-medium text-base transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto">

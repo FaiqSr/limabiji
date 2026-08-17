@@ -1,9 +1,14 @@
 <?php
 
 use App\Http\Controllers\LandingPages;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+
+// --- Sitemap for Search Engines / Google Search Console ---
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/sitemap', [SitemapController::class, 'index']);
 
 // --- Public Landing Pages ---
 Route::get('/', [LandingPages::class, 'index'])->name('landingpages.home');
@@ -15,6 +20,7 @@ Route::get('/news/{article:slug}', [LandingPages::class, 'newsDetail'])->name('l
 Route::get('/origin/{name}', [LandingPages::class, 'origins'])->name('landingpages.origins');
 Route::get('/testimonials', [LandingPages::class, 'testimonials'])->name('landingpages.testimonials');
 Route::get('/contact', [LandingPages::class, 'contact'])->name('landingpages.contact');
+Route::post('/contact', [LandingPages::class, 'submitContact'])->name('landingpages.contact.submit');
 
 // --- Utility Routes ---
 Route::post('/locale', function (Request $request) {

@@ -84,7 +84,7 @@ return [
 
     // News Section (Home & Library)
     'news_title' => 'BERITA & CERITA',
-    'news_library_heading' => 'PERPUSTAKAAN<br>BERITA',
+    'news_library_heading' => 'BERITA',
     'news_library_subheading' => 'Pembaruan ekspor, terobosan fermentasi, dan cerita dari petani mitra kami.',
     'news_subtitle' => 'Berita terbaru dari meja ekspor dan lab fermentasi kami.',
     'news_view_all' => 'Lihat Semua Berita',
@@ -135,6 +135,7 @@ return [
     'contact_email_label' => 'Email Ekspor',
     'contact_phone_label' => 'Telepon / WhatsApp',
     'contact_office_label' => 'Kantor Ekspor',
+    'contact_hours_label' => 'Jam Operasional',
     'contact_address' => 'Bogor, Jawa Barat, Indonesia',
     'contact_form_name' => 'Nama Lengkap',
     'contact_form_email' => 'Alamat Email',
@@ -147,7 +148,7 @@ return [
     'contact_form_message' => 'Pesan',
     'contact_form_message_placeholder' => 'Tuliskan detail kebutuhan kopi specialty Anda...',
     'contact_form_submit' => 'Kirim Pesan',
-    'contact_form_alert' => 'Pesan Anda berhasil terkirim. Tim ekspor kami akan segera menghubungi Anda!',
+    'contact_form_alert' => 'Pesan Anda berhasil terkirim.',
 
     // Footer
     'footer_company' => 'Lima Biji Agritech',

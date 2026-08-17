@@ -145,7 +145,7 @@ class OriginController extends Controller
             $path = null;
             if (str_contains($url, '/storage/')) {
                 $path = Str::after($url, '/storage/');
-            } elseif (! str_starts_with($url, 'http://') && ! str_starts_with($url, 'https://')) {
+            } elseif (! str_starts_with($url, 'https://') && ! str_starts_with($url, 'https://')) {
                 $path = ltrim($url, '/');
             }
 

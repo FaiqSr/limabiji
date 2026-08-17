@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             PageSeeder::class,
             OriginSeeder::class,
             ContentSeeder::class,
+            FaqSeeder::class,
+            InnovationStepSeeder::class,
         ]);
     }
 }

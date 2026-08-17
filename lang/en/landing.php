@@ -135,6 +135,7 @@ return [
     'contact_email_label' => 'Export Email',
     'contact_phone_label' => 'Phone / WhatsApp',
     'contact_office_label' => 'Export Office',
+    'contact_hours_label' => 'Operating Hours',
     'contact_address' => 'Bogor, West Java, Indonesia',
     'contact_form_name' => 'Full Name',
     'contact_form_email' => 'Email Address',
@@ -147,7 +148,7 @@ return [
     'contact_form_message' => 'Message',
     'contact_form_message_placeholder' => 'Tell us about your specialty coffee requirements...',
     'contact_form_submit' => 'Send Message',
-    'contact_form_alert' => 'Thank you! Your message has been sent. Our export team will contact you shortly.',
+    'contact_form_alert' => 'Thank you! Your message has been sent.',
 
     // Footer
     'footer_company' => 'Lima Biji Agritech',

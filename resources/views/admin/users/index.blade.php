@@ -4,12 +4,12 @@
 
 @section('content')
 <div class="card-modern">
-    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+    <div class="grid grid-cols-1 sm:grid-cols-2  items-center justify-between mb-4 pb-3 border-b border-slate-100">
         <div>
             <h3 class="text-base font-semibold text-slate-900">Administrator & Staff Users</h3>
             <p class="text-xs text-slate-500">Manage portal access permissions, roles, and administrative accounts.</p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 justify-end">
             <span class="text-xs font-medium px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border border-slate-200">{{ count($users) }} Users Total</span>
             <a href="{{ route('admin.users.create') }}" class="btn btn-primary py-1.5 px-3.5 text-xs shadow-xs">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
