@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CertificateController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ExportDestinationController;
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     // Innovation / Process Steps
     Route::resource('innovation-steps', InnovationStepController::class)->except(['show']);
     Route::post('/innovation-steps/{innovation_step}/toggle-active', [InnovationStepController::class, 'toggleActive'])->name('innovation-steps.toggle-active');
+
+    // Certificates & Compliance
+    Route::resource('certificates', CertificateController::class)->except(['show']);
+    Route::post('/certificates/{certificate}/toggle-active', [CertificateController::class, 'toggleActive'])->name('certificates.toggle-active');
 
     // FAQs (Frequently Asked Questions)
     Route::resource('faqs', FaqController::class)->except(['show']);

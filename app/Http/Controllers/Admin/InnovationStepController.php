@@ -23,17 +23,22 @@ class InnovationStepController extends Controller
             });
         }
 
-        if ($request->filled('status')) {
-            if ($request->status === 'active') {
-                $query->where('is_active', true);
-            } elseif ($request->status === 'inactive') {
-                $query->where('is_active', false);
-            }
+        $status = $request->get('status', 'all');
+        if ($status === 'active') {
+            $query->where('is_active', true);
+        } elseif ($status === 'inactive') {
+            $query->where('is_active', false);
         }
 
         $steps = $query->orderBy('order')->orderBy('id')->paginate(15)->withQueryString();
 
-        return view('admin.innovation-steps.index', compact('steps'));
+        $counts = [
+            'all' => InnovationStep::count(),
+            'active' => InnovationStep::where('is_active', true)->count(),
+            'inactive' => InnovationStep::where('is_active', false)->count(),
+        ];
+
+        return view('admin.innovation-steps.index', compact('steps', 'counts', 'status'));
     }
 
     public function create()

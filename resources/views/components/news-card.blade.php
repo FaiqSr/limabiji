@@ -25,6 +25,7 @@
 @endif
 <div class="relative h-80 overflow-hidden">
     <img src="{{ $image }}" alt="{{ $title }}"
+        loading="lazy" decoding="async"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
     <div class="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-90"></div>
     @if (!empty($categoriesList))

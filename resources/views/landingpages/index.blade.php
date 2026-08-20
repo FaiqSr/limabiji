@@ -4,19 +4,51 @@
     $locale = app()->getLocale();
 @endphp
 
-@push('title',
-    'Lima Biji Agritech — ' .
-    ($locale === 'id'
-    ? 'Kopi Luwak Enzimatik Specialty'
-    : 'Specialty Enzymatic
+@push('title', 'Lima Biji Agritech — ' . ($locale === 'id' ? 'Kopi Luwak Enzimatik Specialty' : 'Specialty Enzymatic
     Civet Coffee'))
 
     @push('meta')
         <meta name="description" content="{{ __('landing.hero_subheading') }}">
-        <meta property="og:title" content="Lima Biji Agritech">
+        <meta property="og:title"
+            content="Lima Biji Agritech — {{ $locale === 'id' ? 'Kopi Luwak Enzimatik Specialty' : 'Specialty Enzymatic Civet Coffee' }}">
         <meta property="og:description" content="{{ __('landing.hero_subheading') }}">
         <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:image" content="{{ asset('favicon.ico') }}">
+        <meta name="twitter:title"
+            content="Lima Biji Agritech — {{ $locale === 'id' ? 'Kopi Luwak Enzimatik Specialty' : 'Specialty Enzymatic Civet Coffee' }}">
+        <meta name="twitter:description" content="{{ __('landing.hero_subheading') }}">
+        <meta name="twitter:image" content="{{ asset('favicon.ico') }}">
         <link rel="canonical" href="{{ url()->current() }}">
+    @endpush
+
+    @push('schema')
+        <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'Organization',
+                    '@id' => url('/') . '#organization',
+                    'name' => 'Lima Biji Agritech',
+                    'url' => url('/'),
+                    'logo' => asset('favicon.ico'),
+                    'description' => __('landing.hero_subheading'),
+                    'sameAs' => [],
+                ],
+                [
+                    '@type' => 'WebSite',
+                    '@id' => url('/') . '#website',
+                    'url' => url('/'),
+                    'name' => 'Lima Biji Agritech',
+                    'publisher' => [
+                        '@id' => url('/') . '#organization',
+                    ],
+                    'inLanguage' => $locale,
+                ],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
     @endpush
 
     @push('modules')
@@ -208,7 +240,8 @@
                                 <a href="{{ route('landingpages.origins', $originSlug) }}"
                                     class="group block h-[25rem] sm:h-[30rem] rounded-2xl overflow-hidden relative mb-5 bg-surface-alt border border-border">
                                     @if ($originImage)
-                                        <img src="{{ $originImage }}" alt="{{ $originName }}"
+                                        <img src="{{ $originImage }}" alt="{{ $originName }}" loading="lazy"
+                                            decoding="async"
                                             class="w-full h-full object-cover group-hover:scale-125 transition-all duration-500">
                                     @endif
                                     <p
@@ -229,7 +262,7 @@
             </div>
         @endif
 
-        
+
         {{-- 2. Export Map Section --}}
         @php
             $mapLocations = $exportDestinations
@@ -263,7 +296,7 @@
                 </div>
             </div>
         </div>
-        
+
 
         {{-- 6. Testimonials Section --}}
         @if ($testimonials->isNotEmpty())

@@ -124,3 +124,23 @@
         @apply font-mono text-sm bg-surface-alt text-primary px-1.5 py-0.5 rounded border border-border;
     }
 }
+
+/* Infinite Marquee Animation */
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
+}

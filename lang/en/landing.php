@@ -4,7 +4,7 @@ return [
     // Brand & General
     'hero_label' => 'Lima Biji Agritech',
     'hero_heading' => 'SPECIALTY ENZYMATIC<br>CIVET COFFEE',
-    'hero_subheading' => 'Luxury civet coffee profile — zero animal cruelty. Our proprietary enzymatic fermentation replicates the natural civet process with scientific precision, consistently scoring 84+ SCA.',
+    'hero_subheading' => 'Luxury civet coffee profile — zero animal cruelty. Our proprietary enzymatic fermentation replicates the natural civet process with scientific precision, consistently scoring 82+ SCA.',
     'cta_innovations' => 'Our Innovations',
     'cta_news' => 'News',
     'cta_primary' => 'Request a Free Sample',
@@ -24,6 +24,11 @@ return [
 
     'about_mission_title' => 'Our Mission',
     'about_mission_desc' => 'To advance agriculture through innovation and biotechnology, delivering sustainable coffee to global markets while empowering farmers and communities.',
+
+    'about_certificates_label' => 'CERTIFICATIONS & COMPLIANCE',
+    'about_certificates_title' => 'Verified Quality & Standards',
+    'about_certificates_subtitle' => 'Our biotechnology, facility, and supply chains comply with certified national and international food safety and ethical benchmarks.',
+    'about_cert_no' => 'Cert. No',
 
     'about_values_label' => 'OUR CORE VALUES',
     'about_values_title' => 'Principles That Guide Our Craft',
@@ -48,7 +53,7 @@ return [
 
     'about_time_2_period' => 'Phase 02 • Prototype',
     'about_time_2_title' => 'Bioreactor Pilot Facility',
-    'about_time_2_desc' => 'Constructed our controlled fermentation facility in West Java, achieving repeatable 84+ SCA cupping scores.',
+    'about_time_2_desc' => 'Constructed our controlled fermentation facility in West Java, achieving repeatable 82+ SCA cupping scores.',
 
     'about_time_3_period' => 'Phase 03 • Expansion',
     'about_time_3_title' => 'Multi-Origin Direct Trade',
@@ -73,7 +78,7 @@ return [
     'home_feature_heading' => 'REVOLUTIONIZING SPECIALTY COFFEE WITH ZERO CRUELTY',
     'home_feature_desc' => 'Our proprietary enzymatic bioprocessing replicates natural civet digestive biochemistry in temperature-controlled bioreactors, unlocking extraordinary sweetness and cup clarity with 100% cruelty-free integrity.',
     'home_feature_card_title' => 'Global Direct Trade & Micro-Lot Quality',
-    'home_feature_card_desc' => 'Consistently scored 84+ SCA points by licensed Q-graders and barista champions across the globe.',
+    'home_feature_card_desc' => 'Consistently scored 82+ SCA points by licensed Q-graders and barista champions across the globe.',
 
     // Stats Section (Home)
     'stats_title' => 'We provide coffee for',

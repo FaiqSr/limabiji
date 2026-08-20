@@ -13,7 +13,48 @@
     <meta property="og:title" content="{{ ($locale === 'id' ? 'Perpustakaan Berita' : 'News Library') . ' — Lima Biji Agritech' }}">
     <meta property="og:description" content="{{ __('landing.news_library_subheading') }}">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('favicon.ico') }}">
+    <meta name="twitter:title" content="{{ ($locale === 'id' ? 'Perpustakaan Berita' : 'News Library') . ' — Lima Biji Agritech' }}">
+    <meta name="twitter:description" content="{{ __('landing.news_library_subheading') }}">
+    <meta name="twitter:image" content="{{ asset('favicon.ico') }}">
     <link rel="canonical" href="{{ url()->current() }}">
+@endpush
+
+@push('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'CollectionPage',
+                    '@id' => url()->current() . '#webpage',
+                    'url' => url()->current(),
+                    'name' => ($locale === 'id' ? 'Perpustakaan Berita' : 'News Library') . ' — Lima Biji Agritech',
+                    'description' => __('landing.news_library_subheading'),
+                    'inLanguage' => $locale,
+                ],
+                [
+                    '@type' => 'BreadcrumbList',
+                    '@id' => url()->current() . '#breadcrumb',
+                    'itemListElement' => [
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 1,
+                            'name' => $locale === 'id' ? 'Beranda' : 'Home',
+                            'item' => url('/'),
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 2,
+                            'name' => $locale === 'id' ? 'Berita' : 'News',
+                            'item' => url()->current(),
+                        ],
+                    ],
+                ],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 @section('content')

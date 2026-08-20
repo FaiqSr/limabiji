@@ -4,7 +4,7 @@ return [
     // Brand & General
     'hero_label' => 'Lima Biji Agritech',
     'hero_heading' => 'KOPI LUWAK<br>ENZIMATIK SPECIALTY',
-    'hero_subheading' => 'Profil kopi luwak mewah — tanpa eksploitasi hewan. Fermentasi enzimatik proprietary kami mereplikasi proses luwak alami dengan presisi ilmiah, secara konsisten meraih skor SCA 84+.',
+    'hero_subheading' => 'Profil kopi luwak mewah — tanpa eksploitasi hewan. Fermentasi enzimatik proprietary kami mereplikasi proses luwak alami dengan presisi ilmiah, secara konsisten meraih skor SCA 82+.',
     'cta_innovations' => 'Jelajahi Proses Kami',
     'cta_news' => 'Berita',
     'cta_primary' => 'Minta Sampel Gratis',
@@ -24,6 +24,11 @@ return [
 
     'about_mission_title' => 'Misi Kami',
     'about_mission_desc' => 'Memajukan agrikultur melalui inovasi dan bioteknologi, menghadirkan kopi berkelanjutan ke pasar global sembari memberdayakan petani dan komunitas lokal.',
+
+    'about_certificates_label' => 'SERTIFIKASI & KEPATUHAN STANDAR',
+    'about_certificates_title' => 'Standar Kualitas & Mutu Terverifikasi',
+    'about_certificates_subtitle' => 'Bioteknologi, fasilitas bioreaktor, dan rantai pasok kami mematuhi standar keamanan pangan resmi nasional dan internasional.',
+    'about_cert_no' => 'No. Sertifikat',
 
     'about_values_label' => 'NILAI UTAMA KAMI',
     'about_values_title' => 'Prinsip Yang Memandu Karya Kami',
@@ -48,7 +53,7 @@ return [
 
     'about_time_2_period' => 'Fase 02 • Prototipe',
     'about_time_2_title' => 'Fasilitas Bioreaktor Terkontrol',
-    'about_time_2_desc' => 'Membangun fasilitas fermentasi presisi di Jawa Barat dan mencetak skor cupping 84+ SCA secara konsisten.',
+    'about_time_2_desc' => 'Membangun fasilitas fermentasi presisi di Jawa Barat dan mencetak skor cupping 82+ SCA secara konsisten.',
 
     'about_time_3_period' => 'Fase 03 • Ekspansi Asal',
     'about_time_3_title' => 'Kemitraan Petani Multi-Daerah',
@@ -73,7 +78,7 @@ return [
     'home_feature_heading' => 'MEREVOLUSI KOPI SPECIALTY TANPA EKSPLOITASI',
     'home_feature_desc' => 'Bioproses enzimatik kami mereplikasi biokimia pencernaan luwak alami dalam bioreaktor terkontrol, menghasilkan kemanisan luar biasa dan keasaman seimbang secara 100% bebas eksploitasi.',
     'home_feature_card_title' => 'Perdagangan Langsung & Kualitas Micro-Lot',
-    'home_feature_card_desc' => 'Konsisten meraih skor 84+ SCA oleh Q-grader berlisensi dan juara barista di berbagai negara.',
+    'home_feature_card_desc' => 'Konsisten meraih skor 82+ SCA oleh Q-grader berlisensi dan juara barista di berbagai negara.',
 
     // Stats Section (Home)
     'stats_title' => 'Kami menyediakan kopi untuk',

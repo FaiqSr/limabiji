@@ -18,6 +18,11 @@ class SettingController extends Controller
             'contact_address_id' => SiteSetting::get('contact_address', 'id', 'Bogor, Jawa Barat, Indonesia'),
             'site_name_en' => SiteSetting::get('site_name', 'en', 'Lima Biji Agritech'),
             'site_name_id' => SiteSetting::get('site_name', 'id', 'Lima Biji Agritech'),
+            'map_lat' => SiteSetting::get('map_lat', null, -6.5971),
+            'map_lng' => SiteSetting::get('map_lng', null, 106.8060),
+            'map_zoom' => SiteSetting::get('map_zoom', null, 14),
+            'map_label' => SiteSetting::get('map_label', null, 'Lima Biji Agritech'),
+            'map_embed_url' => SiteSetting::get('map_embed_url', null, ''),
         ];
 
         return view('admin.settings.index', compact('settings'));
@@ -33,6 +38,11 @@ class SettingController extends Controller
             'contact_address_id' => ['nullable', 'string', 'max:500'],
             'site_name_en' => ['nullable', 'string', 'max:255'],
             'site_name_id' => ['nullable', 'string', 'max:255'],
+            'map_lat' => ['nullable', 'numeric', 'between:-90,90'],
+            'map_lng' => ['nullable', 'numeric', 'between:-180,180'],
+            'map_zoom' => ['nullable', 'integer', 'between:1,20'],
+            'map_label' => ['nullable', 'string', 'max:255'],
+            'map_embed_url' => ['nullable', 'url', 'max:1000'],
         ]);
 
         SiteSetting::set('contact_email', $validated['contact_email'], null, 'contact');
@@ -46,6 +56,22 @@ class SettingController extends Controller
         }
         if (isset($validated['site_name_id'])) {
             SiteSetting::set('site_name', $validated['site_name_id'], 'id', 'general');
+        }
+
+        if (isset($validated['map_lat'])) {
+            SiteSetting::set('map_lat', (float) $validated['map_lat'], null, 'map');
+        }
+        if (isset($validated['map_lng'])) {
+            SiteSetting::set('map_lng', (float) $validated['map_lng'], null, 'map');
+        }
+        if (isset($validated['map_zoom'])) {
+            SiteSetting::set('map_zoom', (int) $validated['map_zoom'], null, 'map');
+        }
+        if (isset($validated['map_label'])) {
+            SiteSetting::set('map_label', $validated['map_label'], null, 'map');
+        }
+        if (isset($validated['map_embed_url'])) {
+            SiteSetting::set('map_embed_url', $validated['map_embed_url'], null, 'map');
         }
 
         return redirect()->route('admin.settings.index')

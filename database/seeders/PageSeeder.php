@@ -190,7 +190,7 @@ class PageSeeder extends Seeder
                                     ['step' => '03', 'title' => 'Controlled Fermentation', 'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop', 'description' => 'Depulped beans undergo a 36-hour bio-fermentation in stainless steel bioreactors. Temperature, pH, and enzyme concentration are monitored in real time.', 'details' => '36-hour duration, Real-time pH control, Stainless steel tanks'],
                                     ['step' => '04', 'title' => 'Washing & Solar Drying', 'image' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop', 'description' => 'Beans are thoroughly washed with mountain spring water to stop fermentation, then dried on raised solar beds to achieve an optimal 11% moisture content.', 'details' => 'Spring water wash, Raised bed drying, 11% target moisture'],
                                     ['step' => '05', 'title' => 'Resting & Conditioning', 'image' => 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop', 'description' => 'Parchment coffee rests in temperature-controlled warehouses for 30–60 days. This allows flavor precursors to stabilize before hulling.', 'details' => '30–60 days rest, Climate-controlled, Parchment aging'],
-                                    ['step' => '06', 'title' => 'Quality Grading & Export', 'image' => 'https://images.unsplash.com/photo-1587080413959-06b859fb107d?q=80&w=800&auto=format&fit=crop', 'description' => 'Every lot undergoes cupping, density sorting, and screen sizing. Only beans scoring 84+ points are approved for export. Vacuum-packed in food-grade GrainPro bags.', 'details' => 'SCA score: 84+, Screen: 16–18, GrainPro packed'],
+                                    ['step' => '06', 'title' => 'Quality Grading & Export', 'image' => 'https://images.unsplash.com/photo-1587080413959-06b859fb107d?q=80&w=800&auto=format&fit=crop', 'description' => 'Every lot undergoes cupping, density sorting, and screen sizing. Only beans scoring 82+ points are approved for export. Vacuum-packed in food-grade GrainPro bags.', 'details' => 'SCA score: 82+, Screen: 16–18, GrainPro packed'],
                                 ],
                             ],
                             'id' => [
@@ -202,7 +202,7 @@ class PageSeeder extends Seeder
                                     ['step' => '03', 'title' => 'Fermentasi Terkontrol', 'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop', 'description' => 'Biji yang telah dikupas menjalani bio-fermentasi 36 jam dalam bioreaktor stainless steel. Suhu, pH, dan konsentrasi enzim dipantau secara real-time.', 'details' => 'Durasi 36 jam, Kontrol pH real-time, Tangki stainless steel'],
                                     ['step' => '04', 'title' => 'Pencucian & Pengeringan Matahari', 'image' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop', 'description' => 'Biji dicuci menyeluruh dengan air mata air pegunungan untuk menghentikan fermentasi, lalu dikeringkan di atas bedengan surya untuk mencapai kadar air optimal 11%.', 'details' => 'Cuci air mata air, Pengeringan bedengan, Target kadar air 11%'],
                                     ['step' => '05', 'title' => 'Penyimpanan & Kondisioning', 'image' => 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop', 'description' => 'Kopi parchment disimpan dalam gudang dengan suhu terkontrol selama 30–60 hari. Ini memungkinkan prekursor rasa stabil sebelum pengupasan.', 'details' => 'Istirahat 30–60 hari, Kontrol iklim, Penuaan parchment'],
-                                    ['step' => '06', 'title' => 'Grading Kualitas & Ekspor', 'image' => 'https://images.unsplash.com/photo-1587080413959-06b859fb107d?q=80&w=800&auto=format&fit=crop', 'description' => 'Setiap lot menjalani cupping, penyortiran densitas, dan sizing. Hanya biji dengan skor 84+ yang disetujui untuk ekspor. Dikemas vakum dalam kantong GrainPro food-grade.', 'details' => 'Skor SCA: 84+, Screen: 16–18, Kemasan GrainPro'],
+                                    ['step' => '06', 'title' => 'Grading Kualitas & Ekspor', 'image' => 'https://images.unsplash.com/photo-1587080413959-06b859fb107d?q=80&w=800&auto=format&fit=crop', 'description' => 'Setiap lot menjalani cupping, penyortiran densitas, dan sizing. Hanya biji dengan skor 82+ yang disetujui untuk ekspor. Dikemas vakum dalam kantong GrainPro food-grade.', 'details' => 'Skor SCA: 82+, Screen: 16–18, Kemasan GrainPro'],
                                 ],
                             ],
                         ],
@@ -217,7 +217,7 @@ class PageSeeder extends Seeder
                                 'body2' => 'Our enzymatic process achieves the identical proteolytic breakdown of coffee proteins without exploiting any animal. The result is a coffee that is:',
                                 'checklist' => 'Ethically sourced and 100% cruelty-free, Consistent in quality — every batch tastes the same, Food-safe and hygienically processed, Lower in bitterness, higher in sweetness',
                                 'items' => [
-                                    ['label' => 'SCA Cupping Score', 'value' => '84+'],
+                                    ['label' => 'SCA Cupping Score', 'value' => '82+'],
                                     ['label' => 'Animals Involved', 'value' => '0'],
                                     ['label' => 'Fermentation', 'value' => '48–72h'],
                                     ['label' => 'Quality Steps', 'value' => '6'],
@@ -230,7 +230,7 @@ class PageSeeder extends Seeder
                                 'body2' => 'Proses enzimatik kami mencapai pemecahan proteolitik identik dari protein kopi tanpa mengeksploitasi hewan apa pun. Hasilnya adalah kopi yang:',
                                 'checklist' => 'Bersumber etis dan 100% bebas eksploitasi, Kualitas konsisten — setiap batch terasa sama, Aman pangan dan diproses higienis, Lebih rendah kepahitan, lebih tinggi kemanisan',
                                 'items' => [
-                                    ['label' => 'Skor Cupping SCA', 'value' => '84+'],
+                                    ['label' => 'Skor Cupping SCA', 'value' => '82+'],
                                     ['label' => 'Hewan Terlibat', 'value' => '0'],
                                     ['label' => 'Fermentasi', 'value' => '48–72j'],
                                     ['label' => 'Langkah Kualitas', 'value' => '6'],

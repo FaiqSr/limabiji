@@ -10,8 +10,49 @@
     <meta name="description" content="{{ __('landing.innovation_hero_subheading') }}">
     <meta property="og:title" content="{{ ($locale === 'id' ? 'Inovasi Proses Luwak Enzimatik' : 'Enzymatic Civet Coffee Innovation') . ' — Lima Biji Agritech' }}">
     <meta property="og:description" content="{{ __('landing.innovation_hero_subheading') }}">
-    <meta property="og:type" content="website">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ asset('favicon.ico') }}">
+    <meta name="twitter:title" content="{{ ($locale === 'id' ? 'Inovasi Proses Luwak Enzimatik' : 'Enzymatic Civet Coffee Innovation') . ' — Lima Biji Agritech' }}">
+    <meta name="twitter:description" content="{{ __('landing.innovation_hero_subheading') }}">
+    <meta name="twitter:image" content="{{ asset('favicon.ico') }}">
     <link rel="canonical" href="{{ url()->current() }}">
+@endpush
+
+@push('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'HowTo',
+                    '@id' => url()->current() . '#howto',
+                    'name' => ($locale === 'id' ? 'Inovasi Proses Luwak Enzimatik' : 'Enzymatic Civet Coffee Innovation') . ' — Lima Biji Agritech',
+                    'description' => __('landing.innovation_hero_subheading'),
+                    'inLanguage' => $locale,
+                    'totalTime' => 'P3D',
+                ],
+                [
+                    '@type' => 'BreadcrumbList',
+                    '@id' => url()->current() . '#breadcrumb',
+                    'itemListElement' => [
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 1,
+                            'name' => $locale === 'id' ? 'Beranda' : 'Home',
+                            'item' => url('/'),
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 2,
+                            'name' => $locale === 'id' ? 'Inovasi' : 'Innovation',
+                            'item' => url()->current(),
+                        ],
+                    ],
+                ],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 @section('content')
@@ -51,6 +92,7 @@
                     <div class="rounded-lg overflow-hidden h-80 lg:h-96 bg-surface-alt border border-border">
                         @if(!empty($stepImage))
                             <img src="{{ $stepImage }}" alt="{{ $stepTitle }}"
+                                loading="lazy" decoding="async"
                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
                         @endif
                     </div>
@@ -95,7 +137,7 @@
     ];
 
     $mattersStats = [
-        ['value' => '84+', 'label' => __('landing.innovation_matters_stats_cupping')],
+        ['value' => '82+', 'label' => __('landing.innovation_matters_stats_cupping')],
         ['value' => '0', 'label' => __('landing.innovation_matters_stats_animals')],
         ['value' => $locale === 'id' ? '48–72j' : '48–72h', 'label' => __('landing.innovation_matters_stats_fermentation')],
         ['value' => '6', 'label' => __('landing.innovation_matters_stats_quality')],

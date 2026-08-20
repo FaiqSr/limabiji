@@ -1,16 +1,86 @@
 @extends('layouts.landingpages')
 
-@push('title', $article->title . ' — Lima Biji Agritech')
+@php
+    $locale = app()->getLocale();
+    $articleTitle = $article->getTitleForLocale($locale);
+    $articleExcerpt = Str::limit(strip_tags($article->getExcerptForLocale($locale)), 160);
+    $articleImage = $article->image ? url($article->image) : asset('favicon.ico');
+@endphp
+
+@push('title', $articleTitle . ' — Lima Biji Agritech')
 
 @push('meta')
-    <meta name="description" content="{{ Str::limit(strip_tags($article->getExcerptForLocale(app()->getLocale())), 160) }}">
-    <meta property="og:title" content="{{ $article->title }} — Lima Biji Agritech">
-    <meta property="og:description" content="{{ Str::limit(strip_tags($article->getExcerptForLocale(app()->getLocale())), 160) }}">
+    <meta name="description" content="{{ $articleExcerpt }}">
+    <meta property="og:title" content="{{ $articleTitle }} — Lima Biji Agritech">
+    <meta property="og:description" content="{{ $articleExcerpt }}">
     <meta property="og:type" content="article">
-    @if($article->image)
-        <meta property="og:image" content="{{ $article->image }}">
-    @endif
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ $articleImage }}">
+    <meta name="twitter:title" content="{{ $articleTitle }} — Lima Biji Agritech">
+    <meta name="twitter:description" content="{{ $articleExcerpt }}">
+    <meta name="twitter:image" content="{{ $articleImage }}">
     <link rel="canonical" href="{{ url()->current() }}">
+@endpush
+
+@push('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'NewsArticle',
+                    '@id' => url()->current() . '#article',
+                    'headline' => $articleTitle,
+                    'description' => $articleExcerpt,
+                    'image' => [$articleImage],
+                    'datePublished' => ($article->published_at ?? $article->created_at)->toIso8601String(),
+                    'dateModified' => $article->updated_at->toIso8601String(),
+                    'inLanguage' => $locale,
+                    'mainEntityOfPage' => [
+                        '@type' => 'WebPage',
+                        '@id' => url()->current(),
+                    ],
+                    'author' => [
+                        '@type' => 'Person',
+                        'name' => $article->author->name ?? 'Lima Biji Editorial',
+                    ],
+                    'publisher' => [
+                        '@type' => 'Organization',
+                        'name' => 'Lima Biji Agritech',
+                        'url' => url('/'),
+                        'logo' => [
+                            '@type' => 'ImageObject',
+                            'url' => asset('favicon.ico'),
+                        ],
+                    ],
+                ],
+                [
+                    '@type' => 'BreadcrumbList',
+                    '@id' => url()->current() . '#breadcrumb',
+                    'itemListElement' => [
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 1,
+                            'name' => $locale === 'id' ? 'Beranda' : 'Home',
+                            'item' => url('/'),
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 2,
+                            'name' => $locale === 'id' ? 'Berita' : 'News',
+                            'item' => url('/news'),
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 3,
+                            'name' => $articleTitle,
+                            'item' => url()->current(),
+                        ],
+                    ],
+                ],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 @section('content')
@@ -18,7 +88,8 @@
         {{-- Featured Image --}}
         @if($article->image)
             <div data-animate="fade-in" class="container mx-auto mb-12">
-                <img src="{{ $article->image }}" alt="{{ $article->title }}"
+                <img src="{{ $article->image }}" alt="{{ $articleTitle }}"
+                    loading="lazy" decoding="async"
                     class="w-full h-80 sm:h-96 lg:h-[28rem] object-cover rounded-lg shadow-md border border-border">
             </div>
         @endif

@@ -43,6 +43,8 @@ class LandingPagesTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('ABOUT US');
         $response->assertSee('Cruelty-Free Ethics');
+        $response->assertSee('Halal Indonesia');
+        $response->assertSee('ID32110001234560723');
     }
 
     public function test_innovation_page_renders_successfully(): void

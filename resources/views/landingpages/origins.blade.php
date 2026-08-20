@@ -17,13 +17,67 @@
     <meta name="description" content="{{ $description }}">
     <meta property="og:title" content="{{ $origin['name'] }} Coffee Origin — Lima Biji Agritech">
     <meta property="og:description" content="{{ $description }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url()->current() }}">
     @if($origin['image'] ?? null)
         <meta property="og:image" content="{{ $origin['image'] }}">
+        <meta name="twitter:image" content="{{ $origin['image'] }}">
+    @else
+        <meta property="og:image" content="{{ asset('favicon.ico') }}">
+        <meta name="twitter:image" content="{{ asset('favicon.ico') }}">
     @endif
+    <meta name="twitter:title" content="{{ $origin['name'] }} Coffee Origin — Lima Biji Agritech">
+    <meta name="twitter:description" content="{{ $description }}">
+    <link rel="canonical" href="{{ url()->current() }}">
+@endpush
+
+@push('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@graph' => [
+                [
+                    '@type' => 'Place',
+                    '@id' => url()->current() . '#place',
+                    'name' => $origin['name'] . ' Coffee Region',
+                    'description' => $description,
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'addressRegion' => $origin['province'] ?? '',
+                        'addressCountry' => 'ID',
+                    ],
+                ],
+                [
+                    '@type' => 'BreadcrumbList',
+                    '@id' => url()->current() . '#breadcrumb',
+                    'itemListElement' => [
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 1,
+                            'name' => app()->getLocale() === 'id' ? 'Beranda' : 'Home',
+                            'item' => url('/'),
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 2,
+                            'name' => 'Origins',
+                            'item' => url('/#origins'),
+                        ],
+                        [
+                            '@type' => 'ListItem',
+                            'position' => 3,
+                            'name' => $origin['name'],
+                            'item' => url()->current(),
+                        ],
+                    ],
+                ],
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 @if (count($galleryImages) > 0)
-    @push('scripts')
+    @push('schema')
         <script type="application/ld+json">
             {!! json_encode([
                 '@context' => 'https://schema.org',
@@ -36,7 +90,7 @@
                     'item' => [
                         '@type' => 'ImageObject',
                         'contentUrl' => $image,
-                        'caption' => $origin['name'] . ' coffee origin in ' . $origin['province'],
+                        'caption' => $origin['name'] . ' coffee origin in ' . ($origin['province'] ?? ''),
                     ],
                 ], $galleryImages, array_keys($galleryImages)),
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}

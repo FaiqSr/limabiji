@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Certificate;
 use App\Models\ContactMessage;
 use App\Models\ExportDestination;
 use App\Models\Faq;
@@ -24,7 +25,7 @@ class LandingPages extends Controller
             ->latest()
             ->take(3)
             ->get();
-        $testimonials = Testimonial::orderBy('order')->take(3)->get();
+        $testimonials = Testimonial::ordered()->take(3)->get();
         $faqs = Faq::active()->ordered()->get();
 
         return view('landingpages.index', compact(
@@ -38,7 +39,9 @@ class LandingPages extends Controller
 
     public function about()
     {
-        return view('landingpages.about');
+        $certificates = Certificate::active()->ordered()->get();
+
+        return view('landingpages.about', compact('certificates'));
     }
 
     public function innovation()

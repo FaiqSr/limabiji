@@ -197,7 +197,7 @@
                                id="score" 
                                value="{{ old('score', $origin->score) }}" 
                                required 
-                               placeholder="e.g. 86.5 or 84+" 
+                               placeholder="e.g. 86.5 or 82+" 
                                class="w-full text-xs bg-white border @error('score') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
                         @error('score')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>

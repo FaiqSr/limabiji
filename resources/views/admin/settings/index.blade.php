@@ -167,6 +167,119 @@
             </div>
         </div>
 
+        <!-- 4. Store Location & Interactive Map Configuration Card -->
+        <div class="card-modern space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">Store Location & Map (Contact Page)</h3>
+                </div>
+                <span class="text-[10px] font-mono text-slate-400">Google Maps Embed</span>
+            </div>
+
+            <p class="text-xs text-slate-500">
+                Configure the store / office map pin displayed on the public Contact page (<code class="font-mono text-emerald-600 font-semibold">/contact</code>).
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                    <label for="map_lat" class="block text-xs font-semibold text-slate-700 mb-1">
+                        Latitude <span class="text-slate-400 font-normal">(-90 to 90)</span>
+                    </label>
+                    <input type="number" 
+                           step="any"
+                           name="map_lat" 
+                           id="map_lat" 
+                           value="{{ old('map_lat', $settings['map_lat']) }}" 
+                           placeholder="-6.597144" 
+                           class="w-full text-xs bg-slate-50 border @error('map_lat') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                    @error('map_lat')
+                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="map_lng" class="block text-xs font-semibold text-slate-700 mb-1">
+                        Longitude <span class="text-slate-400 font-normal">(-180 to 180)</span>
+                    </label>
+                    <input type="number" 
+                           step="any"
+                           name="map_lng" 
+                           id="map_lng" 
+                           value="{{ old('map_lng', $settings['map_lng']) }}" 
+                           placeholder="106.806039" 
+                           class="w-full text-xs bg-slate-50 border @error('map_lng') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                    @error('map_lng')
+                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="map_zoom" class="block text-xs font-semibold text-slate-700 mb-1">
+                        Zoom Level <span class="text-slate-400 font-normal">(1 - 20)</span>
+                    </label>
+                    <input type="number" 
+                           min="1"
+                           max="20"
+                           name="map_zoom" 
+                           id="map_zoom" 
+                           value="{{ old('map_zoom', $settings['map_zoom']) }}" 
+                           placeholder="14" 
+                           class="w-full text-xs bg-slate-50 border @error('map_zoom') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                    @error('map_zoom')
+                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="map_label" class="block text-xs font-semibold text-slate-700 mb-1">
+                        Marker Pin Label / Store Name
+                    </label>
+                    <input type="text" 
+                           name="map_label" 
+                           id="map_label" 
+                           value="{{ old('map_label', $settings['map_label']) }}" 
+                           placeholder="Lima Biji Agritech — Headquarters" 
+                           class="w-full text-xs bg-slate-50 border @error('map_label') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                    @error('map_label')
+                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="map_embed_url" class="block text-xs font-semibold text-slate-700 mb-1">
+                        Custom Google Maps Embed URL <span class="text-slate-400 font-normal">(Opsional)</span>
+                    </label>
+                    <input type="url" 
+                           name="map_embed_url" 
+                           id="map_embed_url" 
+                           value="{{ old('map_embed_url', $settings['map_embed_url']) }}" 
+                           placeholder="https://www.google.com/maps/embed?pb=..." 
+                           class="w-full text-xs bg-slate-50 border @error('map_embed_url') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-[11px] transition-all">
+                    @error('map_embed_url')
+                        <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-3 text-[11px] text-slate-600 flex items-center justify-between border border-slate-100">
+                <span class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Tip: Jika Custom Embed URL dikosongkan, sistem akan otomatis menggunakan Latitude & Longitude untuk menampilkan peta.
+                </span>
+                <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="text-indigo-600 hover:text-indigo-700 font-medium inline-flex items-center gap-1">
+                    Buka Google Maps
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
         <!-- Save Button Bar -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
             <p class="text-xs text-slate-500">

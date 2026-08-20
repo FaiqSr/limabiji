@@ -10,10 +10,10 @@
     @stack('meta')
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
-    {{-- SEO hreflang --}}
-    <link rel="alternate" hreflang="en" href="{{ url('/en') }}">
-    <link rel="alternate" hreflang="id" href="{{ url('/id') }}">
-    <link rel="alternate" hreflang="x-default" href="{{ url('/') }}">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta property="og:site_name" content="Lima Biji Agritech">
+    <meta property="og:locale" content="{{ app()->getLocale() === 'id' ? 'id_ID' : 'en_US' }}">
+    <meta name="twitter:card" content="summary_large_image">
 
     @stack('styles')
 
@@ -24,14 +24,11 @@
         rel="stylesheet">
     @stack('modules')
 
-
-
-    {{-- Animation CSS --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    {{-- Structured Data Schema --}}
+    @stack('schema')
 
     {{-- Motion Js --}}
     <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
-
 </head>
 
 <body>
