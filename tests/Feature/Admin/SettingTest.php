@@ -133,4 +133,42 @@ class SettingTest extends TestCase
 
         $response->assertSessionHasErrors(['map_lat', 'map_lng', 'map_zoom']);
     }
+
+    public function test_can_update_separate_stat_settings(): void
+    {
+        $payload = [
+            'contact_email' => 'admin@limabiji.com',
+            'contact_phone' => '+62812345678',
+            'stat_about_sca_score' => '86+',
+            'stat_innovation_sca_score' => '84+',
+            'stat_export_destinations' => '12+',
+        ];
+
+        $response = $this->actingAs($this->admin)->put(route('admin.settings.update'), $payload);
+
+        $response->assertRedirect(route('admin.settings.index'));
+        $response->assertSessionHas('success');
+
+        $this->assertEquals('86+', SiteSetting::get('stat_about_sca_score'));
+        $this->assertEquals('84+', SiteSetting::get('stat_innovation_sca_score'));
+        $this->assertEquals('12+', SiteSetting::get('stat_export_destinations'));
+    }
+
+    public function test_separate_stat_settings_render_on_about_and_innovation_pages(): void
+    {
+        SiteSetting::set('stat_about_sca_score', '88+', null, 'stats');
+        SiteSetting::set('stat_innovation_sca_score', '83+', null, 'stats');
+        SiteSetting::set('stat_export_destinations', '15+', null, 'stats');
+
+        $aboutResponse = $this->get('/about');
+        $aboutResponse->assertStatus(200);
+        $aboutResponse->assertSee('88+ SCA');
+        $aboutResponse->assertDontSee('83+ SCA');
+
+        $innovationResponse = $this->get('/innovation');
+        $innovationResponse->assertStatus(200);
+        $innovationResponse->assertSee('83+');
+        $innovationResponse->assertSee('15+');
+        $innovationResponse->assertDontSee('88+');
+    }
 }

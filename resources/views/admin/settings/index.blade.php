@@ -280,6 +280,92 @@
             </div>
         </div>
 
+        <!-- Page Statistics & Metrics Card -->
+        <div class="card-modern space-y-5">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+                <div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900">Page Statistics & Metrics</h3>
+                    <p class="text-[11px] text-slate-500">Kelola angka metrik untuk halaman <span class="font-mono bg-slate-100 px-1 rounded">/about</span> dan <span class="font-mono bg-slate-100 px-1 rounded">/innovation</span>.</p>
+                </div>
+            </div>
+
+            <!-- About Page Section -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-100">About Page</span>
+                    <span class="text-xs text-slate-400">/about</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="stat_about_sca_score" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                            SCA Cupping Score (/about)
+                        </label>
+                        <input type="text"
+                               id="stat_about_sca_score"
+                               name="stat_about_sca_score"
+                               value="{{ old('stat_about_sca_score', $settings['stat_about_sca_score']) }}"
+                               placeholder="e.g. 82+"
+                               maxlength="20"
+                               class="w-full text-xs bg-slate-50 border @error('stat_about_sca_score') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                        @error('stat_about_sca_score')
+                            <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                        <p class="text-[11px] text-slate-400 mt-1">Tampil di badge Quality Benchmark pada halaman About.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 space-y-3">
+                <!-- Innovation Page Section -->
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-100">Innovation Page</span>
+                    <span class="text-xs text-slate-400">/innovation</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- SCA Score for Innovation -->
+                    <div>
+                        <label for="stat_innovation_sca_score" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                            SCA Cupping Score (/innovation)
+                        </label>
+                        <input type="text"
+                               id="stat_innovation_sca_score"
+                               name="stat_innovation_sca_score"
+                               value="{{ old('stat_innovation_sca_score', $settings['stat_innovation_sca_score']) }}"
+                               placeholder="e.g. 82+"
+                               maxlength="20"
+                               class="w-full text-xs bg-slate-50 border @error('stat_innovation_sca_score') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                        @error('stat_innovation_sca_score')
+                            <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                        <p class="text-[11px] text-slate-400 mt-1">Tampil pada stat grid cupping score di halaman Inovasi.</p>
+                    </div>
+
+                    <!-- Export Destinations -->
+                    <div>
+                        <label for="stat_export_destinations" class="block text-xs font-semibold text-slate-700 mb-1.5">
+                            Export Destinations (/innovation)
+                        </label>
+                        <input type="text"
+                               id="stat_export_destinations"
+                               name="stat_export_destinations"
+                               value="{{ old('stat_export_destinations', $settings['stat_export_destinations']) }}"
+                               placeholder="e.g. 7+"
+                               maxlength="20"
+                               class="w-full text-xs bg-slate-50 border @error('stat_export_destinations') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                        @error('stat_export_destinations')
+                            <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
+                        @enderror
+                        <p class="text-[11px] text-slate-400 mt-1">Tampil pada stat grid destinasi ekspor di halaman Inovasi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Save Button Bar -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
             <p class="text-xs text-slate-500">

@@ -2,6 +2,8 @@
 
 @php
     $locale = app()->getLocale();
+    $statSca         = \App\Models\SiteSetting::get('stat_innovation_sca_score', null, '82+');
+    $statExports     = \App\Models\SiteSetting::get('stat_export_destinations', null, '7+');
 @endphp
 
 @push('title', ($locale === 'id' ? 'Inovasi Proses Luwak Enzimatik' : 'Enzymatic Civet Coffee Innovation') . ' — Lima Biji Agritech')
@@ -137,11 +139,11 @@
     ];
 
     $mattersStats = [
-        ['value' => '82+', 'label' => __('landing.innovation_matters_stats_cupping')],
-        ['value' => '0', 'label' => __('landing.innovation_matters_stats_animals')],
+        ['value' => $statSca,     'label' => __('landing.innovation_matters_stats_cupping')],
+        ['value' => '0',          'label' => __('landing.innovation_matters_stats_animals')],
         ['value' => $locale === 'id' ? '48–72j' : '48–72h', 'label' => __('landing.innovation_matters_stats_fermentation')],
-        ['value' => '6', 'label' => __('landing.innovation_matters_stats_quality')],
-        ['value' => '7+', 'label' => __('landing.innovation_matters_stats_export')],
+        ['value' => '6',          'label' => __('landing.innovation_matters_stats_quality')],
+        ['value' => $statExports, 'label' => __('landing.innovation_matters_stats_export')],
     ];
 @endphp
 

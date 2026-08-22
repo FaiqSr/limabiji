@@ -196,7 +196,6 @@ class OriginTest extends TestCase
             'score' => '80',
             'overview' => 'Test overview',
             'flavor' => '["Chocolate", "Nutty"]',
-            'farms' => 'Farm A, Farm B',
             'is_active' => true,
         ]);
 
@@ -205,6 +204,5 @@ class OriginTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Legacy Origin');
         $response->assertSee('Chocolate');
-        $response->assertSee('Farm A');
     }
 }

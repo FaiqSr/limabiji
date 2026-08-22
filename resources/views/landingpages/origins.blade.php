@@ -8,7 +8,6 @@
 
 @php($flavorNotes = is_array($origin['flavor'] ?? null) ? $origin['flavor'] : (is_string($origin['flavor'] ?? null) ? (json_decode($origin['flavor'], true) ?: array_map('trim', explode(',', $origin['flavor']))) : []))
 
-@php($farmList = is_array($origin['farms'] ?? null) ? $origin['farms'] : (is_string($origin['farms'] ?? null) ? (json_decode($origin['farms'], true) ?: array_map('trim', explode(',', $origin['farms']))) : []))
 
 @php($galleryImages = is_array($origin['gallery'] ?? null) ? $origin['gallery'] : (is_string($origin['gallery'] ?? null) ? (json_decode($origin['gallery'], true) ?: []) : []))
 @php($galleryImages = array_values(array_filter($galleryImages)))
@@ -198,23 +197,6 @@
     </div>
     @endif
 
-    {{-- Partner Farms --}}
-    @if (count($farmList) > 0)
-    <div class="container mx-auto px-5 py-24">
-        <div data-animate="fade-up" class="max-w-3xl">
-            <p class="section-heading">Partner Farms</p>
-            <h2 class="font-display text-4xl sm:text-5xl text-white uppercase mt-2 mb-8">Where We Source</h2>
-            <div class="space-y-4">
-                @foreach ($farmList as $farm)
-                    <div class="flex items-center gap-4 p-5 rounded-lg bg-surface-alt border border-border hover:border-primary/30 transition-all duration-300">
-                        <span class="w-3 h-3 rounded-full bg-secondary flex-shrink-0"></span>
-                        <span class="text-white/90 font-medium">{{ $farm }}</span>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    @endif
 
     {{-- CTA --}}
     <div class="container mx-auto px-5 py-24">

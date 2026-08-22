@@ -296,14 +296,6 @@
                 placeholder="e.g. Floral Jasmine, Bergamot, Dark Chocolate, Brown Sugar"
                 button-label="Add Flavor Note" />
 
-            <!-- Reusable Partner Farms Repeater -->
-            <x-form.repeater 
-                name="farms"
-                :items="$origin->farms"
-                label="Partner Farms & Cooperatives"
-                placeholder="e.g. Sapan Village Farm, Bittuang Co-op, Mama Maria Lot"
-                button-label="Add Partner Farm" />
-
             <!-- Publishing & Display Settings Card -->
             <div class="card-modern space-y-4">
                 <h3 class="text-base font-semibold text-slate-900 pb-2 border-b border-slate-100">Visibility & Display Settings</h3>

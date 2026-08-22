@@ -26,7 +26,6 @@ class OriginSeeder extends Seeder
                 'overview' => "Bogor's highland farms sit on the fertile volcanic slopes of Mount Salak, producing bright, complex Arabica with distinctive floral and citrus notes.",
                 'overview_id' => 'Perkebunan dataran tinggi Bogor berada di lereng vulkanik subur Gunung Salak, menghasilkan Arabika cerah dan kompleks dengan aroma bunga serta citrus yang khas.',
                 'flavor' => ['Floral', 'Citrus', 'Brown Sugar', 'Medium Body', 'Bright Acidity'],
-                'farms' => ['Cisarua Highland Farm', 'Megamendung Estate', 'Ciawi Cooperative'],
                 'order' => 1,
             ],
             [
@@ -42,7 +41,6 @@ class OriginSeeder extends Seeder
                 'overview' => "The historic Preanger highlands surrounding Bandung and Ciwidey have been the heart of Java's specialty coffee since the 18th century, yielding elegant sweetness and balanced stone-fruit nuances.",
                 'overview_id' => 'Dataran tinggi Preanger yang bersejarah di sekitar Bandung dan Ciwidey telah menjadi jantung kopi specialty Jawa sejak abad ke-18, menghadirkan kemanisan elegan dan nuansa buah persik yang seimbang.',
                 'flavor' => ['Chocolate', 'Peach', 'Caramel', 'Silky Body', 'Clean Acidity'],
-                'farms' => ['Ciwidey Estate', 'Pangalengan Highland Farm', 'Lembang Growers Collective'],
                 'order' => 2,
             ],
             [
@@ -58,7 +56,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Grown between twin volcanoes Mount Sindoro and Sumbing, Temanggung produces world-renowned Fine Robusta and aromatic Arabica with deep tobacco, palm sugar, and mocha flavors.',
                 'overview_id' => 'Ditanam di antara gunung kembar Sindoro dan Sumbing, Temanggung menghasilkan Fine Robusta tersohor dan Arabika aromatik dengan karakter tembakau, gula kelapa, dan moka yang pekat.',
                 'flavor' => ['Palm Sugar', 'Tobacco', 'Mocha', 'Full Body', 'Nutty'],
-                'farms' => ['Sindoro Slopes Farm', 'Posong Highland', 'Kledung Growers'],
                 'order' => 3,
             ],
             [
@@ -74,7 +71,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Nestled between Mount Semeru and Mount Kawi, Dampit in southern Malang benefits from nutrient-rich volcanic terroir, offering rich chocolaty notes and heavy syrupy mouthfeel.',
                 'overview_id' => 'Terletak di antara Gunung Semeru dan Gunung Kawi, wilayah Dampit di Malang selatan mendapat manfaat tanah vulkanik kaya mineral, menawarkan aroma cokelat pekat dan mouthfeel sirup tebal.',
                 'flavor' => ['Dark Chocolate', 'Molasses', 'Spice', 'Heavy Body', 'Low Acidity'],
-                'farms' => ['Dampit Highland Cooperative', 'Tirtoyudo Estate', 'Ampelgading Farm'],
                 'order' => 4,
             ],
             [
@@ -90,7 +86,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'The high-altitude plateau spanning Mount Ijen and Mount Raung produces crisp, clean Arabica famous for its unique spicy-nutty aroma and delicate herbal aftertaste.',
                 'overview_id' => 'Dataran tinggi kaldera yang membentang di Gunung Ijen dan Gunung Raung menghasilkan Arabika bersih dengan aroma khas rempah-kacang dan aftertaste herbal yang memikat.',
                 'flavor' => ['Spicy Nut', 'Vanilla', 'Brown Sugar', 'Crisp Acidity', 'Medium Body'],
-                'farms' => ['Sempol Highland Estate', 'Sumber Wringin Cooperative', 'Sukorejo Farm'],
                 'order' => 5,
             ],
             [
@@ -106,7 +101,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Shaded beneath rainforest canopies around Lake Laut Tawar in Central Aceh, Gayo coffee is celebrated globally for its supreme complexity, lemongrass brightness, and velvety sweet body.',
                 'overview_id' => 'Ternaungi kanopi hutan hujan di sekitar Danau Laut Tawar Aceh Tengah, kopi Gayo dirayakan dunia karena kompleksitas rasa unggul, kecerahan sereh/citrus, dan bodi manis beludru.',
                 'flavor' => ['Lemongrass', 'Dark Cherry', 'Cardamom', 'Creamy Body', 'Complex Acidity'],
-                'farms' => ['Takengon Agro Estate', 'Bener Meriah Highland', 'Atu Lintang Organic Farm'],
                 'order' => 6,
             ],
             [
@@ -122,7 +116,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Originating from the legendary highlands of Mandailing and Lake Toba volcanic rim, Mandheling offers classic Sumatran depth with intense dark cocoa, sweet cedar, and herbal earthiness.',
                 'overview_id' => 'Berasal dari dataran tinggi legendaris Mandailing dan lingkar kaldera Toba, Mandheling menyajikan kekayaan rasa khas Sumatera dengan kakao gelap, kayu manis, dan aroma rempah bumi.',
                 'flavor' => ['Dark Cocoa', 'Cedarwood', 'Blackcurrant', 'Syrupy Body', 'Smooth Finish'],
-                'farms' => ['Mandailing Natal Estate', 'Pakantan Growers', 'Panyabungan Farm'],
                 'order' => 7,
             ],
             [
@@ -138,7 +131,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Cultivated on the high volcanic plateau south of Lake Toba in Humbang Hasundutan, Lintong coffee boasts vibrant tropical fruit acidity with a sweet herbal and smoky caramel foundation.',
                 'overview_id' => 'Dibudidayakan di dataran tinggi vulkanik sebelah selatan Danau Toba di Humbang Hasundutan, kopi Lintong menghadirkan keasaman buah tropis segar dengan dasar karamel manis herbal.',
                 'flavor' => ['Grapefruit', 'Clove', 'Caramelized Sugar', 'Dense Body', 'Crisp Finish'],
-                'farms' => ['Lintong Nihuta Collective', 'Dolok Sanggul Farm', 'Paranginan Highland'],
                 'order' => 8,
             ],
             [
@@ -154,7 +146,6 @@ class OriginSeeder extends Seeder
                 'overview' => "Grown around the foot of Mount Kerinci, Sumatra's highest volcano, this specialty micro-lot origin is celebrated for intense passionfruit, red apple sweetness, and floral honeysuckle vibrancy.",
                 'overview_id' => 'Ditanam di kaki Gunung Kerinci, gunung berapi tertinggi di Sumatera, micro-lot specialty ini terkenal dengan rasa markisa pekat, manis apel merah, dan semerbak bunga madu.',
                 'flavor' => ['Passion Fruit', 'Red Apple', 'Honeysuckle', 'Juicy Body', 'Lively Acidity'],
-                'farms' => ['Kayu Aro Estate', 'Gunung Tujuh Cooperative', 'Sungai Penuh Micro-lots'],
                 'order' => 9,
             ],
             [
@@ -170,7 +161,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Shaded beneath lush tangerine and citrus trees on the volcanic slopes of Mount Batur, Bali Kintamani coffee carries a naturally bright orange-citrus tang with sweet floral jasmine notes.',
                 'overview_id' => 'Tumbuh di bawah naungan pohon jeruk di lereng vulkanik Gunung Batur, kopi Kintamani Bali membawa kesegaran jeruk keprok alami berpadu dengan keharuman bunga melati manis.',
                 'flavor' => ['Sweet Orange', 'Jasmine', 'Honey', 'Light-Medium Body', 'Vibrant Acidity'],
-                'farms' => ['Ulian Village Cooperative', 'Catur Highland Farm', 'Kintamani Subak Abian'],
                 'order' => 10,
             ],
             [
@@ -186,7 +176,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Nurtured on the volcanic slopes of Mount Inerie in the Ngada highlands, Flores Bajawa delivers a sweet, aromatic cup with signature roasted hazelnut, sweet apple, and milk chocolate notes.',
                 'overview_id' => 'Dibesarkan di lereng vulkanik Gunung Inerie di dataran tinggi Ngada, Flores Bajawa menghasilkan seduhan aromatik manis dengan ciri khas kacang hazelnut panggang, apel manis, dan cokelat susu.',
                 'flavor' => ['Hazelnut', 'Green Apple', 'Milk Chocolate', 'Smooth Body', 'Balanced Acidity'],
-                'farms' => ['Bajawa Ngada Cooperative', 'Inerie Highland Estate', 'Manggarai Partner Farms'],
                 'order' => 11,
             ],
             [
@@ -202,7 +191,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Grown in the dramatic fertile caldera valley of Mount Rinjani in East Lombok, Sembalun Arabica offers crisp sweetness with notes of dried apricot, honey, and subtle black tea.',
                 'overview_id' => 'Ditanam di lembah kaldera subur Gunung Rinjani Lombok Timur, Arabika Sembalun menawarkan kemanisan segar dengan nuansa aprikot kering, madu, dan aroma teh hitam lembut.',
                 'flavor' => ['Dried Apricot', 'Wild Honey', 'Black Tea', 'Medium Body', 'Clean Finish'],
-                'farms' => ['Sembalun Bumbung Farm', 'Rinjani Highland Collective', 'Sajang Agro Farm'],
                 'order' => 12,
             ],
             [
@@ -218,7 +206,6 @@ class OriginSeeder extends Seeder
                 'overview' => "Toraja's world-famous coffee grows in the mystical high altitude mist of Sulawesi, prized by international roasteries for its deep dark chocolate, cedar spices, and rich syrupy body.",
                 'overview_id' => 'Kopi Toraja yang termasyhur tumbuh di kabut dataran tinggi Sulawesi yang sejuk, dihargai roastery internasional karena aroma cokelat pekat, rempah kayu cedar, dan bodi kental bertekstur sirup.',
                 'flavor' => ['Dark Chocolate', 'Cedar', 'Cinnamon', 'Syrupy Body', 'Earthy Finish'],
-                'farms' => ['Sapan Village Farm', 'Bittuang Highland', 'Rantepao Coffee Growers'],
                 'order' => 13,
             ],
             [
@@ -234,7 +221,6 @@ class OriginSeeder extends Seeder
                 'overview' => 'Cultivated along the rugged slopes of Mount Latimojong, Kalosi Arabica from Enrekang delivers exceptional sweetness with ripe plum, dark berry, and soothing herbal aromatics.',
                 'overview_id' => 'Dibudidayakan di sepanjang lereng terjal Gunung Latimojong, Arabika Kalosi dari Enrekang menghadirkan kemanisan istimewa dengan aroma buah prem matang, beri hitam, dan rempah herbal yang menenangkan.',
                 'flavor' => ['Ripe Plum', 'Blackberry', 'Herbal Caramel', 'Full Body', 'Silky Finish'],
-                'farms' => ['Benteng Alla Estate', 'Masalle Highland Farm', 'Baroko Growers'],
                 'order' => 14,
             ],
             [
@@ -250,7 +236,6 @@ class OriginSeeder extends Seeder
                 'overview' => "Grown organically by indigenous tribal communities in the pristine Baliem Valley of Papua's Jayawijaya mountains without chemicals, boasting exceptional clarity with sweet nutty, cocoa, and butterscotch tones.",
                 'overview_id' => 'Ditanam secara organik oleh masyarakat adat di Lembah Baliem pegunungan Jayawijaya Papua tanpa bahan kimia, menawarkan kebersihan seduhan luar biasa dengan nuansa kacang manis, kakao, dan butterscotch.',
                 'flavor' => ['Butterscotch', 'Roasted Walnut', 'Sweet Cocoa', 'Silky Body', 'Very Clean Finish'],
-                'farms' => ['Baliem Valley Organic Cooperative', 'Jayawijaya Highland Farm', 'Kurima Tribal Growers'],
                 'order' => 15,
             ],
         ];

@@ -10,13 +10,12 @@ class Origin extends Model
     protected $fillable = [
         'name', 'slug', 'province', 'image', 'altitude',
         'varietals', 'process', 'harvest', 'score',
-        'overview', 'overview_id', 'flavor', 'farms', 'gallery',
+        'overview', 'overview_id', 'flavor', 'gallery',
         'is_active', 'order',
     ];
 
     protected $casts = [
         'flavor' => 'array',
-        'farms' => 'array',
         'gallery' => 'array',
         'is_active' => 'boolean',
         'order' => 'integer',
@@ -55,11 +54,6 @@ class Origin extends Model
     }
 
     public function getFlavorAttribute($value): array
-    {
-        return $this->parseJsonOrArrayAttribute($value);
-    }
-
-    public function getFarmsAttribute($value): array
     {
         return $this->parseJsonOrArrayAttribute($value);
     }

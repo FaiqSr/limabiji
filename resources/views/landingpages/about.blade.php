@@ -1,7 +1,8 @@
 @extends('layouts.landingpages')
 
 @php
-    $locale = app()->getLocale();
+    $locale  = app()->getLocale();
+    $statSca = \App\Models\SiteSetting::get('stat_about_sca_score', null, '82+');
 @endphp
 
 @push('title', ($locale === 'id' ? 'Tentang Kami' : 'About Us') . ' — Lima Biji Agritech')
@@ -105,7 +106,7 @@
                     <div class="absolute bottom-6 left-6 right-6 flex items-center justify-between gap-4">
                         <div class="bg-card/95 backdrop-blur-xs p-3 rounded-xl border border-border text-xs shadow-md">
                             <p class="text-light-grey text-[10px] uppercase font-bold tracking-wider">Quality Benchmark</p>
-                            <p class="font-display text-2xl text-white">82+ SCA</p>
+                            <p class="font-display text-2xl text-white">{{ $statSca }} SCA</p>
                         </div>
                     </div>
                 </div>

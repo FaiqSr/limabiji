@@ -38,7 +38,6 @@ class OriginController extends Controller
             'overview' => ['required', 'string'],
             'overview_id' => ['nullable', 'string'],
             'flavor' => ['nullable', 'array'],
-            'farms' => ['nullable', 'array'],
             'gallery' => ['nullable', 'array'],
             'gallery.*' => ['nullable', 'string', 'max:2048'],
             'is_active' => ['boolean'],
@@ -47,7 +46,6 @@ class OriginController extends Controller
 
         $validated['slug'] = Str::slug($validated['slug']);
         $validated['flavor'] = array_values(array_filter($validated['flavor'] ?? []));
-        $validated['farms'] = array_values(array_filter($validated['farms'] ?? []));
         $validated['gallery'] = array_values(array_filter($validated['gallery'] ?? []));
 
         Origin::create($validated);
@@ -78,8 +76,6 @@ class OriginController extends Controller
             'overview_id' => ['nullable', 'string'],
             'flavor' => ['nullable', 'array'],
             'flavor.*' => ['string'],
-            'farms' => ['nullable', 'array'],
-            'farms.*' => ['string'],
             'gallery' => ['nullable', 'array'],
             'gallery.*' => ['nullable', 'string', 'max:2048'],
             'is_active' => ['boolean'],
@@ -88,7 +84,6 @@ class OriginController extends Controller
 
         $validated['slug'] = Str::slug($validated['slug']);
         $validated['flavor'] = array_values(array_filter($validated['flavor'] ?? []));
-        $validated['farms'] = array_values(array_filter($validated['farms'] ?? []));
         $newGallery = array_values(array_filter($validated['gallery'] ?? []));
         $validated['gallery'] = $newGallery;
 
