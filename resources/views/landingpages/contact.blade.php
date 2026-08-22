@@ -299,7 +299,7 @@
 
     {{-- 3. Store Location & Interactive Map Section --}}
     <div data-animate="fade-up" class="container mx-auto px-5 pb-24">
-        <div class=" p-6 sm:p-10 relative overflow-hidden">
+        <div class="relative overflow-hidden">
             {{-- Section Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                 <div>
