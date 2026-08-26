@@ -10,6 +10,7 @@ use App\Models\ExportDestination;
 use App\Models\Faq;
 use App\Models\InnovationStep;
 use App\Models\Origin;
+use App\Models\Product;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
@@ -27,13 +28,15 @@ class LandingPages extends Controller
             ->get();
         $testimonials = Testimonial::ordered()->take(3)->get();
         $faqs = Faq::active()->ordered()->get();
+        $featuredProducts = Product::active()->featured()->take(3)->get();
 
         return view('landingpages.index', compact(
             'origins',
             'exportDestinations',
             'articles',
             'testimonials',
-            'faqs'
+            'faqs',
+            'featuredProducts'
         ));
     }
 

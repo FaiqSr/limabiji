@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             InnovationStepSeeder::class,
             CertificateSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }

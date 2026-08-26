@@ -22,6 +22,29 @@ Route::get('/testimonials', [LandingPages::class, 'testimonials'])->name('landin
 Route::get('/contact', [LandingPages::class, 'contact'])->name('landingpages.contact');
 Route::post('/contact', [LandingPages::class, 'submitContact'])->name('landingpages.contact.submit');
 
+// --- Specialty Coffee Store & Marketplace ---
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\StoreController;
+
+Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+Route::get('/store/{product:slug}', [StoreController::class, 'show'])->name('store.show');
+Route::post('/store/quiz/recommend', [StoreController::class, 'quiz'])->name('store.quiz.recommend');
+
+// Cart Endpoints
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+// Checkout & Payment
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('store.checkout');
+Route::post('/checkout', [CheckoutController::class, 'process'])->name('store.checkout.process');
+Route::get('/order/status/{orderNumber}', [CheckoutController::class, 'status'])->name('store.order.status');
+Route::post('/order/simulate/{orderNumber}', [CheckoutController::class, 'simulatePayment'])->name('store.order.simulate');
+Route::post('/payment/midtrans/notification', [CheckoutController::class, 'notification'])->name('payment.midtrans.notification');
+
 // --- Utility Routes ---
 Route::post('/locale', function (Request $request) {
     $locale = $request->input('locale');

@@ -8,39 +8,59 @@
 
     {{-- Desktop Nav --}}
     <nav class="gap-2 hidden lg:flex items-center">
-        <a href="{{ url('/about') }}" class="nav-link">{{ __('nav.about') }}</a>
-        <a href="{{ url('/innovation') }}" class="nav-link">{{ __('nav.innovation') }}</a>
-        {{-- <a href="{{ url('/news') }}" class="nav-link">{{ __('nav.news') }}</a> --}}
-        {{-- <a href="{{ url('/testimonials') }}" class="nav-link">{{ __('nav.testimonials') }}</a> --}}
-        <a href="{{ url('/contact') }}" class="nav-link">{{ __('nav.contact') }}</a>
+        <a href="{{ url('/about') }}" class="nav-link {{ request()->is('about*') ? 'text-primary' : '' }}">{{ __('nav.about') }}</a>
+        <a href="{{ url('/innovation') }}" class="nav-link {{ request()->is('innovation*') ? 'text-primary' : '' }}">{{ __('nav.innovation') }}</a>
+        <a href="{{ route('store.index') }}" class="nav-link {{ request()->is('store*') ? 'text-primary' : '' }}">
+            <span class="flex items-center gap-1.5">
+                {{ __('nav.store') }}
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+            </span>
+        </a>
+        <a href="{{ url('/contact') }}" class="nav-link {{ request()->is('contact*') ? 'text-primary' : '' }}">{{ __('nav.contact') }}</a>
     </nav>
 
+    {{-- Right Section: Cart & Language Switcher --}}
+    <div class="flex items-center gap-3">
+        {{-- Cart Icon Button --}}
+        <button type="button" data-open-cart
+            class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-surface-alt border border-border/80 hover:border-primary/50 text-white hover:text-primary transition-all duration-200 cursor-pointer active:scale-95 shadow-sm"
+            aria-label="View Cart">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 min-w-[1.25rem] h-5 px-1 rounded-full bg-primary text-white text-[10px] font-mono font-bold flex items-center justify-center shadow-md">
+                0
+            </span>
+        </button>
 
-    {{-- Language Switcher --}}
-    <div class="hidden lg:flex items-center gap-0.5 rounded-lg border border-border bg-surface-alt p-1 ml-2">
-        <form method="POST" action="{{ route('locale.switch') }}" class="inline">
-            @csrf
-            <input type="hidden" name="locale" value="en">
-            <button type="submit"
-                class="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 {{ app()->getLocale() === 'en' ? 'bg-primary text-white shadow-sm' : 'text-white/70 hover:text-white' }}">
-                EN
-            </button>
-        </form>
-        <form method="POST" action="{{ route('locale.switch') }}" class="inline">
-            @csrf
-            <input type="hidden" name="locale" value="id">
-            <button type="submit"
-                class="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 {{ app()->getLocale() === 'id' ? 'bg-primary text-white shadow-sm' : 'text-white/70 hover:text-white' }}">
-                ID
-            </button>
-        </form>
+        {{-- Language Switcher --}}
+        <div class="hidden lg:flex items-center gap-0.5 rounded-lg border border-border bg-surface-alt p-1">
+            <form method="POST" action="{{ route('locale.switch') }}" class="inline">
+                @csrf
+                <input type="hidden" name="locale" value="en">
+                <button type="submit"
+                    class="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 {{ app()->getLocale() === 'en' ? 'bg-primary text-white shadow-sm' : 'text-white/70 hover:text-white' }}">
+                    EN
+                </button>
+            </form>
+            <form method="POST" action="{{ route('locale.switch') }}" class="inline">
+                @csrf
+                <input type="hidden" name="locale" value="id">
+                <button type="submit"
+                    class="px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 {{ app()->getLocale() === 'id' ? 'bg-primary text-white shadow-sm' : 'text-white/70 hover:text-white' }}">
+                    ID
+                </button>
+            </form>
+        </div>
+
+        {{-- Hamburger — Mobile --}}
+        <button id="sidebar-open" class="lg:hidden text-white hover:text-primary transition-colors p-1" aria-label="Open menu">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
     </div>
-    {{-- Hamburger — Mobile --}}
-    <button id="sidebar-open" class="lg:hidden text-white hover:text-primary transition-colors" aria-label="Open menu">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
 </header>
 
 {{-- Overlay --}}
@@ -75,6 +95,15 @@
         </a>
         <a href="{{ url('/innovation') }}" class="sidebar-link">
             <span>{{ __('nav.innovation') }}</span>
+            <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+        <a href="{{ route('store.index') }}" class="sidebar-link text-primary font-semibold">
+            <span class="flex items-center gap-2">
+                {{ __('nav.store') }}
+                <span class="px-2 py-0.5 rounded-md bg-primary/20 text-[10px] uppercase font-mono font-bold text-primary">New</span>
+            </span>
             <svg class="w-4 h-4 arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>

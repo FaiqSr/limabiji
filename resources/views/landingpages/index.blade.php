@@ -262,6 +262,81 @@
             </div>
         @endif
 
+        {{-- Store Preview Section (Clean White Theme) --}}
+        @if (isset($featuredProducts) && $featuredProducts->isNotEmpty())
+            <div class="container mx-auto px-5 my-16 lg:my-24">
+                <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm text-slate-800">
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 pb-6 border-b border-slate-100">
+                        <div>
+                            <span class="text-xs font-mono font-bold uppercase tracking-widest text-primary block mb-2">
+                                Direct Roastery • Online Store
+                            </span>
+                            <h2 class="font-display text-4xl sm:text-5xl text-slate-900 uppercase tracking-tight">
+                                {{ $locale === 'id' ? 'Koleksi Kopi Pilihan' : 'Specialty Bean Store' }}
+                            </h2>
+                            <p class="text-slate-600 text-sm sm:text-base mt-2 max-w-xl">
+                                {{ $locale === 'id' ? 'Pesan biji kopi segar hasil bio-fermentasi enzimatik langsung dari roastery kami.' : 'Order freshly roasted specialty beans processed with bio-fermentation direct to your door.' }}
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button type="button" data-open-quiz
+                                class="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold uppercase tracking-wider transition-colors flex items-center gap-2">
+                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <span>{{ $locale === 'id' ? 'Kuis Kopi' : 'Coffee Quiz' }}</span>
+                            </button>
+                            <a href="{{ route('store.index') }}"
+                                class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold uppercase tracking-wider transition-colors shadow-sm active:scale-95 flex items-center gap-2">
+                                <span>{{ $locale === 'id' ? 'Buka Toko' : 'Visit Store' }}</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        @foreach ($featuredProducts as $item)
+                            @php
+                                $itemDisplayName = $item->getNameForLocale($locale);
+                            @endphp
+                            <div class="bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 hover:border-primary/50 transition-colors flex flex-col justify-between group shadow-xs">
+                                <div>
+                                    <div class="relative h-48 bg-slate-100 overflow-hidden">
+                                        <img src="{{ $item->image ?: asset('assets/images/limabiji/toko.webp') }}"
+                                            alt="{{ $itemDisplayName }}"
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute top-3 left-3 flex gap-1.5">
+                                            <span class="px-2.5 py-0.5 rounded-lg bg-white/95 text-slate-800 text-[10px] font-mono font-bold uppercase shadow-xs">
+                                                {{ ucfirst($item->category) }}
+                                            </span>
+                                            @if ($item->sca_score)
+                                                <span class="px-2.5 py-0.5 rounded-lg bg-primary text-white text-[10px] font-mono font-bold uppercase shadow-xs">
+                                                    {{ $item->sca_score }} SCA
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="p-5">
+                                        <h3 class="font-display text-xl text-slate-900 uppercase truncate">
+                                            <a href="{{ route('store.show', $item->slug) }}" class="group-hover:text-primary transition-colors">{{ $itemDisplayName }}</a>
+                                        </h3>
+                                        <p class="text-slate-500 text-xs line-clamp-2 mt-1.5 leading-relaxed">
+                                            {{ $item->getDescriptionForLocale($locale) }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="p-5 pt-0 flex items-center justify-between border-t border-slate-200/60 mt-3 pt-3">
+                                    <span class="font-display text-xl text-slate-900">{{ $item->getFormattedPrice('200g') }}</span>
+                                    <button type="button"
+                                        onclick="LimaBijiCart.addItem({{ $item->id }}, '200g', 'whole_bean', 1)"
+                                        class="px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-xs cursor-pointer">
+                                        + Cart
+                                    </button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
 
         {{-- 2. Export Map Section --}}
         @php

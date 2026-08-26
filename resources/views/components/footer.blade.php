@@ -18,6 +18,7 @@
                     <li><a href="{{ url('/') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.home') }}</a></li>
                     <li><a href="{{ url('/about') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.about') }}</a></li>
                     <li><a href="{{ url('/innovation') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.innovation') }}</a></li>
+                    <li><a href="{{ route('store.index') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.store') }}</a></li>
                     <li><a href="{{ url('/news') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.news') }}</a></li>
                     <li><a href="{{ url('/testimonials') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.testimonials') }}</a></li>
                     <li><a href="{{ url('/contact') }}" class="text-light-grey hover:text-white transition-colors">{{ __('nav.contact') }}</a></li>
