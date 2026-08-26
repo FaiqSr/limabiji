@@ -80,15 +80,53 @@ class CheckoutTest extends TestCase
             'city' => 'Bogor',
             'postal_code' => '16128',
             'courier' => 'JNE REG',
+            'payment_method' => 'qris',
             'notes' => 'Testing order note',
         ]);
 
         $order = Order::where('customer_email', 'faiq@example.com')->first();
         $this->assertNotNull($order);
         $this->assertEquals('pending', $order->payment_status);
+        $this->assertEquals('qris', $order->payment_method_type);
+        $this->assertNotEmpty($order->payment_instructions);
         $this->assertCount(1, $order->items);
 
         $response->assertRedirect('/order/status/'.$order->order_number);
+    }
+
+    public function test_checkout_rejects_invalid_payment_method(): void
+    {
+        $product = Product::active()->first();
+
+        $cartKey = md5("{$product->id}_200g_whole_bean");
+        $cartData = [
+            $cartKey => [
+                'key' => $cartKey,
+                'product_id' => $product->id,
+                'name' => $product->name,
+                'name_id' => $product->name_id,
+                'slug' => $product->slug,
+                'image' => $product->image,
+                'weight' => '200g',
+                'grind_size' => 'whole_bean',
+                'unit_price' => $product->base_price_200g,
+                'quantity' => 1,
+                'subtotal' => $product->base_price_200g,
+            ],
+        ];
+
+        $response = $this->withSession(['limabiji_cart' => $cartData])->post('/checkout', [
+            'customer_name' => 'Faiq Developer',
+            'customer_email' => 'faiq@example.com',
+            'customer_phone' => '081234567890',
+            'shipping_address' => 'Jl. Pajajaran No. 10',
+            'city' => 'Bogor',
+            'courier' => 'JNE REG',
+            'payment_method' => 'unknown_method',
+        ]);
+
+        $response->assertSessionHasErrors('payment_method');
+        $this->assertEquals(0, Order::where('customer_email', 'faiq@example.com')->count());
     }
 
     public function test_can_simulate_payment_as_paid(): void

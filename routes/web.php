@@ -42,6 +42,7 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('store.checkout');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('store.checkout.process');
 Route::get('/order/status/{orderNumber}', [CheckoutController::class, 'status'])->name('store.order.status');
+Route::get('/payment/status/{orderNumber}', [CheckoutController::class, 'paymentStatus'])->name('store.order.payment-status');
 Route::post('/order/simulate/{orderNumber}', [CheckoutController::class, 'simulatePayment'])->name('store.order.simulate');
 Route::post('/payment/midtrans/notification', [CheckoutController::class, 'notification'])->name('payment.midtrans.notification');
 

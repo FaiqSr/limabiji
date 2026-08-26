@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class CheckoutController extends Controller
 {
-    public function index(CartService $cartService): View|RedirectResponse
+    public function index(CartService $cartService, PaymentGatewayService $paymentService): View|RedirectResponse
     {
         $cart = $cartService->getCart();
         if (empty($cart)) {
@@ -26,8 +26,9 @@ class CheckoutController extends Controller
         $defaultCourier = 'JNE REG';
         $defaultShippingCost = 25000;
         $total = $subtotal + $defaultShippingCost;
+        $paymentMethods = $paymentService->availableMethods();
 
-        return view('landingpages.store.checkout', compact('cart', 'itemCount', 'subtotal', 'defaultCourier', 'defaultShippingCost', 'total'));
+        return view('landingpages.store.checkout', compact('cart', 'itemCount', 'subtotal', 'defaultCourier', 'defaultShippingCost', 'total', 'paymentMethods'));
     }
 
     public function process(
@@ -52,8 +53,14 @@ class CheckoutController extends Controller
             'city' => 'required|string|max:100',
             'postal_code' => 'nullable|string|max:10',
             'courier' => 'required|string|in:JNE REG,J&T Express,SiCepat BEST,GoSend / Grab Instant',
+            'payment_method' => 'required|string',
             'notes' => 'nullable|string|max:500',
         ]);
+
+        $paymentMethod = $validated['payment_method'];
+        if (! $paymentService->isValidMethod($paymentMethod)) {
+            return back()->withErrors(['payment_method' => __('store.pay_method_invalid')])->withInput();
+        }
 
         $subtotal = $cartService->getSubtotal();
 
@@ -68,7 +75,7 @@ class CheckoutController extends Controller
 
         $orderNumber = 'LB-'.date('Ymd').'-'.strtoupper(substr(uniqid(), -5));
 
-        $order = DB::transaction(function () use ($validated, $orderNumber, $subtotal, $shippingCost, $totalAmount, $cart) {
+        $order = DB::transaction(function () use ($validated, $orderNumber, $subtotal, $shippingCost, $totalAmount, $cart, $paymentMethod) {
             $order = Order::create([
                 'order_number' => $orderNumber,
                 'customer_name' => $validated['customer_name'],
@@ -83,7 +90,8 @@ class CheckoutController extends Controller
                 'shipping_cost' => $shippingCost,
                 'total_amount' => $totalAmount,
                 'payment_method' => 'midtrans',
-                'payment_status' => 'pending',
+                'payment_method_type' => $paymentMethod,
+                'payment_status' => 'creating_payment',
             ]);
 
             foreach ($cart as $item) {
@@ -102,8 +110,14 @@ class CheckoutController extends Controller
             return $order;
         });
 
-        // Request Midtrans Snap Token
-        $snapToken = $paymentService->createSnapToken($order);
+        // Request Midtrans Core API charge (order already in `creating_payment` state)
+        $instructions = $paymentService->createPayment($order, $paymentMethod);
+
+        if (! $instructions) {
+            return back()
+                ->withInput()
+                ->with('error', __('store.pay_charge_failed'));
+        }
 
         // Clear cart
         $cartService->clear();
@@ -112,7 +126,8 @@ class CheckoutController extends Controller
             return response()->json([
                 'status' => 'success',
                 'order_number' => $order->order_number,
-                'snap_token' => $snapToken,
+                'payment_method_type' => $order->payment_method_type,
+                'instructions' => $instructions,
                 'redirect_url' => route('store.order.status', $order->order_number),
             ]);
         }
@@ -123,10 +138,32 @@ class CheckoutController extends Controller
     public function status(string $orderNumber, PaymentGatewayService $paymentService): View
     {
         $order = Order::with('items')->where('order_number', $orderNumber)->firstOrFail();
-        $clientKey = $paymentService->getClientKey();
-        $snapJsUrl = $paymentService->getSnapJsUrl();
+        $paymentMethodLabel = $paymentService->methodLabel((string) $order->payment_method_type);
 
-        return view('landingpages.store.order-status', compact('order', 'clientKey', 'snapJsUrl'));
+        return view('landingpages.store.order-status', compact('order', 'paymentMethodLabel'));
+    }
+
+    /**
+     * Polling endpoint used by the custom payment UI. Syncs against Midtrans
+     * GET status so the page reflects the latest authoritative state.
+     */
+    public function paymentStatus(
+        string $orderNumber,
+        PaymentGatewayService $paymentService
+    ): JsonResponse {
+        $order = Order::where('order_number', $orderNumber)->firstOrFail();
+
+        $paymentService->syncStatus($order);
+        $order->refresh();
+
+        return response()->json([
+            'status' => 'success',
+            'order_number' => $order->order_number,
+            'payment_status' => $order->payment_status,
+            'midtrans_status' => $order->midtrans_status,
+            'payment_method_type' => $order->payment_method_type,
+            'paid_at' => $order->paid_at?->toISOString(),
+        ]);
     }
 
     public function simulatePayment(

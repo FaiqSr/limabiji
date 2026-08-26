@@ -157,6 +157,38 @@
                                 placeholder="Gilingan untuk V60 rasio 1:15 atau titip di pos sekuriti">
                         </div>
                     </div>
+
+                    {{-- Payment Method Picker --}}
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl space-y-5 border border-slate-200 shadow-sm">
+                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+                            <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">2</span>
+                            <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_payment_method') }}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="payment-methods">
+                            @foreach ($paymentMethods as $key => $method)
+                                <label
+                                    class="payment-method-card relative flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200 select-none
+                                        border-slate-200 hover:border-primary/50 bg-white
+                                        has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 has-[:checked]:bg-primary/5">
+                                    <span class="w-5 h-5 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center
+                                        border-slate-300 has-[:checked]:border-primary has-[:checked]:[&>span]:bg-primary">
+                                        <input type="radio" name="payment_method" value="{{ $key }}"
+                                            class="sr-only"
+                                            {{ old('payment_method') === $key || $loop->first ? 'checked' : '' }}>
+                                        <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
+                                    </span>
+                                    <span class="min-w-0">
+                                        <span class="block font-semibold text-sm text-slate-900">{{ __('store.pay_method_'.$key) }}</span>
+                                        <span class="block text-[11px] text-slate-500 mt-0.5">{{ __('store.pay_method_'.$key.'_desc') }}</span>
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
+                        @error('payment_method')
+                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 {{-- Right: Order Summary Card --}}
