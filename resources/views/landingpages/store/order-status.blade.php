@@ -12,8 +12,8 @@
 @endpush
 
 @push('scripts')
-    @if ($order->payment_status === 'pending' && !empty($snapJsUrl) && !empty($clientKey))
-        <script src="{{ $snapJsUrl }}" data-client-key="{{ $clientKey }}"></script>
+    @if ($order->payment_status === 'pending' && !empty($order->payment_instructions))
+        @include('landingpages.store.partials.payment-polling', ['order' => $order])
     @endif
 @endpush
 
@@ -77,7 +77,15 @@
                     : ($order->payment_status === 'pending'
                         ? 'bg-amber-100 text-amber-800'
                         : 'bg-rose-100 text-rose-800') }}">
-                {{ $order->payment_status === 'paid' ? __('store.order_status_paid') : ($order->payment_status === 'pending' ? __('store.order_status_pending') : __('store.order_status_failed')) }}
+                @if ($order->payment_status === 'paid')
+                    {{ __('store.order_status_paid') }}
+                @elseif ($order->payment_status === 'pending')
+                    {{ __('store.order_status_pending') }}
+                @elseif ($order->payment_status === 'expired')
+                    {{ __('store.order_status_expired') }}
+                @else
+                    {{ __('store.order_status_failed') }}
+                @endif
             </span>
 
             <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl text-slate-900 uppercase mt-2">
@@ -91,7 +99,7 @@
             {{-- Pay Now Button for Pending Status --}}
             @if ($order->payment_status === 'pending')
                 <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <button type="button" id="btn-pay-snap"
+                    <button type="button" id="btn-pay-now"
                         class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-semibold text-xs sm:text-sm uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -101,6 +109,112 @@
                 </div>
             @endif
         </div>
+
+        {{-- Custom Payment Instructions --}}
+        @if ($order->payment_status === 'pending' && !empty($order->payment_instructions))
+            <div data-payment-instructions class="bg-white p-6 sm:p-10 rounded-2xl border border-slate-200 shadow-sm mb-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-100 mb-6">
+                    <div>
+                        <h2 class="font-display text-2xl sm:text-3xl text-slate-900 uppercase">{{ __('store.pay_instructions_title') }}</h2>
+                        <p class="text-xs text-slate-500 mt-1">
+                            {{ __('store.pay_method') }}: <span class="font-semibold text-slate-800">{{ $paymentMethodLabel }}</span>
+                        </p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">{{ __('store.pay_amount') }}</p>
+                        <p class="font-display text-2xl text-primary">{{ $order->getFormattedTotal() }}</p>
+                    </div>
+                </div>
+
+                @php
+                    $methodType = $order->payment_method_type;
+                    $vaNumber = $order->getVaNumber();
+                    $qrUrl = $order->getQrUrl();
+                    $deepLink = $order->getDeepLinkUrl();
+                @endphp
+
+                {{-- Virtual Account / E-Channel --}}
+                @if (in_array($methodType, ['bca_va', 'bni_va', 'bri_va', 'permata_va', 'mandiri_va'], true))
+                    <div class="space-y-5">
+                        @if ($vaNumber)
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                                    {{ $methodType === 'mandiri_va' ? __('store.pay_bill_key') : __('store.pay_va_number') }}
+                                </p>
+                                <div class="flex items-center gap-3">
+                                    <p id="payment-code" class="font-mono text-3xl sm:text-4xl font-bold text-slate-900 tracking-widest select-all bg-slate-50 border border-slate-200 rounded-xl px-5 py-4">
+                                        {{ $vaNumber }}
+                                    </p>
+                                    <button type="button" data-copy="#payment-code"
+                                        class="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer shrink-0">
+                                        {{ __('store.pay_copy') }}
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($methodType === 'mandiri_va' && !empty($order->getInstructions()['biller_code']))
+                            <div>
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{{ __('store.pay_biller_code') }}</p>
+                                <p class="font-mono text-xl font-bold text-slate-900">{{ $order->getInstructions()['biller_code'] }}</p>
+                            </div>
+                        @endif
+
+                        <ol class="space-y-2 text-sm text-slate-600">
+                            @foreach (__('store.pay_va_steps') as $step)
+                                <li class="flex items-start gap-3">
+                                    <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold flex items-center justify-center shrink-0">{{ $loop->iteration }}</span>
+                                    <span>{{ $step }}</span>
+                                </li>
+                            @endforeach
+                        </ol>
+                    </div>
+
+                {{-- QRIS / E-Wallet (QR scan) --}}
+                @elseif ($qrUrl || $deepLink)
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        @if ($qrUrl)
+                            <div class="text-center">
+                                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">{{ __('store.pay_scan_qr') }}</p>
+                                <img src="{{ $qrUrl }}" alt="QRIS / QR Payment"
+                                    class="w-56 h-56 rounded-2xl border-2 border-slate-200 bg-white p-2 shadow-sm object-contain">
+                            </div>
+                        @endif
+                        <div class="flex-1 space-y-4 text-sm text-slate-600">
+                            <ol class="space-y-2">
+                                @foreach (__('store.pay_qr_steps') as $step)
+                                    <li class="flex items-start gap-3">
+                                        <span class="w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold flex items-center justify-center shrink-0">{{ $loop->iteration }}</span>
+                                        <span>{{ $step }}</span>
+                                    </li>
+                                @endforeach
+                            </ol>
+                            @if ($deepLink)
+                                <a href="{{ $deepLink }}" target="_blank" rel="noopener"
+                                    class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer">
+                                    {{ __('store.pay_open_app') }}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Expiry + Already Paid --}}
+                <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    @if ($order->expires_at)
+                        <div class="text-xs text-slate-500">
+                            <span class="font-mono font-bold uppercase tracking-wider text-amber-600">{{ __('store.pay_expires_in') }}</span>
+                            <span id="payment-expiry" data-expires="{{ $order->expires_at->timestamp }}" class="font-mono font-bold text-slate-800 ml-1">--:--:--</span>
+                        </div>
+                    @endif
+                    <button type="button" id="btn-paid-check"
+                        class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer">
+                        {{ __('store.pay_i_have_paid') }}
+                    </button>
+                </div>
+            </div>
+        @endif
 
         {{-- Order Details Breakdown --}}
         <div class="bg-white p-6 sm:p-10 rounded-2xl space-y-8 border border-slate-200 shadow-sm">
@@ -195,45 +309,4 @@
         </div>
     </div>
 </div>
-
-    @if ($order->payment_status === 'pending' && !empty($order->snap_token))
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const btnPay = document.getElementById('btn-pay-snap');
-                const snapToken = '{{ $order->snap_token }}';
-
-                if (btnPay) {
-                    btnPay.addEventListener('click', () => {
-                        if (typeof window.snap !== 'undefined' && typeof window.snap.pay === 'function' && !snapToken.startsWith('MOCK_') && !snapToken.startsWith('FALLBACK_')) {
-                            window.snap.pay(snapToken, {
-                                onSuccess: function(result) {
-                                    window.location.reload();
-                                },
-                                onPending: function(result) {
-                                    window.location.reload();
-                                },
-                                onError: function(result) {
-                                    alert('Payment failed or cancelled.');
-                                    window.location.reload();
-                                },
-                                onClose: function() {
-                                    console.log('Payment modal closed.');
-                                }
-                            });
-                        } else {
-                            // In mock or fallback dev mode, automatically trigger simulation
-                            if (confirm('Midtrans Snap SDK in local simulation mode. Would you like to simulate an instant successful payment?')) {
-                                const simForm = document.querySelector('form[action*="simulate"]');
-                                if (simForm) {
-                                    simForm.submit();
-                                } else {
-                                    window.location.reload();
-                                }
-                            }
-                        }
-                    });
-                }
-            });
-        </script>
-    @endif
 @endsection
