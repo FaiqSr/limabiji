@@ -5,13 +5,142 @@
 @source "../**/*.blade.php";
 @source "../**/*.js";
 
+@theme {
+    /* Font */
+    --font-display: "Bebas Neue", sans-serif;
+    --font-body: "Rubik", sans-serif;
+
+    /* Lima Biji — Dark Forest & Roasted Coffee Palette */
+    --color-dark: #1C332E;
+    --color-surface: #1C332E;
+    --color-surface-alt: #142622;
+    --color-primary: #069F80;
+    --color-primary-hover: #08B894;
+    --color-secondary: #9E4906;
+    --color-secondary-hover: #BA5708;
+    --color-mint: #4EBA9F;
+    --color-light-grey: #A3B8B2;
+    --color-card: #233F39;
+    --color-accent-gold: #9E4906;
+    --color-border: #2D4E46;
+    --color-border-subtle: #24413B;
+}
+
+@layer base {
+    body {
+        font-family: var(--font-body);
+        background-color: var(--color-surface);
+        color: #FFFFFF;
+    }
+}
+
 @layer components {
-    .navbar-text {
-        @apply font-bold text-2xl px-3 py-1 hover:border hover:rounded-lg hover:px-3 hover:py-1 transition-all duration-300;
+    /* Pill-shaped navigation links */
+    .nav-link {
+        @apply font-medium text-sm px-5 py-2.5 rounded-lg border border-transparent
+               text-white/80 hover:text-white hover:border-border hover:bg-surface-alt
+               transition-all duration-300;
     }
-    .alfa-slab-one-regular {
-        font-family: "Alfa Slab One", serif;
-        font-weight: 400;
-        font-style: normal;
+
+    /* Section heading — small, uppercase label */
+    .section-heading {
+        @apply text-4xl font-bold tracking-widest uppercase text-light-grey mb-2;
     }
+
+    .section-title {
+        @apply font-display text-4xl sm:text-5xl lg:text-6xl text-white leading-tight;
+    }
+
+    .section-subtitle {
+        @apply text-light-grey text-base sm:text-lg max-w-2xl;
+    }
+
+    /* Solid card — dark elevated container with subtle border */
+    .card-solid {
+        @apply bg-card border border-border-subtle rounded-lg shadow-sm;
+    }
+
+    /* Rich text article body — styled markup from Trix editor */
+    .article-body {
+        @apply text-white/80 text-lg leading-relaxed;
+    }
+
+    .article-body h1,
+    .article-body h2,
+    .article-body h3,
+    .article-body h4 {
+        @apply font-display text-white leading-tight mt-10 mb-4 uppercase;
+    }
+
+    .article-body h1 {
+        @apply text-4xl;
+    }
+
+    .article-body h2 {
+        @apply text-3xl;
+    }
+
+    .article-body h3 {
+        @apply text-2xl;
+    }
+
+    .article-body h4 {
+        @apply text-xl;
+    }
+
+    .article-body p {
+        @apply my-5;
+    }
+
+    .article-body ul {
+        @apply list-disc pl-6 my-5 space-y-2;
+    }
+
+    .article-body ol {
+        @apply list-decimal pl-6 my-5 space-y-2;
+    }
+
+    .article-body blockquote {
+        @apply border-l-4 border-primary pl-5 my-6 italic text-white/70;
+    }
+
+    .article-body a {
+        @apply text-primary underline decoration-primary/40 hover:decoration-primary transition-colors;
+    }
+
+    .article-body img {
+        @apply rounded-lg my-8 w-full h-auto;
+    }
+
+    .article-body hr {
+        @apply my-8 border-border;
+    }
+
+    .article-body pre {
+        @apply bg-surface-alt text-light-grey rounded-lg p-4 my-6 overflow-x-auto font-mono text-sm border border-border;
+    }
+
+    .article-body code {
+        @apply font-mono text-sm bg-surface-alt text-primary px-1.5 py-0.5 rounded border border-border;
+    }
+}
+
+/* Infinite Marquee Animation */
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    display: flex;
+    width: max-content;
+    animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
 }
