@@ -13,7 +13,6 @@
         <a href="{{ route('store.index') }}" class="nav-link {{ request()->is('store*') ? 'text-primary' : '' }}">
             <span class="flex items-center gap-1.5">
                 {{ __('nav.store') }}
-                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
             </span>
         </a>
         <a href="{{ url('/contact') }}" class="nav-link {{ request()->is('contact*') ? 'text-primary' : '' }}">{{ __('nav.contact') }}</a>
