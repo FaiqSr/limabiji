@@ -42,7 +42,7 @@ class StoreController extends Controller
             default => $query->orderBy('is_featured', 'desc')->orderBy('id', 'asc'),
         };
 
-        $products = $query->paginate(6)->withQueryString();
+        $products = $query->paginate(8)->withQueryString();
         $featuredProducts = Product::active()->featured()->take(3)->get();
 
         return view('landingpages.store.index', compact('products', 'featuredProducts', 'category', 'search', 'sort'));
