@@ -17,7 +17,7 @@
                            name="search" 
                            value="{{ request('search') }}" 
                            placeholder="Search certificates by name, issuer, or cert number..." 
-                           class="w-full pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                     
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,7 +140,7 @@
                             <!-- Actions -->
                             <td class="py-4 px-5 text-right space-x-1.5">
                                 <a href="{{ route('admin.certificates.edit', $cert) }}" 
-                                   class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 rounded-lg transition-colors"
+                                   class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 rounded-lg transition-colors"
                                    title="Edit Certificate">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -174,7 +174,7 @@
                                     </svg>
                                     <span class="font-medium text-xs">No certificates found</span>
                                     @if(request('search'))
-                                        <a href="{{ route('admin.certificates.index') }}" class="text-xs text-indigo-600 hover:underline">Clear search</a>
+                                        <a href="{{ route('admin.certificates.index') }}" class="text-xs text-emerald-600 hover:underline">Clear search</a>
                                     @endif
                                 </div>
                             </td>

@@ -44,6 +44,7 @@
                 <ul class="space-y-2 text-sm">
                     <li><button type="button" data-open-quiz class="text-slate-600 hover:text-primary transition-colors text-left cursor-pointer">{{ $locale === 'id' ? 'Kuis Pilihan Kopi' : 'Coffee Matcher' }}</button></li>
                     <li><button type="button" data-open-cart class="text-slate-600 hover:text-primary transition-colors text-left cursor-pointer">{{ $locale === 'id' ? 'Lihat Keranjang' : 'Shopping Cart' }}</button></li>
+                    <li><a href="{{ route('store.tracking') }}" class="text-slate-600 hover:text-primary transition-colors">{{ $locale === 'id' ? 'Lacak Pesanan' : 'Track Your Order' }}</a></li>
                     <li><a href="{{ url('/about') }}" class="text-slate-600 hover:text-primary transition-colors">{{ __('nav.about') }}</a></li>
                     <li><a href="{{ url('/contact') }}" class="text-slate-600 hover:text-primary transition-colors">{{ __('nav.contact') }}</a></li>
                 </ul>

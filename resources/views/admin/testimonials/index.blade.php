@@ -37,13 +37,13 @@
                                      alt="{{ $testimonial->name }}" 
                                      class="w-11 h-11 rounded-full object-cover border border-slate-200 shadow-2xs shrink-0">
                             @else
-                                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-slate-800 to-indigo-600 text-white font-bold text-sm flex items-center justify-center border border-slate-200 shadow-2xs shrink-0">
+                                <div class="w-11 h-11 rounded-full bg-gradient-to-tr from-slate-800 to-emerald-600 text-white font-bold text-sm flex items-center justify-center border border-slate-200 shadow-2xs shrink-0">
                                     {{ strtoupper(substr($testimonial->name, 0, 2)) }}
                                 </div>
                             @endif
 
                             <div class="min-w-0">
-                                <h4 class="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
+                                <h4 class="text-sm font-bold text-slate-900 truncate group-hover:text-emerald-600 transition-colors">
                                     {{ $testimonial->name }}
                                 </h4>
                                 <p class="text-xs text-slate-500 truncate mt-0.5">

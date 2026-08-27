@@ -2,57 +2,157 @@
 @extends('layouts.store')
 
 @php
-    $locale = app()->getLocale();
+    $locale    = app()->getLocale();
+    $pageTitle = $locale === 'id'
+        ? 'Toko Kopi Specialty | Lima Biji Agritech — Arabica, Robusta & Blend'
+        : 'Specialty Coffee Store | Lima Biji Agritech — Arabica, Robusta & Blend';
+    $metaDesc  = $locale === 'id'
+        ? 'Beli kopi specialty single origin Indonesia: Arabica, Robusta Fine, Blend, dan Eksperimental. Diproses bio-fermentasi enzimatik, dikirim fresh-roasted ke seluruh Indonesia.'
+        : 'Buy specialty single-origin Indonesian coffee: Arabica, Fine Robusta, Blends, and Experimental. Enzymatic bio-fermentation processed, fresh-roasted and shipped nationwide.';
+    $ogImage   = asset('assets/images/limabiji/toko.webp');
+    $canonical = url()->current();
+    $storeUrl  = route('store.index');
 @endphp
 
-@push('title', __('store.page_title'))
+@push('title', $pageTitle)
 
 @push('meta')
-    <meta name="description" content="{{ __('store.hero_subheading') }}">
-    <meta property="og:title" content="{{ __('store.page_title') }}">
-    <meta property="og:description" content="{{ __('store.hero_subheading') }}">
+    {{-- Core --}}
+    <meta name="description" content="{{ $metaDesc }}">
+    <meta name="keywords" content="specialty coffee indonesia, kopi specialty, arabica indonesia, robusta fine, kopi luwak enzimatik, lima biji agritech, biji kopi sca, beli kopi online, kopi specialty jakarta">
+    <link rel="canonical" href="{{ $canonical }}">
+
+    {{-- Open Graph --}}
     <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="{{ asset('favicon.ico') }}">
-    <meta name="twitter:title" content="{{ __('store.page_title') }}">
-    <meta name="twitter:description" content="{{ __('store.hero_subheading') }}">
-    <meta name="twitter:image" content="{{ asset('favicon.ico') }}">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $metaDesc }}">
+    <meta property="og:url" content="{{ $canonical }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Lima Biji Agritech — Specialty Coffee Store">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $metaDesc }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    <meta name="twitter:image:alt" content="Lima Biji Agritech — Specialty Coffee Store">
 @endpush
 
 @push('schema')
     <script type="application/ld+json">
         {!! json_encode([
             '@context' => 'https://schema.org',
-            '@graph' => [
+            '@graph'   => array_filter([
+
+                // 1. WebSite with SearchAction
                 [
-                    '@type' => 'CollectionPage',
-                    '@id' => url()->current() . '#webpage',
-                    'url' => url()->current(),
-                    'name' => __('store.page_title'),
-                    'description' => __('store.hero_subheading'),
-                    'inLanguage' => $locale,
+                    '@type'           => 'WebSite',
+                    '@id'             => url('/') . '#website',
+                    'url'             => url('/'),
+                    'name'            => 'Lima Biji Agritech',
+                    'description'     => 'Specialty coffee producer & roaster — single-origin Indonesian beans.',
+                    'inLanguage'      => $locale === 'id' ? 'id-ID' : 'en-US',
+                    'publisher'       => ['@id' => url('/') . '#organization'],
+                    'potentialAction' => [
+                        '@type'       => 'SearchAction',
+                        'target'      => [
+                            '@type'       => 'EntryPoint',
+                            'urlTemplate' => route('store.index') . '?q={search_term_string}',
+                        ],
+                        'query-input' => 'required name=search_term_string',
+                    ],
                 ],
+
+                // 2. Organization
+                [
+                    '@type'       => 'Organization',
+                    '@id'         => url('/') . '#organization',
+                    'name'        => 'Lima Biji Agritech',
+                    'url'         => url('/'),
+                    'logo'        => [
+                        '@type' => 'ImageObject',
+                        'url'   => asset('favicon.ico'),
+                    ],
+                    'description' => 'Specialty coffee producer & roaster specializing in enzymatic bio-fermentation processing from single-origin Indonesian farms.',
+                    'contactPoint' => [
+                        '@type'       => 'ContactPoint',
+                        'contactType' => 'customer service',
+                        'availableLanguage' => ['Indonesian', 'English'],
+                    ],
+                ],
+
+                // 3. CollectionPage
+                [
+                    '@type'       => 'CollectionPage',
+                    '@id'         => $canonical . '#webpage',
+                    'url'         => $canonical,
+                    'name'        => $pageTitle,
+                    'description' => $metaDesc,
+                    'inLanguage'  => $locale === 'id' ? 'id-ID' : 'en-US',
+                    'isPartOf'    => ['@id' => url('/') . '#website'],
+                    'publisher'   => ['@id' => url('/') . '#organization'],
+                    'breadcrumb'  => ['@id' => $canonical . '#breadcrumb'],
+                    'primaryImageOfPage' => [
+                        '@type' => 'ImageObject',
+                        'url'   => $ogImage,
+                    ],
+                ],
+
+                // 4. ItemList — catalog snapshot (max 10 to keep payload lean)
+                $products->isNotEmpty() ? [
+                    '@type'           => 'ItemList',
+                    '@id'             => $canonical . '#product-list',
+                    'name'            => $locale === 'id' ? 'Katalog Kopi Specialty' : 'Specialty Coffee Catalog',
+                    'numberOfItems'   => $products->total(),
+                    'itemListElement' => $products->take(10)->values()->map(function ($p, $i) use ($locale) {
+                        return [
+                            '@type'    => 'ListItem',
+                            'position' => $i + 1,
+                            'url'      => route('store.show', $p->slug),
+                            'name'     => $p->getNameForLocale($locale),
+                            'item'     => [
+                                '@type'    => 'Product',
+                                'name'     => $p->getNameForLocale($locale),
+                                'image'    => $p->image ?: asset('assets/images/limabiji/toko.webp'),
+                                'sku'      => 'LB-' . str_pad($p->id, 4, '0', STR_PAD_LEFT),
+                                'category' => ucfirst($p->category ?? 'Specialty Coffee'),
+                                'brand'    => ['@type' => 'Brand', 'name' => 'Lima Biji Agritech'],
+                                'offers'   => [
+                                    '@type'         => 'Offer',
+                                    'priceCurrency' => 'IDR',
+                                    'price'         => (int) $p->base_price_200g,
+                                    'availability'  => $p->stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                                    'url'           => route('store.show', $p->slug),
+                                ],
+                            ],
+                        ];
+                    })->all(),
+                ] : null,
+
+                // 5. BreadcrumbList
                 [
                     '@type' => 'BreadcrumbList',
-                    '@id' => url()->current() . '#breadcrumb',
+                    '@id'   => $canonical . '#breadcrumb',
                     'itemListElement' => [
                         [
-                            '@type' => 'ListItem',
+                            '@type'    => 'ListItem',
                             'position' => 1,
-                            'name' => $locale === 'id' ? 'Beranda' : 'Home',
-                            'item' => url('/'),
+                            'name'     => $locale === 'id' ? 'Beranda' : 'Home',
+                            'item'     => url('/'),
                         ],
                         [
-                            '@type' => 'ListItem',
+                            '@type'    => 'ListItem',
                             'position' => 2,
-                            'name' => $locale === 'id' ? 'Toko' : 'Store',
-                            'item' => url()->current(),
+                            'name'     => $locale === 'id' ? 'Toko Kopi' : 'Coffee Store',
+                            'item'     => $canonical,
                         ],
                     ],
                 ],
-            ],
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+
+            ]),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 @endpush
 

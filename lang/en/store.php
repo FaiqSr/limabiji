@@ -117,6 +117,8 @@ return [
     'checkout_notes' => 'Order Notes (Optional)',
     'checkout_empty_cart' => 'Your cart is empty. Please add coffee before checking out.',
     'checkout_payment_method' => 'Payment Method',
+    'checkout_processing' => 'Processing Order...',
+    'checkout_items' => 'items in cart',
 
     // Payment Methods
     'pay_method_qris' => 'QRIS',
@@ -138,6 +140,10 @@ return [
     'pay_method_dana' => 'DANA',
     'pay_method_dana_desc' => 'Pay with DANA app',
     'pay_method_invalid' => 'The selected payment method is not available. Please choose another one.',
+
+    'pay_group_qris' => 'QRIS',
+    'pay_group_bank' => 'Bank Transfer / Virtual Account',
+    'pay_group_ewallet' => 'E-Wallet',
 
     'pay_charge_failed' => 'We could not create your payment. Please try again or choose another payment method.',
 
@@ -178,12 +184,40 @@ return [
     'order_date' => 'Order Date',
     'order_items' => 'Ordered Items',
     'order_shipping_to' => 'Shipping To',
+    'order_customer' => 'Customer',
+    'order_courier' => 'Courier',
+    'order_qty' => 'Qty',
     'order_pay_now_btn' => 'Complete Payment with Midtrans',
     'order_back_home' => 'Back to Home',
     'order_browse_more' => 'Browse More Beans',
+    'order_status_recovery_title' => 'Payment Not Completed',
+    'order_status_recovery_desc' => 'Your order is still open, but the payment was not completed. You can browse the catalog again to place a new order, or reach out to our team for assistance.',
+    'order_contact_support' => 'Contact Support',
+    'order_status_paid_note_title' => 'Payment Confirmed',
+    'order_status_paid_note_desc' => 'Thank you. Our roastery is packing your order and will send the tracking number once it ships.',
+
+    // Order Tracking
+    'tracking_title' => 'Track Your Order',
+    'tracking_kicker' => 'Order Tracking',
+    'tracking_desc' => 'Enter your Lima Biji order number to see the latest status of your beans from roastery to doorstep.',
+    'tracking_enter_label' => 'Order Number',
+    'tracking_placeholder' => 'e.g. LB-20260827-339C9',
+    'tracking_btn' => 'Track Order',
+    'tracking_hint' => 'The order number is on your payment receipt and confirmation email. Format: LB-YYYYMMDD-XXXXX',
+    'tracking_not_found_title' => 'Order Not Found',
+    'tracking_not_found_desc' => 'We could not find an order matching that number. Double-check the number or contact our team for help.',
+    'tracking_result_title' => 'Order Progress',
+    'tracking_courier' => 'Courier',
+    'tracking_resi' => 'Tracking Number (Resi)',
+    'tracking_step_ordered' => 'Order Placed',
+    'tracking_step_payment' => 'Payment Confirmed',
+    'tracking_step_packed' => 'Packed & Processing',
+    'tracking_step_shipped' => 'Shipped',
+    'tracking_step_delivered' => 'Delivered',
+    'tracking_open_status' => 'Open Order Status',
+    'tracking_current' => 'In Progress',
+    'tracking_done' => 'Done',
+
     'payment_simulated_success' => 'Demo Payment successful! Order has been marked as Paid.',
     'payment_simulated_failed' => 'Demo Payment failed! Order status updated to Failed.',
-    'dev_simulate_title' => 'Development Payment Simulator',
-    'dev_simulate_desc' => 'In sandbox/local mode, click below to simulate an instant successful settlement without entering real card details.',
-    'dev_simulate_btn' => 'Simulate Instant Payment (Dev)',
 ];

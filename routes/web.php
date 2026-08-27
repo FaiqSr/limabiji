@@ -26,8 +26,10 @@ Route::post('/contact', [LandingPages::class, 'submitContact'])->name('landingpa
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\TrackingController;
 
 Route::get('/store', [StoreController::class, 'index'])->name('store.index');
+Route::get('/store/tracking', [TrackingController::class, 'index'])->name('store.tracking');
 Route::get('/store/{product:slug}', [StoreController::class, 'show'])->name('store.show');
 Route::post('/store/quiz/recommend', [StoreController::class, 'quiz'])->name('store.quiz.recommend');
 

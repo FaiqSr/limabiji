@@ -4,10 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') — Lima Biji Admin</title>
+    <meta name="robots" content="noindex, nofollow">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|jetbrains-mono:400" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=outfit:400,500,600,700|jetbrains-mono:400" rel="stylesheet" />
 
     <!-- Alpine.js Plugins -->
     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
@@ -28,7 +29,7 @@
             line-height: 1.5;
             padding: 0.75rem;
         }
-        trix-editor:focus { border-color: #6366f1; outline: none; }
+        trix-editor:focus { border-color: #079f81; outline: none; }
         trix-toolbar .trix-button-group--file-tools { display: none; }
         trix-toolbar .trix-button--icon-code { display: none; }
         trix-toolbar .trix-button--icon-quote { display: none; }
@@ -36,9 +37,9 @@
 
     @vite(['resources/css/admin.css', 'resources/js/app.js'])
 </head>
-<body class="font-body bg-slate-50 text-slate-900 antialiased selection:bg-indigo-500 selection:text-white" x-data="{ mobileOpen: false }">
+<body class="font-body bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white" x-data="{ mobileOpen: false }">
 
-    <div class="flex min-h-screen">
+    <div class="flex min-h-[100dvh]">
         <!-- Sidebar -->
         <x-admin.sidebar />
 

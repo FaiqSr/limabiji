@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Origin;
+use App\Models\Product;
 use Illuminate\Http\Response;
 
 class SitemapController extends Controller
@@ -47,6 +48,12 @@ class SitemapController extends Controller
                 'changefreq' => 'monthly',
                 'priority' => '0.7',
             ],
+            [
+                'url' => route('store.index'),
+                'lastmod' => now()->startOfDay()->toAtomString(),
+                'changefreq' => 'daily',
+                'priority' => '0.9',
+            ],
         ];
 
         $origins = Origin::active()
@@ -81,10 +88,26 @@ class SitemapController extends Controller
                 ];
             });
 
+        $products = Product::active()
+            ->orderBy('is_featured', 'desc')
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->map(function (Product $product) {
+                return [
+                    'url' => route('store.show', $product->slug),
+                    'lastmod' => ($product->updated_at ?? now())->toAtomString(),
+                    'changefreq' => 'weekly',
+                    'priority' => $product->is_featured ? '0.9' : '0.8',
+                    'image' => $product->image ? url($product->image) : null,
+                    'title' => $product->name,
+                ];
+            });
+
         $xml = view('sitemap', [
             'staticPages' => $staticPages,
             'origins' => $origins,
             'articles' => $articles,
+            'products' => $products,
         ])->render();
 
         return response($xml, 200, [

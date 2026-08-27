@@ -23,8 +23,8 @@
     --color-primary-500: #079f81;
     --color-primary-600: #05846b;
 
-    --font-display: 'Inter', system-ui, -apple-system, sans-serif;
-    --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+    --font-body: 'Outfit', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 }
 
@@ -192,9 +192,9 @@ label {
 }
 
 .badge-approved {
-    background-color: #F5F3FF;
-    color: #5B21B6;
-    border: 1px solid #DDD6FE;
+    background-color: #ECFDF5;
+    color: #047857;
+    border: 1px solid #A7F3D0;
 }
 
 .badge-draft {
@@ -290,4 +290,26 @@ label {
 }
 .table-modern tbody tr:last-child td {
     border-bottom: none;
+}
+
+/* Dashboard load-in cascade */
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-rise {
+    animation: rise-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-rise {
+        animation: none;
+    }
 }

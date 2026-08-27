@@ -22,13 +22,13 @@
         </a>
 
         <a href="{{ route('admin.messages.index', ['status' => 'unread']) }}" 
-           class="card-modern p-5 transition-all hover:border-indigo-300 {{ $status === 'unread' ? 'border-indigo-500 ring-1 ring-indigo-500 bg-indigo-50/30' : '' }}">
+           class="card-modern p-5 transition-all hover:border-emerald-300 {{ $status === 'unread' ? 'border-emerald-500 ring-1 ring-emerald-500 bg-emerald-50/30' : '' }}">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-xs font-mono font-medium text-indigo-600 uppercase tracking-wider">Unread Inquiries</span>
+                    <span class="text-xs font-mono font-medium text-emerald-600 uppercase tracking-wider">Unread Inquiries</span>
                     <h3 class="text-2xl font-bold text-slate-900 mt-1">{{ $counts['unread'] }}</h3>
                 </div>
-                <div class="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
@@ -65,7 +65,7 @@
                            name="search" 
                            value="{{ request('search') }}" 
                            placeholder="Search messages by sender name, email, company, subject, or message text..." 
-                           class="w-full pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                     
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,10 +92,10 @@
                     All
                 </a>
                 <a href="{{ route('admin.messages.index', array_merge(request()->query(), ['status' => 'unread'])) }}" 
-                   class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 {{ $status === 'unread' ? 'bg-white text-indigo-700 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900' }}">
+                   class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 {{ $status === 'unread' ? 'bg-white text-emerald-700 font-semibold shadow-2xs' : 'text-slate-600 hover:text-slate-900' }}">
                     <span>Unread</span>
                     @if ($counts['unread'] > 0)
-                        <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+                        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
                     @endif
                 </a>
                 <a href="{{ route('admin.messages.index', array_merge(request()->query(), ['status' => 'read'])) }}" 
@@ -121,12 +121,12 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-xs text-slate-700">
                     @forelse ($messages as $message)
-                        <tr class="hover:bg-slate-50/75 transition-colors group {{ ! $message->is_read ? 'bg-indigo-50/20 font-medium' : '' }}">
+                        <tr class="hover:bg-slate-50/75 transition-colors group {{ ! $message->is_read ? 'bg-emerald-50/20 font-medium' : '' }}">
                             <!-- Status Column -->
                             <td class="py-4 px-5 whitespace-nowrap">
                                 @if (! $message->is_read)
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                                         Unread
                                     </span>
                                 @else
@@ -143,7 +143,7 @@
                                     <span>{{ $message->name }}</span>
                                 </div>
                                 <div class="text-slate-500 text-[11px] mt-0.5 font-mono">
-                                    <a href="mailto:{{ $message->email }}" class="hover:text-indigo-600 transition-colors">{{ $message->email }}</a>
+                                    <a href="mailto:{{ $message->email }}" class="hover:text-emerald-600 transition-colors">{{ $message->email }}</a>
                                 </div>
                                 @if ($message->company)
                                     <div class="text-slate-400 text-[10px] mt-0.5 flex items-center gap-1">
@@ -177,7 +177,7 @@
                             <td class="py-4 px-5 text-right whitespace-nowrap space-x-1">
                                 <!-- View Details -->
                                 <a href="{{ route('admin.messages.show', $message) }}" 
-                                   class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-indigo-600 bg-slate-100 hover:bg-indigo-50 rounded-lg transition-colors"
+                                   class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:text-emerald-600 bg-slate-100 hover:bg-emerald-50 rounded-lg transition-colors"
                                    title="View message">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -229,7 +229,7 @@
                                     </svg>
                                     <span class="font-medium text-xs">No messages found</span>
                                     @if(request('search') || request('status') !== 'all')
-                                        <a href="{{ route('admin.messages.index') }}" class="text-xs text-indigo-600 hover:underline">Reset filters</a>
+                                        <a href="{{ route('admin.messages.index') }}" class="text-xs text-emerald-600 hover:underline">Reset filters</a>
                                     @endif
                                 </div>
                             </td>
