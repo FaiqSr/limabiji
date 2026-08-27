@@ -21,7 +21,7 @@
                            name="search" 
                            value="{{ request('search') }}" 
                            placeholder="Search articles by title, category, or snippet..." 
-                           class="w-full pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full pl-9 pr-8 text-xs bg-slate-50 border border-slate-200 rounded-xl p-2.5 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                     
                     @if (request('search'))
                         <a href="{{ route('admin.news.index', request()->except('search', 'page')) }}" 
@@ -80,7 +80,7 @@
                         🌐 All Languages
                     </a>
                     <a href="{{ route('admin.news.index', array_merge(request()->except('page'), ['lang' => 'en'])) }}"
-                       class="px-3 py-1 text-xs font-semibold rounded-lg transition-all {{ request('lang') === 'en' ? 'bg-white text-indigo-600 shadow-2xs' : 'text-slate-600 hover:text-slate-900' }}">
+                       class="px-3 py-1 text-xs font-semibold rounded-lg transition-all {{ request('lang') === 'en' ? 'bg-white text-emerald-600 shadow-2xs' : 'text-slate-600 hover:text-slate-900' }}">
                         🇬🇧 English
                     </a>
                     <a href="{{ route('admin.news.index', array_merge(request()->except('page'), ['lang' => 'id'])) }}"
@@ -97,13 +97,13 @@
         </div>
 
         @if (request('search'))
-            <div class="flex items-center gap-2 pt-1 text-xs text-slate-600 bg-indigo-50/70 border border-indigo-100 rounded-xl px-3 py-2">
-                <svg class="w-4 h-4 text-indigo-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center gap-2 pt-1 text-xs text-slate-600 bg-emerald-50/70 border border-emerald-100 rounded-xl px-3 py-2">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
                 <span>Searching results for <strong>"{{ request('search') }}"</strong></span>
                 <a href="{{ route('admin.news.index', request()->except('search', 'page')) }}" 
-                   class="text-indigo-600 hover:text-indigo-800 font-semibold underline ml-auto text-[11px]">
+                   class="text-emerald-600 hover:text-emerald-800 font-semibold underline ml-auto text-[11px]">
                     Clear Search
                 </a>
             </div>
@@ -200,7 +200,7 @@
                     <div class="space-y-2">
                         <!-- Titles -->
                         <div>
-                            <h4 class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug">
+                            <h4 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug">
                                 {{ $article->title }}
                             </h4>
                             @if ($article->title_id)
@@ -225,7 +225,7 @@
                         <!-- Author & Date -->
                         <div class="flex items-center justify-between text-xs text-slate-500">
                             <div class="flex items-center gap-1.5 font-medium truncate">
-                                <div class="w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center font-bold text-[10px]">
+                                <div class="w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center font-bold text-[10px]">
                                     {{ strtoupper(substr($article->author?->name ?? 'A', 0, 1)) }}
                                 </div>
                                 <span class="truncate">{{ $article->author?->name ?? 'Admin' }}</span>
@@ -240,7 +240,7 @@
                             @if ($article->status === 'published')
                                 <a href="{{ route('landingpages.news.detail', $article->slug) }}" 
                                    target="_blank" 
-                                   class="text-xs text-slate-500 hover:text-indigo-600 font-medium inline-flex items-center gap-1 transition-colors">
+                                   class="text-xs text-slate-500 hover:text-emerald-600 font-medium inline-flex items-center gap-1 transition-colors">
                                     <span>View Article</span>
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>

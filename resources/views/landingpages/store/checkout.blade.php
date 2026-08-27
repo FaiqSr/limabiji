@@ -3,6 +3,28 @@
 
 @php
     $locale = app()->getLocale();
+
+    $groupDefs = [
+        'qris' => [
+            'title' => __('store.pay_group_qris'),
+            'keys' => ['qris'],
+            'icon' => 'scan',
+        ],
+        'bank' => [
+            'title' => __('store.pay_group_bank'),
+            'keys' => ['bca_va', 'bni_va', 'bri_va', 'permata_va', 'mandiri_va'],
+            'icon' => 'bank',
+        ],
+        'ewallet' => [
+            'title' => __('store.pay_group_ewallet'),
+            'keys' => ['gopay', 'shopeepay', 'dana'],
+            'icon' => 'wallet',
+        ],
+    ];
+
+    $flatMethodKeys = collect($groupDefs)->flatMap(fn ($g) => $g['keys'])->all();
+    $firstMethodKey = collect($flatMethodKeys)->first(fn ($k) => isset($paymentMethods[$k]));
+    $selectedMethod = old('payment_method', $firstMethodKey ?? '');
 @endphp
 
 @push('title', __('store.checkout_title') . ': Lima Biji Agritech')
@@ -16,110 +38,139 @@
 @endpush
 
 @section('content')
-<div class="bg-[#fafaf9] text-slate-800 min-h-screen">
-    <div class="container mx-auto px-5 lg:px-8 py-8 lg:py-12 max-w-7xl">
+<div class="bg-[#fafaf9] text-slate-800 min-h-[100dvh]">
+    <div class="container mx-auto px-5 lg:px-8 py-8 lg:py-14 max-w-7xl">
 
-        {{-- Breadcrumbs --}}
-        <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-500 mb-8">
-            <a href="{{ route('store.index') }}" class="hover:text-primary transition-colors flex items-center gap-1.5 font-medium">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                {{ __('store.detail_back') }}
-            </a>
-            <span class="text-slate-300">/</span>
-            <span class="text-slate-700 font-semibold">{{ __('store.checkout_title') }}</span>
-        </div>
+        {{-- Header --}}
+        <header class="animate-rise mb-8 lg:mb-10" style="animation-delay: 0ms">
+            <div class="flex items-center gap-2 text-xs sm:text-sm text-slate-500 mb-4">
+                <a href="{{ route('store.index') }}" class="hover:text-primary transition-colors flex items-center gap-1.5 font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    {{ __('store.detail_back') }}
+                </a>
+                <span class="text-slate-300">/</span>
+                <span class="text-slate-700 font-semibold">{{ __('store.checkout_title') }}</span>
+            </div>
 
-        <h1 class="font-display text-4xl sm:text-5xl text-slate-900 uppercase mb-8">
-            {{ __('store.checkout_title') }}
-        </h1>
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                <div>
+                    <h1 class="font-display text-4xl sm:text-5xl text-slate-900 uppercase leading-none tracking-tight">
+                        {{ __('store.checkout_title') }}
+                    </h1>
+                </div>
+                <p class="text-xs text-slate-500 font-mono shrink-0">{{ $itemCount }} {{ __('store.checkout_items') }}</p>
+            </div>
+        </header>
 
         <form action="{{ route('store.checkout.process') }}" method="POST" id="checkout-form">
             @csrf
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
 
-                {{-- LEFT: blocks 1-3 --}}
-                <div class="lg:col-span-7 space-y-6">
+                {{-- LEFT: single numbered canvas --}}
+                <div class="lg:col-span-7 min-w-0">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.06)] divide-y divide-slate-100 overflow-hidden animate-rise" style="animation-delay: 80ms">
 
-                    {{-- Block 1: Customer Information --}}
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl space-y-5 border border-slate-200 shadow-sm">
-                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                            <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">1</span>
-                            <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_customer_info') }}</h2>
-                        </div>
-
-                        {{-- Name & Email --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                    {{ __('store.checkout_name') }} *
-                                </label>
-                                <input type="text" name="customer_name" value="{{ old('customer_name') }}" required
-                                    class="w-full bg-white border @error('customer_name') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
-                                    placeholder="Rian Kurniawan">
-                                @error('customer_name')
-                                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                                @enderror
+                        {{-- Section 1: Customer Information --}}
+                        <section class="p-6 sm:p-8 space-y-5">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">1</span>
+                                <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_customer_info') }}</h2>
                             </div>
 
-                            <div>
-                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                    {{ __('store.checkout_email') }} *
-                                </label>
-                                <input type="email" name="customer_email" value="{{ old('customer_email') }}" required
-                                    class="w-full bg-white border @error('customer_email') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
-                                    placeholder="rian@example.com">
-                                @error('customer_email')
-                                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- Phone --}}
-                        <div>
-                            <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                {{ __('store.checkout_phone') }} *
-                            </label>
-                            <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}" required
-                                class="w-full bg-white border @error('customer_phone') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
-                                placeholder="081234567890">
-                            @error('customer_phone')
-                                <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- Province / City / District (searchable combo boxes) --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                    {{ __('store.checkout_province') }} *
-                                </label>
-                                <div class="combo relative" data-url="{{ route('shipping.provinces') }}"
-                                    data-value-name="province" data-placeholder="{{ __('store.checkout_select') }}">
-                                    <input type="hidden" name="province" value="{{ old('province') }}">
-                                    <div class="combo-field relative">
-                                        <input type="text" class="combo-input w-full bg-white border @error('province') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 pr-10 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
-                                            placeholder="{{ __('store.checkout_select') }}" readonly autocomplete="off">
-                                        <span class="combo-arrow absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                        </span>
-                                    </div>
-                                    <div class="combo-list hidden mt-1 absolute z-20 w-full max-h-56 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-lg divide-y divide-slate-100"></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                        {{ __('store.checkout_name') }} *
+                                    </label>
+                                    <input type="text" name="customer_name" value="{{ old('customer_name') }}" required
+                                        class="w-full bg-white border @error('customer_name') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
+                                        placeholder="Rian Kurniawan">
+                                    @error('customer_name')
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                @error('province')
-                                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                                @enderror
+
+                                <div>
+                                    <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                        {{ __('store.checkout_email') }} *
+                                    </label>
+                                    <input type="email" name="customer_email" value="{{ old('customer_email') }}" required
+                                        class="w-full bg-white border @error('customer_email') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
+                                        placeholder="rian@example.com">
+                                    @error('customer_email')
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div>
                                 <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                    {{ __('store.checkout_city') }} *
+                                    {{ __('store.checkout_phone') }} *
                                 </label>
-                                <div class="combo relative" data-url="{{ route('shipping.cities', ['provinceId' => 'PID']) }}"
-                                    data-value-name="city" data-placeholder="{{ __('store.checkout_select_first') }}"
+                                <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}" required
+                                    class="w-full bg-white border @error('customer_phone') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
+                                    placeholder="081234567890">
+                                @error('customer_phone')
+                                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Province / City / District (searchable combo boxes) --}}
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                        {{ __('store.checkout_province') }} *
+                                    </label>
+                                    <div class="combo relative" data-url="{{ route('shipping.provinces') }}"
+                                        data-value-name="province" data-placeholder="{{ __('store.checkout_select') }}">
+                                        <input type="hidden" name="province" value="{{ old('province') }}">
+                                        <div class="combo-field relative">
+                                            <input type="text" class="combo-input w-full bg-white border @error('province') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 pr-10 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
+                                                placeholder="{{ __('store.checkout_select') }}" readonly autocomplete="off">
+                                            <span class="combo-arrow absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                            </span>
+                                        </div>
+                                        <div class="combo-list hidden mt-1 absolute z-20 w-full max-h-56 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-lg divide-y divide-slate-100"></div>
+                                    </div>
+                                    @error('province')
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                        {{ __('store.checkout_city') }} *
+                                    </label>
+                                    <div class="combo relative" data-url="{{ route('shipping.cities', ['provinceId' => 'PID']) }}"
+                                        data-value-name="city" data-placeholder="{{ __('store.checkout_select_first') }}"
+                                        data-disabled-placeholder="{{ __('store.checkout_select_first') }}">
+                                        <input type="hidden" name="city" value="{{ old('city') }}">
+                                        <div class="combo-field relative">
+                                            <input type="text" class="combo-input w-full bg-slate-50 cursor-not-allowed border border-slate-200 rounded-xl p-3 pr-10 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
+                                                placeholder="{{ __('store.checkout_select_first') }}" readonly disabled autocomplete="off">
+                                            <span class="combo-arrow absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                            </span>
+                                        </div>
+                                        <div class="combo-list hidden mt-1 absolute z-20 w-full max-h-56 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-lg divide-y divide-slate-100"></div>
+                                    </div>
+                                    @error('city')
+                                        <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                    {{ __('store.checkout_district') }} *
+                                </label>
+                                <div class="combo relative" data-url="{{ route('shipping.districts', ['cityId' => 'CID']) }}"
+                                    data-value-name="shipping_district_id" data-placeholder="{{ __('store.checkout_select_first') }}"
                                     data-disabled-placeholder="{{ __('store.checkout_select_first') }}">
-                                    <input type="hidden" name="city" value="{{ old('city') }}">
+                                    <input type="hidden" name="shipping_district_id" value="{{ old('shipping_district_id') }}">
                                     <div class="combo-field relative">
                                         <input type="text" class="combo-input w-full bg-slate-50 cursor-not-allowed border border-slate-200 rounded-xl p-3 pr-10 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
                                             placeholder="{{ __('store.checkout_select_first') }}" readonly disabled autocomplete="off">
@@ -129,128 +180,130 @@
                                     </div>
                                     <div class="combo-list hidden mt-1 absolute z-20 w-full max-h-56 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-lg divide-y divide-slate-100"></div>
                                 </div>
-                                @error('city')
+                                @error('shipping_district_id')
                                     <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                        </div>
 
-                        <div>
-                            <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                {{ __('store.checkout_district') }} *
-                            </label>
-                            <div class="combo relative" data-url="{{ route('shipping.districts', ['cityId' => 'CID']) }}"
-                                data-value-name="shipping_district_id" data-placeholder="{{ __('store.checkout_select_first') }}"
-                                data-disabled-placeholder="{{ __('store.checkout_select_first') }}">
-                                <input type="hidden" name="shipping_district_id" value="{{ old('shipping_district_id') }}">
-                                <div class="combo-field relative">
-                                    <input type="text" class="combo-input w-full bg-slate-50 cursor-not-allowed border border-slate-200 rounded-xl p-3 pr-10 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
-                                        placeholder="{{ __('store.checkout_select_first') }}" readonly disabled autocomplete="off">
-                                    <span class="combo-arrow absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                    </span>
+                            <div>
+                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                    {{ __('store.checkout_address') }} *
+                                </label>
+                                <textarea name="shipping_address" required rows="3"
+                                    class="w-full bg-white border @error('shipping_address') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
+                                    placeholder="Jl. Pajajaran No. 88, RT 02/RW 05, Kel. Babakan">{{ old('shipping_address') }}</textarea>
+                                @error('shipping_address')
+                                    <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                        {{ __('store.checkout_postal') }}
+                                    </label>
+                                    <input type="text" name="postal_code" value="{{ old('postal_code') }}"
+                                        class="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
+                                        placeholder="16128">
                                 </div>
-                                <div class="combo-list hidden mt-1 absolute z-20 w-full max-h-56 overflow-y-auto bg-white border border-slate-200 rounded-xl shadow-lg divide-y divide-slate-100"></div>
+
+                                <div>
+                                    <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
+                                        {{ __('store.checkout_notes') }}
+                                    </label>
+                                    <input type="text" name="notes" value="{{ old('notes') }}"
+                                        class="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
+                                        placeholder="Gilingan untuk V60 rasio 1:15 atau titip di pos sekuriti">
+                                </div>
                             </div>
-                            @error('shipping_district_id')
+                        </section>
+
+                        {{-- Section 2: Courier --}}
+                        <section class="p-6 sm:p-8 space-y-5">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">2</span>
+                                <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_courier') }}</h2>
+                            </div>
+
+                            <div id="courier-empty" class="text-sm text-slate-500">
+                                {{ __('store.checkout_courier_hint') }}
+                            </div>
+
+                            <div id="courier-loading" class="hidden space-y-2.5" aria-live="polite">
+                                <div class="h-[4.5rem] rounded-xl border border-slate-100 bg-slate-100/70 animate-pulse"></div>
+                                <div class="h-[4.5rem] rounded-xl border border-slate-100 bg-slate-100/70 animate-pulse" style="animation-delay: 120ms"></div>
+                                <div class="h-[4.5rem] rounded-xl border border-slate-100 bg-slate-100/70 animate-pulse" style="animation-delay: 240ms"></div>
+                            </div>
+
+                            <div id="courier-list" class="space-y-5"></div>
+
+                            <p id="courier-error" class="hidden text-rose-600 text-xs mt-1"></p>
+                            @error('courier')
                                 <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
                             @enderror
-                        </div>
+                        </section>
 
-                        {{-- Complete Address --}}
-                        <div>
-                            <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                {{ __('store.checkout_address') }} *
-                            </label>
-                            <textarea name="shipping_address" required rows="3"
-                                class="w-full bg-white border @error('shipping_address') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors shadow-xs"
-                                placeholder="Jl. Pajajaran No. 88, RT 02/RW 05, Kel. Babakan">{{ old('shipping_address') }}</textarea>
-                            @error('shipping_address')
-                                <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        {{-- Postal Code & Notes --}}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                    {{ __('store.checkout_postal') }}
-                                </label>
-                                <input type="text" name="postal_code" value="{{ old('postal_code') }}"
-                                    class="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
-                                    placeholder="16128">
+                        {{-- Section 3: Payment Method --}}
+                        <section class="p-6 sm:p-8 space-y-6">
+                            <div class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">3</span>
+                                <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_payment_method') }}</h2>
                             </div>
 
-                            <div>
-                                <label class="block text-slate-800 font-semibold text-xs uppercase tracking-wider mb-2">
-                                    {{ __('store.checkout_notes') }}
-                                </label>
-                                <input type="text" name="notes" value="{{ old('notes') }}"
-                                    class="w-full bg-white border border-slate-200 rounded-xl p-3 text-slate-900 placeholder:text-slate-400 text-sm focus:border-primary focus:outline-none transition-colors shadow-xs"
-                                    placeholder="Gilingan untuk V60 rasio 1:15 atau titip di pos sekuriti">
-                            </div>
-                        </div>
-                    </div>
+                            @foreach ($groupDefs as $groupId => $group)
+                                @php
+                                    $groupMethods = array_intersect($group['keys'], array_keys($paymentMethods));
+                                @endphp
+                                @if (count($groupMethods))
+                                    <div class="space-y-3">
+                                        <div class="flex items-center gap-2.5">
+                                            <span class="w-6 h-6 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center shrink-0">
+                                                @if ($group['icon'] === 'scan')
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7V5a2 2 0 012-2h2m10 0h2a2 2 0 012 2v2m0 10v2a2 2 0 01-2 2h-2m-10 0H5a2 2 0 01-2-2v-2"/></svg>
+                                                @elseif ($group['icon'] === 'bank')
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h18M5 10l7-4 7 4M6 10v8m4-8v8m4-8v8m4-8v8M3 21h18"/></svg>
+                                                @else
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zm0 0V5a2 2 0 00-2-2H6a2 2 0 00-2 2v2m16 5h-4a1 1 0 00-1 1v0a1 1 0 001 1h4"/></svg>
+                                                @endif
+                                            </span>
+                                            <p class="text-xs font-mono font-bold uppercase tracking-widest text-slate-500">{{ $group['title'] }}</p>
+                                        </div>
 
-                    {{-- Block 2: Courier --}}
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl space-y-5 border border-slate-200 shadow-sm">
-                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                            <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">2</span>
-                            <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_courier') }}</h2>
-                        </div>
-
-                        <div id="courier-empty" class="text-sm text-slate-500">
-                            {{ __('store.checkout_courier_hint') }}
-                        </div>
-                        <div id="courier-loading" class="hidden text-sm text-slate-500">
-                            {{ __('store.shipping_loading') }}
-                        </div>
-
-                        <div id="courier-list" class="grid grid-cols-1 gap-3"></div>
-
-                        <p id="courier-error" class="hidden text-rose-600 text-xs mt-1"></p>
-                        @error('courier')
-                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- Block 3: Payment Method --}}
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl space-y-5 border border-slate-200 shadow-sm">
-                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                            <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">3</span>
-                            <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_payment_method') }}</h2>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="payment-methods">
-                            @foreach ($paymentMethods as $key => $method)
-                                <label
-                                    class="payment-method-card relative flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200 select-none
-                                        border-slate-200 hover:border-primary/50 bg-white
-                                        has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 has-[:checked]:bg-primary/5">
-                                    <span class="w-5 h-5 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center
-                                        border-slate-300 has-[:checked]:border-primary has-[:checked]:[&>span]:bg-primary">
-                                        <input type="radio" name="payment_method" value="{{ $key }}"
-                                            class="sr-only"
-                                            {{ old('payment_method') === $key || $loop->first ? 'checked' : '' }}>
-                                        <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
-                                    </span>
-                                    <span class="min-w-0">
-                                        <span class="block font-semibold text-sm text-slate-900">{{ __('store.pay_method_'.$key) }}</span>
-                                        <span class="block text-[11px] text-slate-500 mt-0.5">{{ __('store.pay_method_'.$key.'_desc') }}</span>
-                                    </span>
-                                </label>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="payment-methods">
+                                            @foreach ($groupMethods as $key)
+                                                <label
+                                                    class="payment-method-card relative flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200 select-none
+                                                        border-slate-200 hover:border-primary/50 bg-white
+                                                        has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 has-[:checked]:bg-primary/5">
+                                                    <span class="w-5 h-5 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center
+                                                        border-slate-300 has-[:checked]:border-primary has-[:checked]:[&>span]:bg-primary">
+                                                        <input type="radio" name="payment_method" value="{{ $key }}"
+                                                            class="sr-only"
+                                                            {{ $selectedMethod === $key ? 'checked' : '' }}>
+                                                        <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
+                                                    </span>
+                                                    <span class="min-w-0">
+                                                        <span class="block font-semibold text-sm text-slate-900">{{ __('store.pay_method_'.$key) }}</span>
+                                                        <span class="block text-[11px] text-slate-500 mt-0.5">{{ __('store.pay_method_'.$key.'_desc') }}</span>
+                                                    </span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
                             @endforeach
-                        </div>
-                        @error('payment_method')
-                            <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+
+                            @error('payment_method')
+                                <p class="text-rose-600 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </section>
                     </div>
                 </div>
 
-                {{-- RIGHT: Block 4 Order Summary --}}
-                <div class="lg:col-span-5 space-y-6">
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl space-y-5 border border-slate-200 shadow-sm sticky top-24">
-                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+                {{-- RIGHT: Order Summary --}}
+                <aside class="lg:col-span-5 min-w-0">
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-[0_20px_40px_-20px_rgba(0,0,0,0.06)] space-y-5 lg:sticky lg:top-24 animate-rise" style="animation-delay: 240ms">
+                        <div class="flex items-center gap-3">
                             <span class="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 text-primary flex items-center justify-center text-xs font-mono font-bold">4</span>
                             <h2 class="font-display text-2xl text-slate-900 uppercase">{{ __('store.checkout_order_summary') }}</h2>
                         </div>
@@ -267,11 +320,11 @@
                                             alt="{{ $itemDisplayName }}" class="w-12 h-12 rounded-lg object-cover border border-slate-200 shrink-0">
                                         <div class="min-w-0">
                                             <p class="font-display text-sm text-slate-900 uppercase truncate">{{ $itemDisplayName }}</p>
-                                            <p class="text-slate-500 text-[11px] mt-0.5">{{ $item['weight'] }} • {{ ucfirst(str_replace('_', ' ', $item['grind_size'])) }}</p>
-                                            <p class="text-slate-400 text-[10px]">Qty: {{ $item['quantity'] }} × Rp {{ number_format($item['unit_price'], 0, ',', '.') }}</p>
+                                            <p class="text-slate-500 text-[11px] mt-0.5">{{ $item['weight'] }} <span class="text-slate-300">/</span> {{ ucfirst(str_replace('_', ' ', $item['grind_size'])) }}</p>
+                                            <p class="text-slate-400 text-[10px] font-mono">{{ __('store.order_qty') }}: {{ $item['quantity'] }} &times; Rp {{ number_format($item['unit_price'], 0, ',', '.') }}</p>
                                         </div>
                                     </div>
-                                    <span class="font-semibold text-slate-900 shrink-0">
+                                    <span class="font-mono font-semibold text-slate-900 shrink-0">
                                         Rp {{ number_format($item['subtotal'], 0, ',', '.') }}
                                     </span>
                                 </div>
@@ -282,19 +335,19 @@
                         <div class="pt-4 border-t border-slate-100 space-y-2.5 text-xs">
                             <div class="flex justify-between text-slate-600">
                                 <span>{{ __('store.cart_subtotal') }}</span>
-                                <span class="font-semibold text-slate-900" id="summary-subtotal" data-subtotal="{{ $subtotal }}">
+                                <span class="font-mono font-semibold text-slate-900" id="summary-subtotal" data-subtotal="{{ $subtotal }}">
                                     Rp {{ number_format($subtotal, 0, ',', '.') }}
                                 </span>
                             </div>
                             <div class="flex justify-between text-slate-600">
                                 <span>{{ __('store.checkout_shipping_fee') }}</span>
-                                <span class="font-semibold text-slate-900" id="summary-shipping">
+                                <span class="font-mono font-semibold text-slate-900" id="summary-shipping">
                                     {{ __('store.shipping_pending') }}
                                 </span>
                             </div>
                             <div class="flex justify-between text-sm sm:text-base font-bold text-slate-900 pt-2 border-t border-slate-100">
                                 <span>{{ __('store.checkout_total') }}</span>
-                                <span class="font-display text-2xl text-primary" id="summary-total">
+                                <span class="font-display text-3xl text-primary" id="summary-total">
                                     Rp {{ number_format($total, 0, ',', '.') }}
                                 </span>
                             </div>
@@ -303,13 +356,13 @@
                         {{-- Submit --}}
                         <div class="pt-2">
                             <button type="submit" id="btn-submit-order"
-                                class="w-full flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-semibold text-sm uppercase tracking-wider transition-all duration-200 shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="w-full flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white font-semibold text-sm uppercase tracking-wider transition-all duration-200 shadow-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled>
                                 <span>{{ __('store.checkout_pay_midtrans') }}</span>
                             </button>
                         </div>
                     </div>
-                </div>
+                </aside>
             </div>
         </form>
     </div>
@@ -451,7 +504,7 @@
                         }
                     }
                     list.classList.remove('hidden');
-                    render(input.value);
+                    render('');
                 }
 
                 // live keyboard search filter
@@ -556,6 +609,48 @@
                 }
             }
 
+            function createCourierRow(c, isDefault) {
+                const label = document.createElement('label');
+                label.className = 'relative flex items-center justify-between gap-4 p-4 rounded-xl border cursor-pointer transition-all duration-200 select-none border-slate-200 hover:border-primary/50 bg-white has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 has-[:checked]:bg-primary/5';
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'courier';
+                radio.value = (c.name || '') + '::' + (c.service || '');
+                radio.className = 'sr-only';
+                radio.dataset.cost = c.cost;
+                radio.checked = !!isDefault;
+                radio.addEventListener('change', () => {
+                    selectedShippingCost = parseInt(radio.dataset.cost || '0') || 0;
+                    refreshTotals();
+                });
+
+                const name = c.name || c.code;
+                const service = c.service || '';
+                const etd = c.etd ? '<span class="text-[11px] text-slate-400"> (' + c.etd + ')</span>' : '';
+                const desc = c.description ? '<span class="block text-[11px] text-slate-500 mt-1 pl-7">' + c.description + '</span>' : '';
+
+                const body = document.createElement('div');
+                body.className = 'min-w-0 flex-1';
+                body.innerHTML = `
+                    <span class="flex items-center gap-2.5">
+                        <span class="w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center border-slate-300 has-[:checked]:border-primary has-[:checked]:[&>span]:bg-primary">
+                            <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
+                        </span>
+                        <span class="block font-display text-sm text-slate-900 uppercase">${service}</span>
+                    </span>
+                    <span class="block text-[11px] text-slate-500 mt-1 pl-7">${name}${etd}</span>
+                    ${desc}
+                `;
+
+                const cost = document.createElement('span');
+                cost.className = 'font-mono font-semibold text-sm text-slate-900 shrink-0';
+                cost.textContent = fmt(c.cost || 0);
+
+                label.append(radio, body, cost);
+                return label;
+            }
+
             function renderCouriers() {
                 courierList.innerHTML = '';
                 courierEmpty.classList.toggle('hidden', visibleCosts.length > 0);
@@ -565,41 +660,36 @@
                     return;
                 }
 
-                visibleCosts.forEach((c, i) => {
-                    const label = document.createElement('label');
-                    label.className = 'courier-option relative flex items-start gap-3 p-4 rounded-xl border cursor-pointer transition-all duration-200 select-none border-slate-200 hover:border-primary/50 bg-white has-[:checked]:border-primary has-[:checked]:ring-2 has-[:checked]:ring-primary/20 has-[:checked]:bg-primary/5';
+                // Group cost rows by courier brand (JNE, J&T, SiCepat, ...)
+                const groups = {};
+                visibleCosts.forEach((c) => {
+                    const brand = c.name || c.code || 'Courier';
+                    (groups[brand] = groups[brand] || []).push(c);
+                });
 
-                    const radio = document.createElement('input');
-                    radio.type = 'radio';
-                    radio.name = 'courier';
-                    radio.value = (c.name || '') + '::' + (c.service || '');
-                    radio.className = 'sr-only';
-                    radio.dataset.cost = c.cost;
-                    radio.checked = i === 0;
-                    radio.addEventListener('change', () => {
-                        selectedShippingCost = parseInt(radio.dataset.cost || '0') || 0;
-                        refreshTotals();
+                let firstRowSet = false;
+                Object.keys(groups).forEach((brand) => {
+                    const block = document.createElement('div');
+                    block.className = 'courier-group space-y-2.5';
+
+                    const head = document.createElement('div');
+                    head.className = 'flex items-center gap-2.5';
+                    const monogram = document.createElement('span');
+                    monogram.className = 'w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 font-display text-sm flex items-center justify-center uppercase';
+                    monogram.textContent = brand.charAt(0);
+                    const title = document.createElement('span');
+                    title.className = 'font-display text-base text-slate-900 uppercase tracking-wide';
+                    title.textContent = brand;
+                    head.append(monogram, title);
+                    block.appendChild(head);
+
+                    groups[brand].forEach((c) => {
+                        const row = createCourierRow(c, !firstRowSet);
+                        firstRowSet = true;
+                        block.appendChild(row);
                     });
 
-                    const name = c.name || c.code;
-                    const service = c.service || '';
-                    const desc = c.description ? '<span class="block text-[11px] text-slate-500 mt-0.5">' + c.description + '</span>' : '';
-                    const etd = c.etd ? '<span class="text-[11px] text-slate-400"> (' + c.etd + ')</span>' : '';
-                    const costTxt = fmt(c.cost || 0);
-
-                    label.innerHTML = `
-                        <span class="w-5 h-5 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center border-slate-300 has-[:checked]:border-primary has-[:checked]:[&>span]:bg-primary">
-                            <span class="w-2.5 h-2.5 rounded-full bg-transparent"></span>
-                        </span>
-                        <span class="min-w-0 flex-1">
-                            <span class="block font-display text-sm text-slate-900 uppercase">${name}</span>
-                            <span class="block text-xs text-slate-700 font-medium">${service}${etd}</span>
-                            ${desc}
-                        </span>
-                        <span class="font-semibold text-sm text-slate-900 shrink-0">${costTxt}</span>
-                    `;
-                    label.prepend(radio);
-                    courierList.appendChild(label);
+                    courierList.appendChild(block);
                 });
 
                 const first = courierList.querySelector('input[name="courier"]');
@@ -618,6 +708,14 @@
             districtCombo.el.querySelector('.combo-input').addEventListener('focus', () => {
                 if (!districtCombo.el._parentId) return;
                 districtCombo.el.querySelector('.combo-input').click();
+            });
+
+            // Submit processing state
+            const checkoutForm = document.getElementById('checkout-form');
+            checkoutForm.addEventListener('submit', () => {
+                submitBtn.disabled = true;
+                const label = submitBtn.querySelector('span');
+                if (label) label.textContent = '{{ __('store.checkout_processing') }}';
             });
         });
     </script>

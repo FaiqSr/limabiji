@@ -5,17 +5,8 @@
 @section('content')
 <div class="space-y-6">
 
-    @if (session('success'))
-        <div class="p-3.5 rounded-lg bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-semibold flex items-center gap-2">
-            <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
-
     <!-- FOCAL POINT: Quick Action & Operations Bar -->
-    <div class="card-modern">
+    <div class="card-modern animate-rise" style="animation-delay: 0ms">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-start gap-3.5">
                 <div class="w-10 h-10 rounded-lg bg-slate-900 text-white flex items-center justify-center shrink-0 shadow-2xs">
@@ -50,7 +41,7 @@
     </div>
 
     <!-- STORE & COMMERCIAL KPI ROW -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 animate-rise" style="animation-delay: 80ms">
         <div class="card-modern p-4">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono">Store Revenue</span>
             <div class="flex items-baseline justify-between mt-2">
@@ -75,9 +66,9 @@
 
         <div class="card-modern p-4">
             <a href="{{ route('admin.orders.index') }}" class="block group">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono group-hover:text-indigo-600 transition-colors">Total Orders</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono group-hover:text-emerald-600 transition-colors">Total Orders</span>
                 <div class="flex items-baseline justify-between mt-2">
-                    <span class="font-mono text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{{ number_format($stats['orders_count']) }}</span>
+                    <span class="font-mono text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{{ number_format($stats['orders_count']) }}</span>
                     <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">{{ number_format($stats['orders_paid_count']) }} PAID</span>
                 </div>
             </a>
@@ -85,9 +76,9 @@
 
         <div class="card-modern p-4">
             <a href="{{ route('admin.products.index') }}" class="block group">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono group-hover:text-indigo-600 transition-colors">Products Catalog</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono group-hover:text-emerald-600 transition-colors">Products Catalog</span>
                 <div class="flex items-baseline justify-between mt-2">
-                    <span class="font-mono text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{{ number_format($stats['products_count']) }}</span>
+                    <span class="font-mono text-2xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{{ number_format($stats['products_count']) }}</span>
                     @if ($stats['products_low_stock_count'] > 0)
                         <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">{{ $stats['products_low_stock_count'] }} LOW STOCK</span>
                     @else
@@ -99,7 +90,7 @@
     </div>
 
     <!-- CONTENT & DISTRIBUTION KPI ROW -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-rise" style="animation-delay: 160ms">
         <div class="card-modern p-4">
             <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono">Export Destinations</span>
             <div class="flex items-baseline justify-between mt-2">
@@ -126,11 +117,11 @@
 
         <div class="card-modern p-4">
             <a href="{{ route('admin.messages.index') }}" class="block group">
-                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono group-hover:text-indigo-600 transition-colors">Inquiries</span>
+                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono group-hover:text-emerald-600 transition-colors">Inquiries</span>
                 <div class="flex items-baseline justify-between mt-2">
-                    <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{{ number_format($stats['messages_count']) }}</span>
+                    <span class="font-mono text-2xl font-bold text-slate-900 tracking-tight group-hover:text-emerald-600 transition-colors">{{ number_format($stats['messages_count']) }}</span>
                     @if ($stats['messages_unread'] > 0)
-                        <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase">{{ number_format($stats['messages_unread']) }} NEW</span>
+                        <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">{{ number_format($stats['messages_unread']) }} NEW</span>
                     @else
                         <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 uppercase">0 NEW</span>
                     @endif
@@ -148,7 +139,7 @@
     </div>
 
     <!-- STORE ORDERS OVERVIEW -->
-    <div class="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
+    <div class="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden animate-rise" style="animation-delay: 240ms">
         <div class="p-4 border-b border-slate-100 flex items-center justify-between gap-2">
             <div>
                 <h3 class="text-sm font-bold text-slate-900">Recent Store Orders & Fulfillment</h3>
@@ -222,7 +213,7 @@
 
 
     <!-- BOTTOM GRID: Recent Inquiries, Recent News Articles & Top Page Traffic -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-rise" style="animation-delay: 320ms">
         <!-- Recent Inquiries Feed -->
         <div class="card-modern p-4">
             <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">

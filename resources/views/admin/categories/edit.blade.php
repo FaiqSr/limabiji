@@ -82,7 +82,7 @@
                            value="{{ old('name', $category->name) }}" 
                            required 
                            placeholder="e.g. Export Market, Innovation, Agritech" 
-                           class="w-full text-xs bg-white border @error('name') border-rose-500 @else border-slate-200 @enderror rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500">
+                           class="w-full text-xs bg-white border @error('name') border-rose-500 @else border-slate-200 @enderror rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500">
                     @error('name')
                         <p class="text-[11px] text-rose-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -99,7 +99,7 @@
                            id="name_id" 
                            value="{{ old('name_id', $category->name_id) }}" 
                            placeholder="e.g. Pasar Ekspor, Inovasi, Agriteknologi" 
-                           class="w-full text-xs bg-white border @error('name_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500">
+                           class="w-full text-xs bg-white border @error('name_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500">
                     @error('name_id')
                         <p class="text-[11px] text-rose-500 mt-1">{{ $message }}</p>
                     @enderror
@@ -119,7 +119,7 @@
                                value="{{ old('slug', $category->slug) }}" 
                                required 
                                placeholder="export-market" 
-                               class="w-full text-xs bg-white font-mono border @error('slug') border-rose-500 @else border-slate-200 @enderror rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500">
+                               class="w-full text-xs bg-white font-mono border @error('slug') border-rose-500 @else border-slate-200 @enderror rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500">
                     </div>
                     <p class="text-[11px] text-slate-400 mt-1">Unique identifier used for URL filtering and routing.</p>
                     @error('slug')
@@ -136,7 +136,7 @@
                     <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider font-mono">Linked Articles</h4>
                     <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between">
                         <span class="text-xs text-slate-600">Total Articles</span>
-                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
+                        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
                             {{ $category->articles()->count() }}
                         </span>
                     </div>
@@ -145,7 +145,7 @@
 
             <div class="card-modern space-y-2.5 bg-slate-50/50">
                 <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                     <span>Category Guide</span>

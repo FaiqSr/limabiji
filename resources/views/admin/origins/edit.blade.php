@@ -100,7 +100,7 @@
                            value="{{ old('name', $origin->name) }}" 
                            required 
                            placeholder="e.g. Toraja, Gayo, Flores Bajawa" 
-                           class="w-full text-xs bg-white border @error('name') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
+                           class="w-full text-xs bg-white border @error('name') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500">
                     @error('name')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -118,7 +118,7 @@
                                value="{{ old('slug', $origin->slug) }}" 
                                required 
                                placeholder="toraja" 
-                               class="w-full text-xs bg-white border @error('slug') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-r-lg p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                               class="w-full text-xs bg-white border @error('slug') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-r-lg p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
                     </div>
                     @error('slug')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
@@ -135,7 +135,7 @@
                            value="{{ old('province', $origin->province) }}" 
                            required 
                            placeholder="e.g. South Sulawesi, Aceh, East Nusa Tenggara" 
-                           class="w-full text-xs bg-white border @error('province') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
+                           class="w-full text-xs bg-white border @error('province') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500">
                     @error('province')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -182,7 +182,7 @@
                                value="{{ old('altitude', $origin->altitude) }}" 
                                required 
                                placeholder="e.g. 1400–1900m" 
-                               class="w-full text-xs bg-white border @error('altitude') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                               class="w-full text-xs bg-white border @error('altitude') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
                         @error('altitude')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -198,7 +198,7 @@
                                value="{{ old('score', $origin->score) }}" 
                                required 
                                placeholder="e.g. 86.5 or 82+" 
-                               class="w-full text-xs bg-white border @error('score') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                               class="w-full text-xs bg-white border @error('score') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
                         @error('score')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -214,7 +214,7 @@
                                value="{{ old('process', $origin->process) }}" 
                                required 
                                placeholder="e.g. Washed, Enzymatic Honey" 
-                               class="w-full text-xs bg-white border @error('process') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
+                               class="w-full text-xs bg-white border @error('process') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500">
                         @error('process')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -230,7 +230,7 @@
                                value="{{ old('harvest', $origin->harvest) }}" 
                                required 
                                placeholder="e.g. May – Nov" 
-                               class="w-full text-xs bg-white border @error('harvest') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
+                               class="w-full text-xs bg-white border @error('harvest') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500">
                         @error('harvest')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -247,7 +247,7 @@
                            value="{{ old('varietals', $origin->varietals) }}" 
                            required 
                            placeholder="e.g. S795, Typica, Lini S, Kartika" 
-                           class="w-full text-xs bg-white border @error('varietals') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500">
+                           class="w-full text-xs bg-white border @error('varietals') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500">
                     @error('varietals')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -266,7 +266,7 @@
                                   id="overview" 
                                   rows="5" 
                                   placeholder="Describe the region's climate, terroir, soil composition, and specialty cup characteristics..." 
-                                  class="w-full text-xs bg-white border @error('overview') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 leading-relaxed">{{ old('overview', $origin->overview) }}</textarea>
+                                  class="w-full text-xs bg-white border @error('overview') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 leading-relaxed">{{ old('overview', $origin->overview) }}</textarea>
                         @error('overview')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -280,7 +280,7 @@
                                   id="overview_id" 
                                   rows="5" 
                                   placeholder="Deskripsikan iklim daerah, tanah, sejarah perkebunan, dan profil rasa kopi khas daerah ini..." 
-                                  class="w-full text-xs bg-white border @error('overview_id') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 leading-relaxed">{{ old('overview_id', $origin->overview_id) }}</textarea>
+                                  class="w-full text-xs bg-white border @error('overview_id') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 leading-relaxed">{{ old('overview_id', $origin->overview_id) }}</textarea>
                         @error('overview_id')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -305,7 +305,7 @@
                                name="is_active" 
                                value="1" 
                                {{ old('is_active', $origin->is_active ?? true) ? 'checked' : '' }} 
-                               class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                               class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
                         <div>
                             <span class="text-xs font-semibold text-slate-800">Active Origin</span>
                             <p class="text-[11px] text-slate-500">Display this origin profile on public landing pages and origins slider.</p>
@@ -319,7 +319,7 @@
                                id="order" 
                                value="{{ old('order', $origin->order ?: 0) }}" 
                                min="0" 
-                               class="w-full text-xs bg-white border @error('order') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                               class="w-full text-xs bg-white border @error('order') !border-rose-500 focus:!ring-rose-500 @else border-slate-200 @enderror rounded-lg p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
                         @error('order')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror

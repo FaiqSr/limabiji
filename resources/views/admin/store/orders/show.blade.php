@@ -229,7 +229,7 @@
                     @if ($order->getVaNumber())
                         <div class="flex justify-between">
                             <span class="text-slate-500">VA Number:</span>
-                            <span class="font-bold text-indigo-600 select-all">{{ $order->getVaNumber() }}</span>
+                            <span class="font-bold text-emerald-600 select-all">{{ $order->getVaNumber() }}</span>
                         </div>
                     @endif
 

@@ -42,7 +42,7 @@
                        value="{{ old('name', $certificate->name) }}" 
                        required 
                        placeholder="e.g. Halal Indonesia (BPJPH) or BPOM RI MD"
-                       class="w-full text-xs bg-white border @error('name') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                       class="w-full text-xs bg-white border @error('name') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all font-medium">
                 @error('name')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -58,7 +58,7 @@
                        name="issuer" 
                        value="{{ old('issuer', $certificate->issuer) }}" 
                        placeholder="e.g. BPJPH Kementerian Agama RI"
-                       class="w-full text-xs bg-white border @error('issuer') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all">
+                       class="w-full text-xs bg-white border @error('issuer') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all">
                 @error('issuer')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -75,7 +75,7 @@
                        value="{{ old('certificate_number', $certificate->certificate_number) }}" 
                        required 
                        placeholder="e.g. ID32110001234560723"
-                       class="w-full text-xs bg-white border @error('certificate_number') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all font-mono">
+                       class="w-full text-xs bg-white border @error('certificate_number') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all font-mono">
                 @error('certificate_number')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -91,7 +91,7 @@
                        name="logo" 
                        value="{{ old('logo', $certificate->logo) }}" 
                        placeholder="https://..."
-                       class="w-full text-xs bg-white border @error('logo') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all font-mono">
+                       class="w-full text-xs bg-white border @error('logo') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all font-mono">
                 @error('logo')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -119,7 +119,7 @@
                        id="issued_date" 
                        name="issued_date" 
                        value="{{ old('issued_date', $certificate->issued_date?->format('Y-m-d')) }}"
-                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500">
+                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500">
             </div>
 
             <!-- Expiry Date -->
@@ -129,7 +129,7 @@
                        id="expiry_date" 
                        name="expiry_date" 
                        value="{{ old('expiry_date', $certificate->expiry_date?->format('Y-m-d')) }}"
-                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500">
+                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500">
             </div>
 
             <!-- Display Order -->
@@ -140,7 +140,7 @@
                        name="order" 
                        value="{{ old('order', $certificate->order) }}" 
                        min="0"
-                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
             </div>
 
             <!-- Active Status -->
@@ -150,7 +150,7 @@
                            name="is_active" 
                            value="1" 
                            {{ old('is_active', $certificate->is_active) ? 'checked' : '' }} 
-                           class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                           class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
                     <div>
                         <span class="text-xs font-semibold text-slate-900 block">Publish on Landing Page</span>
                         <span class="text-[11px] text-slate-500">Active certificates are displayed on the /about page.</span>
@@ -165,7 +165,7 @@
                           name="description" 
                           rows="3" 
                           placeholder="Brief notes about the certification scope..."
-                          class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 leading-relaxed transition-all">{{ old('description', $certificate->description) }}</textarea>
+                          class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 leading-relaxed transition-all">{{ old('description', $certificate->description) }}</textarea>
             </div>
         </div>
 

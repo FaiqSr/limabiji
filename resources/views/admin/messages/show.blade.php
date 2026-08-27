@@ -71,8 +71,8 @@
                         <div class="flex items-center gap-2">
                             <h2 class="text-lg font-bold text-slate-900">{{ $message->name }}</h2>
                             @if (! $message->is_read)
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                                     Unread
                                 </span>
                             @else
@@ -84,7 +84,7 @@
                         </div>
                         
                         <div class="text-xs text-slate-600 mt-1 flex flex-wrap items-center gap-y-1 gap-x-3 font-mono">
-                            <a href="mailto:{{ $message->email }}" class="text-indigo-600 hover:underline flex items-center gap-1">
+                            <a href="mailto:{{ $message->email }}" class="text-emerald-600 hover:underline flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
@@ -122,7 +122,7 @@
         <!-- Full Inquiry Message Content -->
         <div class="p-6 sm:p-8">
             <span class="text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-400 block mb-3">Inquiry Message</span>
-            <div class="bg-slate-50/75 border border-slate-100 rounded-xl p-5 sm:p-6 text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-wrap selection:bg-indigo-100">
+            <div class="bg-slate-50/75 border border-slate-100 rounded-xl p-5 sm:p-6 text-sm text-slate-800 leading-relaxed font-sans whitespace-pre-wrap selection:bg-emerald-100">
 {{ $message->message }}
             </div>
         </div>

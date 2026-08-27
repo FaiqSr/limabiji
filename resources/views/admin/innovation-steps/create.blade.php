@@ -16,10 +16,10 @@
 
         <!-- Language Switcher Tabs -->
         <div class="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200">
-            <button type="button" @click="locale = 'en'" :class="locale === 'en' ? 'bg-white text-indigo-700 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'" class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5">
+            <button type="button" @click="locale = 'en'" :class="locale === 'en' ? 'bg-white text-emerald-700 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'" class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5">
                 <span>🇺🇸 English (EN)</span>
             </button>
-            <button type="button" @click="locale = 'id'" :class="locale === 'id' ? 'bg-white text-indigo-700 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'" class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5">
+            <button type="button" @click="locale = 'id'" :class="locale === 'id' ? 'bg-white text-emerald-700 shadow-2xs font-semibold' : 'text-slate-600 hover:text-slate-900'" class="px-3 py-1.5 text-xs rounded-lg transition-all flex items-center gap-1.5">
                 <span>🇮🇩 Indonesia (ID)</span>
             </button>
         </div>
@@ -39,7 +39,7 @@
                        value="{{ old('title') }}" 
                        required 
                        placeholder="e.g. Ethical Cherry Sourcing" 
-                       class="w-full text-xs bg-white border @error('title') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                       class="w-full text-xs bg-white border @error('title') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all font-medium">
                 @error('title')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -54,7 +54,7 @@
                           rows="4" 
                           required 
                           placeholder="Explain the technical or logistical process involved in this step..." 
-                          class="w-full text-xs bg-white border @error('description') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 leading-relaxed transition-all">{{ old('description') }}</textarea>
+                          class="w-full text-xs bg-white border @error('description') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 leading-relaxed transition-all">{{ old('description') }}</textarea>
                 @error('description')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -69,7 +69,7 @@
                        id="details" 
                        value="{{ old('details') }}" 
                        placeholder="e.g. Hand-picked red cherries, 20°+ Brix sugar level, High altitude (1200m+)" 
-                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all">
+                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all">
                 <p class="text-[11px] text-slate-400 mt-1">Separate multiple badges with commas. Displayed as highlighted tags beneath the description.</p>
             </div>
         </div>
@@ -85,7 +85,7 @@
                        id="title_id" 
                        value="{{ old('title_id') }}" 
                        placeholder="Contoh: Pengadaan Ceri Etis" 
-                       class="w-full text-xs bg-white border @error('title_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all font-medium">
+                       class="w-full text-xs bg-white border @error('title_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all font-medium">
                 @error('title_id')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -99,7 +99,7 @@
                           id="description_id" 
                           rows="4" 
                           placeholder="Jelaskan detail proses teknis atau logistik pada langkah ini..." 
-                          class="w-full text-xs bg-white border @error('description_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 leading-relaxed transition-all">{{ old('description_id') }}</textarea>
+                          class="w-full text-xs bg-white border @error('description_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 leading-relaxed transition-all">{{ old('description_id') }}</textarea>
                 @error('description_id')
                     <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                 @enderror
@@ -114,7 +114,7 @@
                        id="details_id" 
                        value="{{ old('details_id') }}" 
                        placeholder="Contoh: Petik tangan ceri merah, Kadar gula 20°+ Brix, Dataran tinggi (1200m+)" 
-                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all">
+                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all">
             </div>
         </div>
 
@@ -129,7 +129,7 @@
                        id="image" 
                        value="{{ old('image') }}" 
                        placeholder="https://images.unsplash.com/... or /storage/..." 
-                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 transition-all font-mono">
+                       class="w-full text-xs bg-white border border-slate-200 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 transition-all font-mono">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -143,7 +143,7 @@
                            value="{{ old('step_number', $suggestedStepNumber ?? '01') }}" 
                            placeholder="01" 
                            maxlength="10" 
-                           class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                           class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
                 </div>
 
                 <div>
@@ -156,7 +156,7 @@
                            value="{{ old('order', $nextOrder ?? 1) }}" 
                            required 
                            min="1" 
-                           class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-indigo-500 font-mono">
+                           class="w-full text-xs bg-white border border-slate-200 rounded-xl p-2.5 focus:ring-2 focus:ring-emerald-500 font-mono">
                 </div>
             </div>
 
@@ -167,7 +167,7 @@
                            name="is_active" 
                            value="1" 
                            {{ old('is_active', true) ? 'checked' : '' }} 
-                           class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                           class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
                     <div>
                         <span class="text-xs font-semibold text-slate-900 block">Publish on Landing Page</span>
                         <span class="text-[11px] text-slate-500">Active steps are immediately visible on the /innovation landing page.</span>

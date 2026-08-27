@@ -126,7 +126,7 @@
                                     <div class="text-[10px] text-slate-500 font-mono flex items-center gap-1.5 mt-0.5">
                                         <span class="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 font-semibold">{{ $order->courier }}</span>
                                         @if ($order->tracking_number)
-                                            <span class="text-indigo-600 font-semibold truncate max-w-[120px]" title="Resi: {{ $order->tracking_number }}">
+                                            <span class="text-emerald-600 font-semibold truncate max-w-[120px]" title="Resi: {{ $order->tracking_number }}">
                                                 Resi: {{ $order->tracking_number }}
                                             </span>
                                         @endif

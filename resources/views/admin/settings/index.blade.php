@@ -32,7 +32,7 @@
             <div class="card-modern space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                         <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">Contact & Support</h3>
                     </div>
                     <span class="text-[10px] font-mono text-slate-400">Global Details</span>
@@ -49,7 +49,7 @@
                                value="{{ old('contact_email', $settings['contact_email']) }}" 
                                required 
                                placeholder="export@limabijiagritech.com" 
-                               class="w-full text-xs bg-slate-50 border @error('contact_email') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 pl-9 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all font-mono">
+                               class="w-full text-xs bg-slate-50 border @error('contact_email') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 pl-9 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all font-mono">
                     </div>
                     <p class="text-[11px] text-slate-400 mt-1">Displayed in contact hero, export inquiry block, and footer.</p>
                     @error('contact_email')
@@ -68,7 +68,7 @@
                                value="{{ old('contact_phone', $settings['contact_phone']) }}" 
                                required 
                                placeholder="+62 812 3456 7890" 
-                               class="w-full text-xs bg-slate-50 border @error('contact_phone') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 pl-9 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all font-mono">
+                               class="w-full text-xs bg-slate-50 border @error('contact_phone') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 pl-9 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all font-mono">
                     </div>
                     <p class="text-[11px] text-slate-400 mt-1">International format with country code (e.g. +62 812 3456 7890).</p>
                     @error('contact_phone')
@@ -85,7 +85,7 @@
                            id="contact_hours" 
                            value="{{ old('contact_hours', $settings['contact_hours']) }}" 
                            placeholder="Mon – Fri, 8:00 – 16:00 WIB" 
-                           class="w-full text-xs bg-slate-50 border @error('contact_hours') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full text-xs bg-slate-50 border @error('contact_hours') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                     @error('contact_hours')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -111,7 +111,7 @@
                               id="contact_address_en" 
                               rows="3" 
                               placeholder="Bogor, West Java, Indonesia" 
-                              class="w-full text-xs bg-slate-50 border @error('contact_address_en') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">{{ old('contact_address_en', $settings['contact_address_en']) }}</textarea>
+                              class="w-full text-xs bg-slate-50 border @error('contact_address_en') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">{{ old('contact_address_en', $settings['contact_address_en']) }}</textarea>
                     @error('contact_address_en')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -126,7 +126,7 @@
                               id="contact_address_id" 
                               rows="3" 
                               placeholder="Bogor, Jawa Barat, Indonesia" 
-                              class="w-full text-xs bg-slate-50 border @error('contact_address_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">{{ old('contact_address_id', $settings['contact_address_id']) }}</textarea>
+                              class="w-full text-xs bg-slate-50 border @error('contact_address_id') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">{{ old('contact_address_id', $settings['contact_address_id']) }}</textarea>
                     @error('contact_address_id')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -152,7 +152,7 @@
                            id="site_name_en" 
                            value="{{ old('site_name_en', $settings['site_name_en']) }}" 
                            placeholder="Lima Biji Agritech" 
-                           class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                 </div>
 
                 <div>
@@ -162,7 +162,7 @@
                            id="site_name_id" 
                            value="{{ old('site_name_id', $settings['site_name_id']) }}" 
                            placeholder="Lima Biji Agritech" 
-                           class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@
                            id="map_lat" 
                            value="{{ old('map_lat', $settings['map_lat']) }}" 
                            placeholder="-6.597144" 
-                           class="w-full text-xs bg-slate-50 border @error('map_lat') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                           class="w-full text-xs bg-slate-50 border @error('map_lat') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono transition-all">
                     @error('map_lat')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -208,7 +208,7 @@
                            id="map_lng" 
                            value="{{ old('map_lng', $settings['map_lng']) }}" 
                            placeholder="106.806039" 
-                           class="w-full text-xs bg-slate-50 border @error('map_lng') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                           class="w-full text-xs bg-slate-50 border @error('map_lng') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono transition-all">
                     @error('map_lng')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -225,7 +225,7 @@
                            id="map_zoom" 
                            value="{{ old('map_zoom', $settings['map_zoom']) }}" 
                            placeholder="14" 
-                           class="w-full text-xs bg-slate-50 border @error('map_zoom') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                           class="w-full text-xs bg-slate-50 border @error('map_zoom') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono transition-all">
                     @error('map_zoom')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -242,7 +242,7 @@
                            id="map_label" 
                            value="{{ old('map_label', $settings['map_label']) }}" 
                            placeholder="Lima Biji Agritech — Headquarters" 
-                           class="w-full text-xs bg-slate-50 border @error('map_label') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all">
+                           class="w-full text-xs bg-slate-50 border @error('map_label') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all">
                     @error('map_label')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -257,7 +257,7 @@
                            id="map_embed_url" 
                            value="{{ old('map_embed_url', $settings['map_embed_url']) }}" 
                            placeholder="https://www.google.com/maps/embed?pb=..." 
-                           class="w-full text-xs bg-slate-50 border @error('map_embed_url') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono text-[11px] transition-all">
+                           class="w-full text-xs bg-slate-50 border @error('map_embed_url') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono text-[11px] transition-all">
                     @error('map_embed_url')
                         <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                     @enderror
@@ -271,7 +271,7 @@
                     </svg>
                     Tip: Jika Custom Embed URL dikosongkan, sistem akan otomatis menggunakan Latitude & Longitude untuk menampilkan peta.
                 </span>
-                <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="text-indigo-600 hover:text-indigo-700 font-medium inline-flex items-center gap-1">
+                <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="text-emerald-600 hover:text-emerald-700 font-medium inline-flex items-center gap-1">
                     Buka Google Maps
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -297,7 +297,7 @@
             <!-- About Page Section -->
             <div class="space-y-3">
                 <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-700 border border-indigo-100">About Page</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-100">About Page</span>
                     <span class="text-xs text-slate-400">/about</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -311,7 +311,7 @@
                                value="{{ old('stat_about_sca_score', $settings['stat_about_sca_score']) }}"
                                placeholder="e.g. 82+"
                                maxlength="20"
-                               class="w-full text-xs bg-slate-50 border @error('stat_about_sca_score') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                               class="w-full text-xs bg-slate-50 border @error('stat_about_sca_score') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono transition-all">
                         @error('stat_about_sca_score')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -338,7 +338,7 @@
                                value="{{ old('stat_innovation_sca_score', $settings['stat_innovation_sca_score']) }}"
                                placeholder="e.g. 82+"
                                maxlength="20"
-                               class="w-full text-xs bg-slate-50 border @error('stat_innovation_sca_score') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                               class="w-full text-xs bg-slate-50 border @error('stat_innovation_sca_score') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono transition-all">
                         @error('stat_innovation_sca_score')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror
@@ -356,7 +356,7 @@
                                value="{{ old('stat_export_destinations', $settings['stat_export_destinations']) }}"
                                placeholder="e.g. 7+"
                                maxlength="20"
-                               class="w-full text-xs bg-slate-50 border @error('stat_export_destinations') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-indigo-500 font-mono transition-all">
+                               class="w-full text-xs bg-slate-50 border @error('stat_export_destinations') border-rose-500 @else border-slate-200 @enderror rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-emerald-500 font-mono transition-all">
                         @error('stat_export_destinations')
                             <p class="text-xs text-rose-500 mt-1 font-medium">{{ $message }}</p>
                         @enderror

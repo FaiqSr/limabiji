@@ -119,7 +119,7 @@ $initialImages = array_values(array_filter($initialImages));
         @dragover.prevent="isDragging = true"
         @dragleave.prevent="isDragging = false"
         @drop.prevent="isDragging = false; handleFiles($event.dataTransfer.files)"
-        :class="isDragging ? 'border-indigo-500 bg-indigo-50/50' : 'border-slate-300 bg-slate-50/50 hover:bg-slate-100/50'"
+        :class="isDragging ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-300 bg-slate-50/50 hover:bg-slate-100/50'"
         class="border-2 border-dashed rounded-lg p-5 text-center transition-colors cursor-pointer relative"
     >
         <input

@@ -106,7 +106,7 @@
                             <!-- Region Title & Province -->
                             <div>
                                 <h4
-                                    class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                                    class="text-base font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">
                                     {{ $origin->name }}
                                 </h4>
                                 <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
@@ -139,7 +139,7 @@
 
                                 @if ($origin->process)
                                     <span
-                                        class="inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                        class="inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100">
                                         {{ $origin->process }}
                                     </span>
                                 @endif
@@ -164,7 +164,7 @@
                         <!-- Card Actions Footer -->
                         <div class="flex items-center justify-between pt-3 border-t border-slate-100 gap-2">
                             <a href="{{ route('landingpages.origins', $origin->slug) }}" target="_blank"
-                                class="text-xs text-slate-500 hover:text-indigo-600 font-medium inline-flex items-center gap-1 transition-colors">
+                                class="text-xs text-slate-500 hover:text-emerald-600 font-medium inline-flex items-center gap-1 transition-colors">
                                 <span>View Live</span>
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
