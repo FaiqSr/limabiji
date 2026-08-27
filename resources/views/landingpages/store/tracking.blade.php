@@ -3,13 +3,131 @@
 
 @php
     $locale = app()->getLocale();
+
+    $pageTitle = $locale === 'id'
+        ? 'Lacak Pesanan Kopi | Lima Biji Agritech — Toko Kopi Specialty'
+        : 'Track Your Order | Lima Biji Agritech — Specialty Coffee Store';
+    $metaDesc = __('store.tracking_desc');
+    $ogImage = asset('assets/images/limabiji/toko.webp');
+    $canonical = route('store.tracking');
+    $pageUrl = url()->full();
 @endphp
 
-@push('title', __('store.tracking_title') . ': Lima Biji Agritech')
+@push('title', $pageTitle)
 
 @push('meta')
-    <meta name="description" content="{{ __('store.tracking_desc') }}">
-    <meta name="robots" content="noindex, nofollow">
+    {{-- Core --}}
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="description" content="{{ $metaDesc }}">
+    <meta name="keywords" content="lacak pesanan kopi, track coffee order, nomor resi lima biji, cek status pesanan kopi, lima biji tracking, resi kopi specialty, order tracking indonesia">
+    <link rel="canonical" href="{{ $canonical }}">
+
+    {{-- Open Graph --}}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $pageTitle }}">
+    <meta property="og:description" content="{{ $metaDesc }}">
+    <meta property="og:url" content="{{ $canonical }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ $pageTitle }}">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $pageTitle }}">
+    <meta name="twitter:description" content="{{ $metaDesc }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
+    <meta name="twitter:image:alt" content="{{ $pageTitle }}">
+@endpush
+
+@push('schema')
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',            '@graph' => array_filter([
+
+                // 1. WebSite with SearchAction for the tracking lookup
+                [
+                    '@type' => 'WebSite',
+                    '@id' => url('/') . '#website',
+                    'url' => url('/'),
+                    'name' => 'Lima Biji Agritech',
+                    'description' => 'Specialty coffee producer & roaster — single-origin Indonesian beans.',
+                    'inLanguage' => $locale === 'id' ? 'id-ID' : 'en-US',
+                    'publisher' => ['@id' => url('/') . '#organization'],
+                    'potentialAction' => [
+                        '@type' => 'SearchAction',
+                        'target' => [
+                            '@type' => 'EntryPoint',
+                            'urlTemplate' => route('store.tracking') . '?order={order_number}',
+                        ],
+                        'query-input' => 'required name=order_number',
+                    ],
+                ],
+
+                // 2. Organization
+                [
+                    '@type' => 'Organization',
+                    '@id' => url('/') . '#organization',
+                    'name' => 'Lima Biji Agritech',
+                    'url' => url('/'),
+                    'logo' => ['@type' => 'ImageObject', 'url' => asset('favicon.ico')],
+                    'description' => 'Specialty coffee producer & roaster specializing in enzymatic bio-fermentation processing from single-origin Indonesian farms.',
+                ],
+
+                // 3. WebPage
+                [
+                    '@type' => 'WebPage',
+                    '@id' => $canonical . '#webpage',
+                    'url' => $canonical,
+                    'name' => $pageTitle,
+                    'description' => $metaDesc,
+                    'inLanguage' => $locale === 'id' ? 'id-ID' : 'en-US',
+                    'isPartOf' => ['@id' => url('/') . '#website'],
+                    'publisher' => ['@id' => url('/') . '#organization'],
+                ],
+
+                // 4. BreadcrumbList
+                [
+                    '@type' => 'BreadcrumbList',
+                    'itemListElement' => [
+                        ['@type' => 'ListItem', 'position' => 1, 'name' => __('nav.home'), 'item' => url('/')],
+                        ['@type' => 'ListItem', 'position' => 2, 'name' => __('store.detail_back'), 'item' => route('store.index')],
+                        ['@type' => 'ListItem', 'position' => 3, 'name' => $pageTitle, 'item' => $canonical],
+                    ],
+                ],
+
+                // 5. Order schema when a lookup succeeds (no PII)
+                $order && $order->exists ? [
+                    '@type' => 'Order',
+                    '@id' => $pageUrl . '#order',
+                    'orderNumber' => $order->order_number,
+                    'orderStatus' => match ($order->shipping_status) {
+                        'delivered' => 'https://schema.org/OrderDelivered',
+                        'shipped' => 'https://schema.org/OrderInTransit',
+                        'processing' => 'https://schema.org/OrderProcessing',
+                        'cancelled' => 'https://schema.org/OrderCancelled',
+                        default => $order->payment_status === 'paid'
+                            ? 'https://schema.org/OrderProcessing'
+                            : 'https://schema.org/OrderPaymentDue',
+                    },
+                    'orderDate' => $order->created_at?->toIso8601String(),
+                    'priceCurrency' => 'IDR',
+                    'price' => (string) $order->total_amount,
+                    'acceptedOffer' => [
+                        '@type' => 'Offer',
+                        'priceCurrency' => 'IDR',
+                        'price' => (string) $order->total_amount,
+                        'itemOffered' => [
+                            '@type' => 'Product',
+                            'name' => 'Lima Biji Specialty Coffee',
+                            'description' => $order->items->pluck('product_name')->implode(', '),
+                        ],
+                    ],
+                    'merchant' => ['@id' => url('/') . '#organization'],
+                ] : null,
+            ], fn ($node) => $node !== null),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
 @endpush
 
 @section('content')
