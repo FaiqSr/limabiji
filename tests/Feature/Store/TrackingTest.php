@@ -50,6 +50,10 @@ class TrackingTest extends TestCase
         $this->get(route('store.tracking'))
             ->assertOk()
             ->assertSee('Track Your Order')
+            ->assertSee('<meta name="robots" content="index, follow', false)
+            ->assertSee('<link rel="canonical"', false)
+            ->assertSee('og:title', false)
+            ->assertSee('application/ld+json', false)
             ->assertDontSee('Order Not Found');
     }
 
@@ -69,7 +73,8 @@ class TrackingTest extends TestCase
             ->assertSee('JNE0123456789')
             ->assertSee('Enzymatic Gayo')
             ->assertSee('Rp 174.000')
-            ->assertSee('Shipped');
+            ->assertSee('Shipped')
+            ->assertSee('https://schema.org/OrderInTransit', false);
     }
 
     public function test_tracking_lookup_is_case_insensitive(): void
