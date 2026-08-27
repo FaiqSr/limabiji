@@ -28,6 +28,10 @@ class Order extends Model
         'total_amount',
         'payment_method',
         'payment_status',
+        'shipping_status',
+        'tracking_number',
+        'shipped_at',
+        'delivered_at',
         'payment_method_type',
         'midtrans_transaction_id',
         'midtrans_status',
@@ -45,6 +49,8 @@ class Order extends Model
         'payment_instructions' => 'array',
         'expires_at' => 'datetime',
         'paid_at' => 'datetime',
+        'shipped_at' => 'datetime',
+        'delivered_at' => 'datetime',
         'weight_grams' => 'integer',
     ];
 
@@ -112,5 +118,49 @@ class Order extends Model
     public function getFormattedShipping(): string
     {
         return 'Rp '.number_format($this->shipping_cost, 0, ',', '.');
+    }
+
+    public function getPaymentStatusLabel(): string
+    {
+        return match ($this->payment_status) {
+            'paid' => 'Paid',
+            'pending' => 'Pending Payment',
+            'failed' => 'Failed',
+            'expired' => 'Expired',
+            default => ucfirst($this->payment_status),
+        };
+    }
+
+    public function getShippingStatusLabel(): string
+    {
+        return match ($this->shipping_status) {
+            'unfulfilled' => 'Unfulfilled',
+            'processing' => 'Processing / Packed',
+            'shipped' => 'Shipped / In Transit',
+            'delivered' => 'Delivered',
+            'cancelled' => 'Cancelled',
+            default => ucfirst($this->shipping_status ?? 'unfulfilled'),
+        };
+    }
+
+    public function getShippingStatusBadgeClass(): string
+    {
+        return match ($this->shipping_status) {
+            'delivered' => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+            'shipped' => 'bg-indigo-50 text-indigo-700 border border-indigo-200',
+            'processing' => 'bg-sky-50 text-sky-700 border border-sky-200',
+            'cancelled' => 'bg-rose-50 text-rose-700 border border-rose-200',
+            default => 'bg-amber-50 text-amber-700 border border-amber-200',
+        };
+    }
+
+    public function getPaymentStatusBadgeClass(): string
+    {
+        return match ($this->payment_status) {
+            'paid' => 'bg-emerald-50 text-emerald-700 border border-emerald-200',
+            'pending' => 'bg-amber-50 text-amber-700 border border-amber-200',
+            'failed', 'expired' => 'bg-rose-50 text-rose-700 border border-rose-200',
+            default => 'bg-slate-50 text-slate-700 border border-slate-200',
+        };
     }
 }
