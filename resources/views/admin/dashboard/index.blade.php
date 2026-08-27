@@ -374,63 +374,6 @@
         </div>
     </div>
 
-    <!-- INTEGRATED GLOBAL SITE SETTINGS SECTION -->
-    <div class="card-modern p-4" x-data="{ settingsOpen: false }">
-        <div class="flex items-center justify-between cursor-pointer select-none" @click="settingsOpen = !settingsOpen">
-            <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-sm font-bold text-slate-900">Global Site Settings</h3>
-                    <p class="text-[11px] text-slate-500 font-mono">Quick Brand & Contact Details Configuration</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="text-xs font-semibold text-slate-600" x-text="settingsOpen ? 'Collapse Settings' : 'Expand Settings'"></span>
-                <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" :class="settingsOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-            </div>
-        </div>
-
-        <div x-show="settingsOpen" x-collapse class="mt-4 pt-4 border-t border-slate-100">
-            <form action="{{ route('admin.dashboard.settings') }}" method="POST" class="space-y-4">
-                @csrf
-                @method('PUT')
-
-                @php $settingIndex = 0; @endphp
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach ($siteSettings as $groupName => $items)
-                        @foreach ($items as $setting)
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-slate-700 capitalize">
-                                    {{ str_replace('_', ' ', $setting->key) }}
-                                    @if ($setting->locale)
-                                        <span class="text-[10px] font-mono text-slate-400 font-normal">({{ strtoupper($setting->locale) }})</span>
-                                    @endif
-                                </label>
-                                <input type="hidden" name="settings[{{ $settingIndex }}][key]" value="{{ $setting->key }}">
-                                <input type="hidden" name="settings[{{ $settingIndex }}][group]" value="{{ $setting->group }}">
-                                <input type="hidden" name="settings[{{ $settingIndex }}][locale]" value="{{ $setting->locale }}">
-                                <input type="text" name="settings[{{ $settingIndex }}][value]" value="{{ old('settings.'.$settingIndex.'.value', $setting->value) }}" class="text-xs">
-                            </div>
-                            @php $settingIndex++; @endphp
-                        @endforeach
-                    @endforeach
-                </div>
-
-                <div class="flex justify-end pt-2">
-                    <button type="submit" class="btn btn-primary text-xs py-2 px-4 shadow-2xs cursor-pointer">
-                        Save Settings
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 
 </div>
 @endsection

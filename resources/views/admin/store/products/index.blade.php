@@ -131,11 +131,11 @@
                                     </span>
                                 @elseif ($product->stock <= 10)
                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-amber-50 text-amber-700 border border-amber-200 uppercase">
-                                        {{ $product->stock }} left (Low)
+                                        {{ $product->stock }}
                                     </span>
                                 @else
                                     <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
-                                        {{ $product->stock }} in stock
+                                        {{ $product->stock }}
                                     </span>
                                 @endif
                             </td>

@@ -5,29 +5,35 @@
 @section('content')
 <div class="max-w-6xl mx-auto space-y-6">
 
-    <!-- Header Toolbar -->
-    <div class="card-modern flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary text-xs py-2 px-3">
-                &larr; Back to Orders
+    <!-- Sticky Top Action Bar -->
+    <div class="mb-6 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+            <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary text-xs py-2 px-3 shrink-0" title="Back to Orders list">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span class="hidden sm:inline">Back</span>
             </a>
-            <div>
-                <div class="flex items-center gap-2">
-                    <h3 class="text-base font-bold text-slate-900 font-mono">Order #{{ $order->order_number }}</h3>
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase {{ $order->getPaymentStatusBadgeClass() }}">
+
+            <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="text-sm font-bold text-slate-900 font-mono truncate">
+                        Order #{{ $order->order_number }}
+                    </h3>
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase {{ $order->getPaymentStatusBadgeClass() }} shrink-0">
                         {{ $order->getPaymentStatusLabel() }}
                     </span>
-                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase {{ $order->getShippingStatusBadgeClass() }}">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase {{ $order->getShippingStatusBadgeClass() }} shrink-0">
                         {{ $order->getShippingStatusLabel() }}
                     </span>
                 </div>
-                <p class="text-xs text-slate-500 font-mono mt-0.5">
-                    Placed on {{ $order->created_at->format('l, d F Y \a\t H:i') }} ({{ $order->created_at->diffForHumans() }})
+                <p class="text-[11px] text-slate-500 font-mono truncate">
+                    Placed {{ $order->created_at->format('d M Y, H:i') }} &bull; {{ $order->customer_name }} ({{ $order->city }})
                 </p>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0">
             <button onclick="window.print()" type="button" class="btn btn-secondary text-xs py-2 px-3.5 shadow-2xs">
                 <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>

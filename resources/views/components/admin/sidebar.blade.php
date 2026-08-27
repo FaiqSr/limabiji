@@ -63,11 +63,10 @@
 
         <!-- SECTION: Store Management (Products & Orders) -->
         @php $isStoreActive = request()->routeIs('admin.products.*', 'admin.orders.*'); @endphp
-        <div x-data="{ open: {{ $isStoreActive ? 'true' : 'true' }} }" class="space-y-1">
+        <div x-data="{ open: {{ $isStoreActive ? 'true' : 'false' }} }" class="space-y-1">
             <button @click="open = !open" type="button" class="w-full flex items-center justify-between px-2.5 py-1 text-[10px] font-bold text-slate-400 hover:text-slate-600 uppercase tracking-wider font-mono rounded select-none transition-colors group">
                 <span class="flex items-center gap-1.5 group-hover:text-slate-700 transition-colors">
                     Store
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                 </span>
                 <svg class="w-3 h-3 text-slate-400 transition-transform duration-200" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>

@@ -44,9 +44,8 @@ class DashboardController extends Controller
         $recentArticles = Article::with('author')->latest()->take(5)->get();
         $recentMessages = ContactMessage::latest()->take(5)->get();
         $recentOrders = Order::with('items')->latest()->take(5)->get();
-        $siteSettings = SiteSetting::all()->groupBy('group');
 
-        return view('admin.dashboard.index', compact('stats', 'origins', 'recentArticles', 'recentMessages', 'recentOrders', 'siteSettings'));
+        return view('admin.dashboard.index', compact('stats', 'origins', 'recentArticles', 'recentMessages', 'recentOrders'));
     }
 
     public function updateSettings(Request $request)
