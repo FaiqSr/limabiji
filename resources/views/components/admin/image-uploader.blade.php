@@ -73,8 +73,8 @@ $initial = old($name, $value);
 
     {{-- Preview --}}
     <div x-show="imageUrl" x-cloak class="mb-4">
-        <div class="relative inline-block">
-            <img :src="imageUrl" alt="Preview" class="w-56 h-36 object-cover rounded-lg border border-slate-200 shadow-sm">
+        <div class="relative inline-block w-full">
+            <img :src="imageUrl" alt="Preview" class="w-full h-36 object-cover rounded-lg border border-slate-200 shadow-sm ">
             <button type="button" @click="clearImage"
                 class="absolute -top-2 -right-2 bg-rose-500 text-white rounded-lg w-6 h-6 flex items-center justify-center hover:bg-rose-600 transition-colors shadow-2xs">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,8 +85,8 @@ $initial = old($name, $value);
     </div>
 
     {{-- Upload button --}}
-    <div class="flex flex-wrap items-center gap-3">
-        <label class="btn btn-secondary text-xs py-2 px-4 cursor-pointer inline-flex items-center gap-2 mb-0">
+    <div class="flex flex-wrap items-center gap-3 w-full">
+        <label class="btn btn-secondary text-xs py-2 px-4 cursor-pointer inline-flex items-center gap-2 mb-0 w-full">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
             </svg>

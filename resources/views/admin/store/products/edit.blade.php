@@ -5,21 +5,42 @@
 @section('content')
 <div class="max-w-5xl mx-auto space-y-6">
 
-    <!-- Header Toolbar -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary text-xs py-2 px-3">
-                &larr; Back to Products
+    <!-- Sticky Top Action Bar -->
+    <div class="mb-6 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary text-xs py-2 px-3 shrink-0" title="Back to Products list">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span class="hidden sm:inline">Back</span>
             </a>
-            <div>
-                <h3 class="text-base font-bold text-slate-900">Edit Product: {{ $product->name }}</h3>
-                <p class="text-xs text-slate-500">Update specifications, multi-weight prices, tasting notes, and stock.</p>
+
+            <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                    <h3 class="text-sm font-bold text-slate-900 truncate">
+                        {{ $product->name }}
+                    </h3>
+                    <span class="text-[10px] font-bold font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 uppercase shrink-0">
+                        {{ $product->category }}
+                    </span>
+                    @if ($product->is_featured)
+                        <span class="px-1.5 py-0.2 text-[9px] font-bold rounded bg-amber-50 text-amber-700 border border-amber-200 font-mono uppercase shrink-0">
+                            Featured
+                        </span>
+                    @endif
+                </div>
+                <p class="text-[11px] text-slate-500 font-mono truncate">
+                    /store/{{ $product->slug }}
+                </p>
             </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0">
             <a href="{{ url('store/' . $product->slug) }}" target="_blank" class="btn btn-secondary text-xs py-2 px-3">
-                View on Store &rarr;
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                <span>View on Store</span>
             </a>
         </div>
     </div>
