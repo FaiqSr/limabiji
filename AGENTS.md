@@ -1,7 +1,7 @@
 # AGENTS.md — Lima Biji
 
 > Compact instruction file for AI coding agents working on **Lima Biji** —
-> a Laravel landing page + admin CMS for a coffee brand (bilingual EN/ID).
+> a Laravel specialty coffee landing page + storefront + admin CMS (bilingual EN/ID).
 >
 > If this file conflicts with a direct instruction from the user (Faiq / "Cel"),
 > the user wins.
@@ -45,6 +45,8 @@ npm run build          # build frontend to public/build
 ```bash
 php artisan test --filter=ArticleTest
 php artisan test tests/Feature/Admin/ArticleTest.php
+php artisan test tests/Feature/Admin/ProductTest.php
+php artisan test tests/Feature/Admin/OrderTest.php
 php artisan test --filter=test_can_view_news_index
 ```
 
@@ -62,7 +64,7 @@ php artisan pint --test  →  php artisan test  →  npm run build
 
 - `bootstrap/app.php` loads `routes/admin.php` inside `withRouting(... then: ...)` using the
   Route facade (no callback parameter). Do not change this pattern without user confirmation.
-- `routes/web.php` — public landing pages + sitemap + locale switch.
+- `routes/web.php` — public landing pages, storefront (`/store`, `/store/{slug}`), checkout (`/checkout`), RajaOngkir region/cost API proxies, Midtrans webhook (`POST /payment/midtrans/webhook`), sitemap, and locale switch.
 - `routes/admin.php` — all admin routes under `/admin`, protected by `auth` + `editor.or.admin`.
   The `/admin/users/*` sub-group adds `admin` middleware.
 - Auth login/logout lives in `routes/admin.php` (not `routes/web.php`), handled by
@@ -91,26 +93,48 @@ Spatie permission package. Middleware checks via `in_array($user->role, [...])`.
 
 | Entry                | Purpose       | Palette                                   | Fonts              |
 |----------------------|---------------|-------------------------------------------|--------------------|
-| `resources/css/app.css`     | Landing page  | Dark forest + roasted coffee; primary `#069F80` | Bebas Neue + Rubik |
-| `resources/css/admin.css`   | Admin dashboard | Clean minimalist slate; nordic green `#079f81`   | Inter               |
+| `resources/css/app.css`     | Landing & Storefront | Dark forest + roasted coffee; primary `#069F80` | Bebas Neue + Rubik |
+| `resources/css/admin.css`   | Admin dashboard      | Clean minimalist slate; nordic green `#079f81`   | Inter               |
 
 Landing views use Tailwind utility classes + custom component classes from `app.css`
 (`nav-link`, `section-title`, `card-solid`, `article-body`, `animate-marquee`).
-Admin views use custom CSS classes from `admin.css` (`btn`, `btn-primary`, `card-modern`,
-`table-modern`, `stat-card`, `badge-*`).
+Admin views use custom CSS classes from `admin.css` (`btn`, `btn-primary`, `btn-secondary`,
+`card-modern`, `table-modern`, `stat-card`, `badge-*`).
+
+### Admin Layout & Sidebar Architecture
+
+- Sidebar (`resources/views/components/admin/sidebar.blade.php`) uses collapsible accordion categories:
+  - **Overview**: Dashboard, Analytics
+  - **Store**: Products, Orders
+  - **Agritech & Export**: Origins, Export Map, Process Steps
+  - **Content & Stories**: News, Categories, Testimonials, Certificates, FAQs
+  - **Inquiries & Media**: Messages, Media
+  - **System**: Settings, Users (Admin only)
+- Categories auto-expand if their child routes are currently active.
+- Detail/Edit views use sticky top action bars with `rounded-2xl` glass containers and quick navigation.
+
+### Store & E-Commerce Subsystem
+
+- **Products**: Specialty coffee catalog with multi-weight pricing (`200g`, `500g`, `1kg`), roast levels, tasting notes, SCA cupping scores, and stock tracking.
+- **Cart**: LocalStorage + session-backed via `CartService`.
+- **Checkout & Logistics**: Dynamic RajaOngkir (Komerce) API integration with cascading Province &rarr; City &rarr; District selectors, real-time courier rate calculation (JNE, SiCepat, J&T, etc.), and local offline DB models (`Province`, `City`, `District`).
+- **Payments**: Midtrans Core API (QRIS, BCA VA, Mandiri Bill, BNI/BRI VA, Permata, GoPay, ShopeePay) with automated status updates via webhook.
+- **Fulfillment**: Orders store `shipping_status` (`unfulfilled`, `processing`, `shipped`, `delivered`, `cancelled`), `tracking_number` (resi), and fulfillment timestamps.
 
 ### Bilingual content
 
-- `lang/en/` and `lang/id/` each contain `nav.php` and `landing.php` translation files.
+- `lang/en/` and `lang/id/` contain `nav.php`, `landing.php`, and `store.php` translation files.
 - Locale is set via `SetLocale` middleware (session/cookie) and switched via `POST /locale`.
 - New public-facing content must be provided in both EN and ID.
 
 ### Toggle-active pattern
 
-Three resources use `POST /{resource}/{id}/toggle-active`:
+Five resources use `POST /{resource}/{id}/toggle-active` or `toggle-featured`:
 - `InnovationStepController::toggleActive`
 - `CertificateController::toggleActive`
 - `FaqController::toggleActive`
+- `ProductController::toggleActive`
+- `ProductController::toggleFeatured`
 
 Follow the same pattern when adding similar features.
 
@@ -120,9 +144,10 @@ Follow the same pattern when adding similar features.
 
 - `phpunit.xml` sets `DB_DATABASE=":memory:"` — tests use in-memory SQLite and never touch
   the file DB.
-- Admin feature tests use `RefreshDatabase` + `$this->seed()` in `setUp()`, then act as
-  the seeded admin user: `User::where('role', 'admin')->first()`.
-- Test files mirror the controller structure: `tests/Feature/Admin/{Name}Test.php`.
+- Admin feature tests use `RefreshDatabase` in `setUp()`, then act as admin (`User::factory()->create(['role' => 'admin'])`) or editor.
+- Test files mirror the controller structure:
+  - `tests/Feature/Admin/{Name}Test.php`
+  - `tests/Feature/Store/{Name}Test.php`
 - Always add tests for new admin features; minimum: verify editor vs admin access.
 
 ---
@@ -134,6 +159,7 @@ Follow the same pattern when adding similar features.
 - **Never modify `.env`** — tell the user if something needs changing there.
 - `FILESYSTEM_DISK=local` by default (media stored in `storage/app/public/`).
 - A custom `GET /storage/{path}` route serves files from `storage/app/public/` (no symlink required).
+- Regional data can be seeded using `php artisan rajaongkir:import-regions`.
 
 ---
 
@@ -165,4 +191,4 @@ Admin login: `http://localhost:8000/admin/login`
 
 ---
 
-*Last verified: 2026-08-22 against commit 232265d*
+*Last verified: 2026-08-27 against branch feat/add-store-dashboard*

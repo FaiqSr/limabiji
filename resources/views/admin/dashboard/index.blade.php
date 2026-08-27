@@ -32,11 +32,11 @@
             </div>
 
             <!-- Quick Action Command Group -->
-            <div class="flex flex-wrap items-center gap-2">
-                <a href="{{ route('admin.products.create') }}" class="btn btn-primary text-xs py-2 px-3.5 shadow-2xs">
+            <div class="grid grid-cols-2 items-center gap-2">
+                <a href="{{ route('admin.products.create') }}" class="btn btn-secondary text-xs py-2 px-3.5 shadow-2xs">
                     + New Product
                 </a>
-                <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary text-xs py-2 px-3">
+                <a href="{{ route('admin.orders.index') }}" class="btn btn-primary text-xs py-2 px-3">
                     View Orders
                 </a>
                 <a href="{{ route('admin.news.create') }}" class="btn btn-secondary text-xs py-2 px-3">
@@ -149,13 +149,13 @@
 
     <!-- STORE ORDERS OVERVIEW -->
     <div class="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
-        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div class="p-4 border-b border-slate-100 flex items-center justify-between gap-2">
             <div>
                 <h3 class="text-sm font-bold text-slate-900">Recent Store Orders & Fulfillment</h3>
                 <p class="text-xs text-slate-500 mt-0.5">Latest online purchases, payment confirmations, and courier dispatches.</p>
             </div>
             <a href="{{ route('admin.orders.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900 flex items-center gap-1">
-                Manage All Orders &rarr;
+                Manage Orders &rarr;
             </a>
         </div>
 
@@ -220,79 +220,9 @@
         </div>
     </div>
 
-    <!-- SIGNATURE ELEMENT: Agritech Origin & Cupping Score Matrix -->
-    <div class="bg-white rounded-lg border border-slate-200 shadow-2xs overflow-hidden">
-        <div class="p-4 border-b border-slate-100 flex items-center justify-between">
-            <div>
-                <h3 class="text-sm font-bold text-slate-900">Agritech Coffee Origins Matrix</h3>
-                <p class="text-xs text-slate-500 mt-0.5">Specialty civet coffee micro-lot profiles & cupping scores.</p>
-            </div>
-            <a href="{{ route('admin.origins.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900 flex items-center gap-1">
-                Manage Origins &rarr;
-            </a>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="table-modern">
-                <thead>
-                    <tr>
-                        <th>Origin Name</th>
-                        <th>Province</th>
-                        <th>Cupping Score</th>
-                        <th>Altitude</th>
-                        <th>Fermentation Process</th>
-                        <th>Harvest Window</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($origins as $origin)
-                    <tr>
-                        <td class="font-semibold text-slate-900 text-xs">
-                            <a href="{{ route('admin.origins.edit', $origin) }}" class="hover:text-emerald-700 transition-colors">
-                                {{ $origin->name }}
-                            </a>
-                        </td>
-                        <td class="text-xs text-slate-600 font-medium">{{ $origin->province }}</td>
-                        <td>
-                            <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1">
-                                <svg class="w-3 h-3 text-emerald-600 fill-current" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                </svg>
-                                <span>{{ $origin->score ?: '85+' }}</span>
-                            </span>
-                        </td>
-                        <td class="font-mono text-xs text-slate-600">{{ $origin->altitude }}</td>
-                        <td class="text-xs text-slate-700 font-medium">{{ $origin->process }}</td>
-                        <td class="font-mono text-xs text-slate-500">{{ $origin->harvest }}</td>
-                        <td>
-                            @if ($origin->is_active)
-                                <span class="inline-flex items-center gap-1 text-[10px] font-bold font-mono uppercase px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                    Active
-                                </span>
-                            @else
-                                <span class="inline-flex items-center gap-1 text-[10px] font-bold font-mono uppercase px-2 py-0.5 rounded bg-slate-100 text-slate-500 border border-slate-200">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                    Inactive
-                                </span>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" class="text-center py-8 text-slate-400 text-xs">
-                            No coffee origins registered in matrix.
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
 
     <!-- BOTTOM GRID: Recent Inquiries, Recent News Articles & Top Page Traffic -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Recent Inquiries Feed -->
         <div class="card-modern p-4">
             <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
@@ -351,27 +281,6 @@
             </div>
         </div>
 
-        <!-- Top Pages Analytics Matrix -->
-        <div class="card-modern p-4">
-            <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
-                <h3 class="text-sm font-bold text-slate-900">Top Pages (7D)</h3>
-                <a href="{{ route('admin.analytics.index') }}" class="text-xs font-semibold text-slate-700 hover:text-slate-900">Analytics &rarr;</a>
-            </div>
-            <div class="space-y-2">
-                @forelse($stats['top_pages'] as $pageItem)
-                <div class="p-2.5 rounded-lg bg-slate-50 border border-slate-200/80 flex items-center justify-between font-mono text-xs">
-                    <span class="text-slate-800 font-medium truncate">/{{ $pageItem['page'] ?? '' }}</span>
-                    <span class="px-2 py-0.5 rounded bg-white text-slate-700 font-semibold border border-slate-200 shrink-0 text-[11px]">
-                        {{ number_format($pageItem['views'] ?? 0) }} views
-                    </span>
-                </div>
-                @empty
-                <div class="p-6 text-center text-xs text-slate-400">
-                    No analytics recorded.
-                </div>
-                @endforelse
-            </div>
-        </div>
     </div>
 
 
