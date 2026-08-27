@@ -2,74 +2,197 @@
 @extends('layouts.store')
 
 @php
-    $locale = app()->getLocale();
-    $displayName = $product->getNameForLocale($locale);
-    $displayDescription = $product->getDescriptionForLocale($locale);
-    $tastingNotes = $product->tasting_notes ?: [];
+    $locale          = app()->getLocale();
+    $displayName     = $product->getNameForLocale($locale);
+    $displayDesc     = $product->getDescriptionForLocale($locale);
+    $displayDescription = $displayDesc; // alias kept for content section
+    $tastingNotes    = $product->tasting_notes ?: [];
     $recommendedBrews = $product->recommended_brews ?: ['v60', 'espresso'];
+
+    // SEO helpers
+    $metaDesc        = Str::limit(strip_tags($displayDesc), 160);
+    $productImage    = $product->image ?: asset('assets/images/limabiji/toko.webp');
+    $canonicalUrl    = url()->current();
+    $lowestPrice     = (int) $product->base_price_200g;
+    $isInStock       = ($product->stock > 0);
+    $availSchema     = $isInStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock';
+
+    // Rich title: «Name — Roast · Process | Lima Biji Agritech»
+    $roastLabel      = ucwords(str_replace('_', ' ', $product->roast_level ?? ''));
+    $richTitle       = $displayName
+        . ($roastLabel ? ' — ' . $roastLabel : '')
+        . ($product->process ? ' · ' . $product->process : '')
+        . ' | Lima Biji Agritech';
+
+    // Build multi-Offer array (one per weight variant)
+    $offerItems = [];
+    foreach (['200g' => $product->base_price_200g, '500g' => $product->price_500g, '1kg' => $product->price_1kg] as $wt => $price) {
+        if ((int) $price > 0) {
+            $offerItems[] = [
+                '@type'         => 'Offer',
+                'name'          => $displayName . ' (' . $wt . ')',
+                'url'           => $canonicalUrl,
+                'priceCurrency' => 'IDR',
+                'price'         => (int) $price,
+                'priceValidUntil' => now()->addMonths(3)->toDateString(),
+                'availability'  => $availSchema,
+                'itemCondition' => 'https://schema.org/NewCondition',
+                'seller' => [
+                    '@type' => 'Organization',
+                    'name'  => 'Lima Biji Agritech',
+                    'url'   => url('/'),
+                ],
+            ];
+        }
+    }
+
+    // Product schema node
+    $productSchema = [
+        '@type'       => 'Product',
+        '@id'         => $canonicalUrl . '#product',
+        'name'        => $displayName,
+        'description' => strip_tags($displayDesc),
+        'image'       => [$productImage],
+        'sku'         => 'LB-' . str_pad($product->id, 4, '0', STR_PAD_LEFT),
+        'brand'       => [
+            '@type' => 'Brand',
+            'name'  => 'Lima Biji Agritech',
+        ],
+        'category'    => ucfirst($product->category ?? 'Specialty Coffee'),
+        'offers'      => $offerItems ?: [
+            '@type'         => 'Offer',
+            'url'           => $canonicalUrl,
+            'priceCurrency' => 'IDR',
+            'price'         => $lowestPrice,
+            'availability'  => $availSchema,
+            'itemCondition' => 'https://schema.org/NewCondition',
+        ],
+    ];
+
+    // Optionally add aggregateRating from SCA score (mapped 0-100 to 1-5)
+    if ($product->sca_score) {
+        $ratingValue = round(($product->sca_score - 50) / 10, 1);
+        $ratingValue = max(1.0, min(5.0, $ratingValue));
+        $productSchema['aggregateRating'] = [
+            '@type'       => 'AggregateRating',
+            'ratingValue' => $ratingValue,
+            'bestRating'  => 5,
+            'worstRating' => 1,
+            'ratingCount' => 1,
+            'description' => 'SCA Cupping Score: ' . $product->sca_score . '/100',
+        ];
+    }
+
+    // Optionally enrich with tasting notes as keywords
+    if (!empty($tastingNotes)) {
+        $productSchema['keywords'] = implode(', ', $tastingNotes);
+    }
 @endphp
 
-@push('title', $displayName . ': Lima Biji Agritech')
+@push('title', $richTitle)
 
 @push('meta')
-    <meta name="description" content="{{ Str::limit(strip_tags($displayDescription), 160) }}">
-    <meta property="og:title" content="{{ $displayName }}: Lima Biji Agritech">
-    <meta property="og:description" content="{{ Str::limit(strip_tags($displayDescription), 160) }}">
+    {{-- Core --}}
+    <meta name="description" content="{{ $metaDesc }}">
+    <meta name="keywords" content="{{ implode(', ', array_filter([$displayName, $product->origin, $product->process, $roastLabel, 'specialty coffee', 'kopi specialty', 'Lima Biji'])) }}">
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    {{-- Open Graph — Product --}}
     <meta property="og:type" content="product">
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="og:image" content="{{ $product->image ?: asset('favicon.ico') }}">
-    <meta name="twitter:title" content="{{ $displayName }}: Lima Biji Agritech">
-    <meta name="twitter:description" content="{{ Str::limit(strip_tags($displayDescription), 160) }}">
-    <meta name="twitter:image" content="{{ $product->image ?: asset('favicon.ico') }}">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $richTitle }}">
+    <meta property="og:description" content="{{ $metaDesc }}">
+    <meta property="og:url" content="{{ $canonicalUrl }}">
+    <meta property="og:image" content="{{ $productImage }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ $displayName }} — Lima Biji Agritech">
+    <meta property="product:price:amount" content="{{ $lowestPrice }}">
+    <meta property="product:price:currency" content="IDR">
+    <meta property="product:availability" content="{{ $isInStock ? 'in stock' : 'out of stock' }}">
+    <meta property="product:condition" content="new">
+    <meta property="product:brand" content="Lima Biji Agritech">
+    @if ($product->category)
+        <meta property="product:category" content="{{ ucfirst($product->category) }} Coffee">
+    @endif
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $richTitle }}">
+    <meta name="twitter:description" content="{{ $metaDesc }}">
+    <meta name="twitter:image" content="{{ $productImage }}">
+    <meta name="twitter:image:alt" content="{{ $displayName }} — Lima Biji Agritech">
+    <meta name="twitter:label1" content="Price (from)">
+    <meta name="twitter:data1" content="Rp {{ number_format($lowestPrice, 0, ',', '.') }}">
+    <meta name="twitter:label2" content="Availability">
+    <meta name="twitter:data2" content="{{ $isInStock ? 'In Stock' : 'Out of Stock' }}">
 @endpush
 
 @push('schema')
     <script type="application/ld+json">
         {!! json_encode([
             '@context' => 'https://schema.org',
-            '@graph' => [
+            '@graph'   => [
+
+                // 1. Organization (publisher)
                 [
-                    '@type' => 'Product',
-                    '@id' => url()->current() . '#product',
-                    'name' => $displayName,
-                    'description' => $displayDescription,
-                    'image' => [$product->image ?: asset('favicon.ico')],
-                    'sku' => 'LB-' . $product->id,
-                    'offers' => [
-                        '@type' => 'Offer',
-                        'url' => url()->current(),
-                        'priceCurrency' => 'IDR',
-                        'price' => $product->base_price_200g,
-                        'availability' => 'https://schema.org/InStock',
+                    '@type'       => 'Organization',
+                    '@id'         => url('/') . '#organization',
+                    'name'        => 'Lima Biji Agritech',
+                    'url'         => url('/'),
+                    'logo'        => asset('favicon.ico'),
+                    'description' => 'Specialty coffee producer & roaster specializing in enzymatic bio-fermentation processing from single-origin Indonesian farms.',
+                    'contactPoint' => [
+                        '@type'       => 'ContactPoint',
+                        'contactType' => 'customer service',
+                        'availableLanguage' => ['Indonesian', 'English'],
                     ],
                 ],
+
+                // 2. WebPage
+                [
+                    '@type'           => 'WebPage',
+                    '@id'             => $canonicalUrl . '#webpage',
+                    'url'             => $canonicalUrl,
+                    'name'            => $richTitle,
+                    'description'     => $metaDesc,
+                    'inLanguage'      => $locale === 'id' ? 'id-ID' : 'en-US',
+                    'isPartOf'        => ['@id' => url('/') . '#website'],
+                    'breadcrumb'      => ['@id' => $canonicalUrl . '#breadcrumb'],
+                    'about'           => ['@id' => $canonicalUrl . '#product'],
+                    'primaryImageOfPage' => ['@type' => 'ImageObject', 'url' => $productImage],
+                ],
+
+                // 3. Product
+                $productSchema,
+
+                // 4. BreadcrumbList
                 [
                     '@type' => 'BreadcrumbList',
-                    '@id' => url()->current() . '#breadcrumb',
+                    '@id'   => $canonicalUrl . '#breadcrumb',
                     'itemListElement' => [
                         [
-                            '@type' => 'ListItem',
+                            '@type'    => 'ListItem',
                             'position' => 1,
-                            'name' => $locale === 'id' ? 'Beranda' : 'Home',
-                            'item' => url('/'),
+                            'name'     => $locale === 'id' ? 'Beranda' : 'Home',
+                            'item'     => url('/'),
                         ],
                         [
-                            '@type' => 'ListItem',
+                            '@type'    => 'ListItem',
                             'position' => 2,
-                            'name' => $locale === 'id' ? 'Toko' : 'Store',
-                            'item' => route('store.index'),
+                            'name'     => $locale === 'id' ? 'Toko Kopi' : 'Coffee Store',
+                            'item'     => route('store.index'),
                         ],
                         [
-                            '@type' => 'ListItem',
+                            '@type'    => 'ListItem',
                             'position' => 3,
-                            'name' => $displayName,
-                            'item' => url()->current(),
+                            'name'     => $displayName,
+                            'item'     => $canonicalUrl,
                         ],
                     ],
                 ],
+
             ],
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
     </script>
 @endpush
 

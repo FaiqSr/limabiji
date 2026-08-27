@@ -39,4 +39,19 @@
 @endif
     </url>
 @endforeach
+
+@foreach ($products as $product)
+    <url>
+        <loc>{{ $product['url'] }}</loc>
+        <lastmod>{{ $product['lastmod'] }}</lastmod>
+        <changefreq>{{ $product['changefreq'] }}</changefreq>
+        <priority>{{ $product['priority'] }}</priority>
+@if (!empty($product['image']))
+        <image:image>
+            <image:loc>{{ $product['image'] }}</image:loc>
+            <image:title>{{ $product['title'] }}</image:title>
+        </image:image>
+@endif
+    </url>
+@endforeach
 </urlset>
