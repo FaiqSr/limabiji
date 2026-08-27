@@ -166,7 +166,7 @@
 
         {{-- Products Grid --}}
         @if ($products->isNotEmpty())
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
                 @foreach ($products as $product)
                     @php
                         $displayName = $product->getNameForLocale($locale);
@@ -175,7 +175,7 @@
                     <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/90 hover:border-primary/50 transition-colors flex flex-col group shadow-sm hover:shadow-md">
 
                         {{-- Product Thumbnail Image --}}
-                        <div class="relative h-56 sm:h-64 bg-slate-100 overflow-hidden">
+                        <div class="relative h-40 sm:h-48 bg-slate-100 overflow-hidden">
                             <img src="{{ $product->image ?: asset('assets/images/limabiji/toko.webp') }}"
                                 alt="{{ $displayName }}"
                                 loading="lazy" decoding="async"
@@ -183,28 +183,28 @@
                             <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent"></div>
 
                             {{-- Category & SCA Score Badges --}}
-                            <div class="absolute top-3 left-3 flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 rounded-lg bg-white/95 backdrop-blur-xs border border-slate-200 text-[10px] font-mono font-bold uppercase text-slate-800 shadow-xs">
+                            <div class="absolute top-2 left-2 flex flex-wrap gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md bg-white/95 backdrop-blur-xs border border-slate-200 text-[9px] font-mono font-bold uppercase text-slate-800 shadow-xs">
                                     {{ ucfirst($product->category) }}
                                 </span>
                                 @if ($product->sca_score)
-                                    <span class="px-2.5 py-1 rounded-lg bg-primary/95 backdrop-blur-xs text-[10px] font-mono font-bold uppercase text-white shadow-xs">
+                                    <span class="px-2 py-0.5 rounded-md bg-primary/95 backdrop-blur-xs text-[9px] font-mono font-bold uppercase text-white shadow-xs">
                                         {{ $product->sca_score }} SCA
                                     </span>
                                 @endif
                             </div>
 
                             @if ($product->is_featured)
-                                <div class="absolute top-3 right-3">
-                                    <span class="px-2.5 py-1 rounded-lg bg-secondary text-white text-[10px] font-mono font-bold uppercase shadow-xs">
+                                <div class="absolute top-2 right-2">
+                                    <span class="px-2 py-0.5 rounded-md bg-secondary text-white text-[9px] font-mono font-bold uppercase shadow-xs">
                                         Signature
                                     </span>
                                 </div>
                             @endif
 
-                            <div class="absolute bottom-3 left-3 right-3">
-                                <span class="text-[11px] text-white font-mono flex items-center gap-1.5 drop-shadow-sm">
-                                    <svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="absolute bottom-2 left-2 right-2">
+                                <span class="text-[10px] text-white font-mono flex items-center gap-1.5 drop-shadow-sm truncate">
+                                    <svg class="w-3 h-3 text-emerald-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     </svg>
                                     {{ $product->origin ?: 'Specialty Micro Lot' }}
@@ -213,21 +213,21 @@
                         </div>
 
                         {{-- Card Content --}}
-                        <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
                             <div>
-                                <h3 class="font-display text-xl sm:text-2xl text-slate-900 uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-1">
+                                <h3 class="font-display text-lg sm:text-xl text-slate-900 uppercase tracking-tight group-hover:text-primary transition-colors line-clamp-1">
                                     <a href="{{ route('store.show', $product->slug) }}">{{ $displayName }}</a>
                                 </h3>
 
-                                <p class="text-slate-600 text-xs line-clamp-2 mt-2 leading-relaxed">
+                                <p class="text-slate-600 text-xs line-clamp-2 mt-1.5 leading-relaxed">
                                     {{ $product->getDescriptionForLocale($locale) }}
                                 </p>
 
                                 {{-- Tasting Notes Tags --}}
                                 @if (!empty($tastingNotes))
-                                    <div class="flex flex-wrap gap-1.5 mt-3">
+                                    <div class="flex flex-wrap gap-1.5 mt-2.5">
                                         @foreach (array_slice($tastingNotes, 0, 3) as $note)
-                                            <span class="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 text-[10px] font-medium text-slate-700">
+                                            <span class="px-1.5 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 text-[9px] font-medium text-slate-700">
                                                 {{ $note }}
                                             </span>
                                         @endforeach
@@ -236,17 +236,17 @@
                             </div>
 
                             {{-- Price & Actions --}}
-                            <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-3 mt-auto">
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3 mt-auto">
                                 <div>
-                                    <p class="text-[10px] text-slate-400 uppercase font-mono tracking-wider">Starts from</p>
-                                    <p class="font-display text-2xl text-slate-900 leading-none mt-0.5">
+                                    <p class="text-[9px] text-slate-400 uppercase font-mono tracking-wider">Starts from</p>
+                                    <p class="font-display text-xl text-slate-900 leading-none mt-0.5">
                                         {{ $product->getFormattedPrice('200g') }}
                                     </p>
                                 </div>
 
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-1.5">
                                     <a href="{{ route('store.show', $product->slug) }}"
-                                        class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors"
+                                        class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors"
                                         title="{{ __('store.view_detail') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -256,7 +256,7 @@
 
                                     <button type="button"
                                         onclick="LimaBijiCart.addItem({{ $product->id }}, '200g', 'whole_bean', 1)"
-                                        class="px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm cursor-pointer flex items-center gap-1.5">
+                                        class="px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-[11px] font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm cursor-pointer flex items-center gap-1.5">
                                         <span>+ Cart</span>
                                     </button>
                                 </div>
