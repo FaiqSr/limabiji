@@ -10,7 +10,9 @@ use App\Http\Controllers\Admin\ExportDestinationController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\InnovationStepController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\OriginController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
@@ -30,6 +32,22 @@ Route::middleware(['auth', 'editor.or.admin'])->prefix('admin')->name('admin.')-
     // Dashboard & Integrated Settings
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::put('/dashboard/settings', [DashboardController::class, 'updateSettings'])->name('dashboard.settings');
+
+    // Store: Products
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::post('/products/{product}/toggle-active', [ProductController::class, 'toggleActive'])->name('products.toggle-active');
+    Route::post('/products/{product}/toggle-featured', [ProductController::class, 'toggleFeatured'])->name('products.toggle-featured');
+
+    // Store: Orders
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}/shipping', [OrderController::class, 'updateShipping'])->name('orders.update-shipping');
+    Route::put('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('orders.update-payment-status');
 
     // Export Destinations Map
     Route::resource('export-destinations', ExportDestinationController::class)->except(['show']);
