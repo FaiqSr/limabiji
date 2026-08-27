@@ -108,6 +108,28 @@ class CartService
         return $subtotal;
     }
 
+    public function getTotalWeightGrams(): int
+    {
+        $cart = $this->getCart();
+        $total = 0;
+
+        foreach ($cart as $item) {
+            $grams = $this->weightToGrams((string) ($item['weight'] ?? '200g'));
+            $total += $grams * (int) ($item['quantity'] ?? 1);
+        }
+
+        return max(1, $total);
+    }
+
+    protected function weightToGrams(string $weight): int
+    {
+        return match (strtolower($weight)) {
+            '500g' => 500,
+            '1kg', '1000g' => 1000,
+            default => 200,
+        };
+    }
+
     public function getFormattedSubtotal(): string
     {
         return 'Rp '.number_format($this->getSubtotal(), 0, ',', '.');

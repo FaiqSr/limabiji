@@ -38,6 +38,14 @@ Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updat
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
+// RajaOngkir shipping helpers (server-side; never call RajaOngkir from the frontend)
+use App\Http\Controllers\RajaOngkirController;
+
+Route::get('/shipping/provinces', [RajaOngkirController::class, 'provinces'])->name('shipping.provinces');
+Route::get('/shipping/cities/{provinceId}', [RajaOngkirController::class, 'cities'])->name('shipping.cities');
+Route::get('/shipping/districts/{cityId}', [RajaOngkirController::class, 'districts'])->name('shipping.districts');
+Route::post('/shipping/cost', [RajaOngkirController::class, 'shippingCost'])->name('shipping.cost');
+
 // Checkout & Payment
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('store.checkout');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('store.checkout.process');

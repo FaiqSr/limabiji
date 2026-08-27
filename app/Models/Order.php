@@ -17,6 +17,9 @@ class Order extends Model
         'customer_phone',
         'shipping_address',
         'city',
+        'province',
+        'shipping_district_id',
+        'weight_grams',
         'postal_code',
         'courier',
         'notes',
@@ -42,6 +45,7 @@ class Order extends Model
         'payment_instructions' => 'array',
         'expires_at' => 'datetime',
         'paid_at' => 'datetime',
+        'weight_grams' => 'integer',
     ];
 
     public function items(): HasMany

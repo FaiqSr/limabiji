@@ -28,14 +28,17 @@ No CI workflows exist (no `.github/workflows/`). Verification is manual.
 ## Commands
 
 ```bash
-composer setup          # full bootstrap: install, .env copy, key:generate, migrate, npm install, npm build
-composer dev            # concurrent: artisan serve + queue:listen + pail + vite
-composer test           # config:clear then php artisan test
-php artisan test        # run test suite
-php artisan pint --test # check code style without changing files
-php artisan pint        # auto-format
-npm run build           # build frontend to public/build
+composer setup         # full bootstrap: install, .env copy, key:generate, migrate, npm install, npm build
+composer dev           # concurrent: artisan serve + queue:listen + pail + vite
+composer test          # config:clear then php artisan test
+php artisan test       # run test suite
+vendor\bin\pint --test # check code style WITHOUT changing files
+vendor\bin\pint        # auto-format
+npm run build          # build frontend to public/build
 ```
+
+> **Gotcha:** Pint is a Composer dev-dependency, **not** an Artisan command. `php artisan pint`
+> errors with `Command "pint" is not defined` — always run `vendor\bin\pint`.
 
 ### Running a single test
 
