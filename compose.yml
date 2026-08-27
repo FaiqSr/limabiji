@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Lima Biji — Docker Compose (development + production equivalent)
+#
+# Usage:
+#   cp .env.example .env          # fill in APP_KEY, Midtrans, RajaOngkir keys
+#   docker compose up --build -d
+#   docker compose exec app php artisan key:generate
+#   docker compose exec app php artisan migrate --force
+# ─────────────────────────────────────────────────────────────────────────────
+name: lima-biji
+
+services:
+
+  # ─── Application (PHP-FPM + Nginx + Queue Worker via Supervisor) ───────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: lima-biji:latest
+    container_name: lima-biji-app
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8080
+      DB_CONNECTION: sqlite
+      DB_DATABASE: /var/www/html/database/database.sqlite
+      # Session / Queue / Cache all use the SQLite DB
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: database
+      CACHE_STORE: database
+      LOG_CHANNEL: stderr
+
+    volumes:
+      # Persist SQLite database and uploaded media across container restarts
+      - sqlite_data:/var/www/html/database
+      - storage_data:/var/www/html/storage/app/public
+      # Hot-reload: mount source during local development
+      # (comment out for a fully built image test)
+      # - .:/var/www/html
+
+    ports:
+      - "80:80"      # Nginx on port 80 inside → host port 8080
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost/up || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  sqlite_data:
+    driver: local
+  storage_data:
+    driver: local

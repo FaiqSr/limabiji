@@ -1,0 +1,67 @@
+# ──────────────────────────────────────────────────
+# Lima Biji — .dockerignore
+#
+# Files listed here are excluded from the Docker
+# build context (speeds up build, prevents secrets
+# from leaking into the image).
+# ──────────────────────────────────────────────────
+
+# Git history
+.git
+.gitattributes
+.gitignore
+
+# Local environment files — NEVER bake secrets into the image
+.env
+.env.*
+!.env.example
+
+# Node build artefacts (rebuilt inside the node-builder stage)
+node_modules
+
+# PHP vendor (rebuilt inside the composer-builder stage)
+vendor
+
+# Frontend build output (produced by node-builder stage)
+# public/build   ← intentionally NOT ignored: copied from builder
+
+# IDE / editor configs
+.vscode
+.idea
+*.iml
+.editorconfig
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+# Docker files themselves (not needed in context)
+Dockerfile
+compose.yml
+docker/
+
+# Laravel log files
+storage/logs/*.log
+
+# PHPUnit cache & result files
+.phpunit.result.cache
+.phpunit.cache
+
+# CI / CD
+.github
+
+# Agent / AI tooling files
+.agents
+.hermes
+skills-lock.json
+AGENTS.md
+dashboard.design.md
+landing.DESIGN.md
+store.DESIGN.md
+
+# Test suite (not needed at runtime)
+tests
+phpunit.xml
+
+# README
+README.md
