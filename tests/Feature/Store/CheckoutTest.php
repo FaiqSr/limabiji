@@ -5,6 +5,7 @@ namespace Tests\Feature\Store;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class CheckoutTest extends TestCase
@@ -15,6 +16,16 @@ class CheckoutTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+
+        Http::fake([
+            '*/calculate/district/domestic-cost' => Http::response([
+                'meta' => ['message' => 'ok', 'code' => 200, 'status' => 'success'],
+                'data' => [
+                    ['name' => 'JNE', 'code' => 'jne', 'service' => 'REG', 'description' => 'Reguler', 'cost' => 18000, 'etd' => '2-3 days'],
+                    ['name' => 'J&T', 'code' => 'jnt', 'service' => 'EZ', 'description' => 'Express', 'cost' => 20000, 'etd' => '1-2 days'],
+                ],
+            ]),
+        ]);
     }
 
     public function test_checkout_redirects_when_cart_is_empty(): void
@@ -78,8 +89,10 @@ class CheckoutTest extends TestCase
             'customer_phone' => '081234567890',
             'shipping_address' => 'Jl. Pajajaran No. 10',
             'city' => 'Bogor',
+            'province' => 'JAWA BARAT',
+            'shipping_district_id' => 1376,
             'postal_code' => '16128',
-            'courier' => 'JNE REG',
+            'courier' => 'JNE::REG',
             'payment_method' => 'qris',
             'notes' => 'Testing order note',
         ]);
@@ -90,6 +103,10 @@ class CheckoutTest extends TestCase
         $this->assertEquals('qris', $order->payment_method_type);
         $this->assertNotEmpty($order->payment_instructions);
         $this->assertCount(1, $order->items);
+        $this->assertEquals(1376, (int) $order->shipping_district_id);
+        $this->assertEquals('JAWA BARAT', $order->province);
+        $this->assertEquals(18000, (int) $order->shipping_cost);
+        $this->assertEquals(1000, (int) $order->weight_grams);
 
         $response->assertRedirect('/order/status/'.$order->order_number);
     }
@@ -121,7 +138,9 @@ class CheckoutTest extends TestCase
             'customer_phone' => '081234567890',
             'shipping_address' => 'Jl. Pajajaran No. 10',
             'city' => 'Bogor',
-            'courier' => 'JNE REG',
+            'province' => 'JAWA BARAT',
+            'shipping_district_id' => 1376,
+            'courier' => 'JNE::REG',
             'payment_method' => 'unknown_method',
         ]);
 

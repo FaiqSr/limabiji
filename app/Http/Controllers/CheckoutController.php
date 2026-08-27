@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Services\CartService;
 use App\Services\PaymentGatewayService;
+use App\Services\RajaOngkirService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,18 +24,17 @@ class CheckoutController extends Controller
 
         $itemCount = $cartService->getItemCount();
         $subtotal = $cartService->getSubtotal();
-        $defaultCourier = 'JNE REG';
-        $defaultShippingCost = 25000;
-        $total = $subtotal + $defaultShippingCost;
+        $total = $subtotal; // shipping added dynamically after courier selection
         $paymentMethods = $paymentService->availableMethods();
 
-        return view('landingpages.store.checkout', compact('cart', 'itemCount', 'subtotal', 'defaultCourier', 'defaultShippingCost', 'total', 'paymentMethods'));
+        return view('landingpages.store.checkout', compact('cart', 'itemCount', 'subtotal', 'total', 'paymentMethods'));
     }
 
     public function process(
         Request $request,
         CartService $cartService,
-        PaymentGatewayService $paymentService
+        PaymentGatewayService $paymentService,
+        RajaOngkirService $rajaOngkir
     ): RedirectResponse|JsonResponse {
         $cart = $cartService->getCart();
         if (empty($cart)) {
@@ -51,8 +51,10 @@ class CheckoutController extends Controller
             'customer_phone' => 'required|string|max:30',
             'shipping_address' => 'required|string|max:500',
             'city' => 'required|string|max:100',
+            'province' => 'required|string|max:100',
+            'shipping_district_id' => 'required|integer|min:1',
             'postal_code' => 'nullable|string|max:10',
-            'courier' => 'required|string|in:JNE REG,J&T Express,SiCepat BEST,GoSend / Grab Instant',
+            'courier' => 'required|string',
             'payment_method' => 'required|string',
             'notes' => 'nullable|string|max:500',
         ]);
@@ -63,19 +65,34 @@ class CheckoutController extends Controller
         }
 
         $subtotal = $cartService->getSubtotal();
+        $weightGrams = $cartService->getTotalWeightGrams();
 
-        $shippingCosts = [
-            'JNE REG' => 25000,
-            'J&T Express' => 28000,
-            'SiCepat BEST' => 35000,
-            'GoSend / Grab Instant' => 45000,
+        // Server-side shipping cost: always re-query (cached upstream) and trust
+        // the result, never the value sent by the frontend.
+        $costs = $rajaOngkir->domesticCost((int) $validated['shipping_district_id'], $weightGrams);
+        [$courierName, $courierService] = array_pad(explode('::', (string) $validated['courier'], 2), 2, null);
+        $selected = collect($costs)->first(function ($row) use ($courierName, $courierService) {
+            return ($row['name'] ?? '') === $courierName && ($row['service'] ?? '') === $courierService;
+        });
+
+        if ($selected === null || ! isset($selected['cost'])) {
+            return back()
+                ->withErrors(['courier' => __('store.shipping_cost_not_available')])
+                ->withInput();
+        }
+
+        $shippingCost = (int) $selected['cost'];
+        $courierServiceLabel = [
+            'courier' => (string) ($selected['name'] ?? $courierName),
+            'service' => (string) ($selected['service'] ?? $courierService),
+            'description' => (string) ($selected['description'] ?? ''),
+            'etd' => (string) ($selected['etd'] ?? ''),
         ];
-        $shippingCost = $shippingCosts[$validated['courier']] ?? 25000;
         $totalAmount = $subtotal + $shippingCost;
 
         $orderNumber = 'LB-'.date('Ymd').'-'.strtoupper(substr(uniqid(), -5));
 
-        $order = DB::transaction(function () use ($validated, $orderNumber, $subtotal, $shippingCost, $totalAmount, $cart, $paymentMethod) {
+        $order = DB::transaction(function () use ($validated, $orderNumber, $subtotal, $shippingCost, $totalAmount, $weightGrams, $cart, $paymentMethod, $courierServiceLabel) {
             $order = Order::create([
                 'order_number' => $orderNumber,
                 'customer_name' => $validated['customer_name'],
@@ -83,8 +100,11 @@ class CheckoutController extends Controller
                 'customer_phone' => $validated['customer_phone'],
                 'shipping_address' => $validated['shipping_address'],
                 'city' => $validated['city'],
+                'province' => $validated['province'],
+                'shipping_district_id' => $validated['shipping_district_id'],
+                'weight_grams' => $weightGrams,
                 'postal_code' => $validated['postal_code'] ?? null,
-                'courier' => $validated['courier'],
+                'courier' => trim($courierServiceLabel['courier'].' '.$courierServiceLabel['service']),
                 'notes' => $validated['notes'] ?? null,
                 'subtotal' => $subtotal,
                 'shipping_cost' => $shippingCost,
