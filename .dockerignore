@@ -38,10 +38,18 @@ Thumbs.db
 # Docker files themselves (not needed in context)
 Dockerfile
 compose.yml
-docker/
+
+# docker/ IS needed in context (Dockerfile COPYs configs from it: php.ini,
+# nginx default.conf, supervisord.conf). Exclude ONLY tunnel secrets:
+docker/cloudflared/*.json
+docker/cloudflared/cert.pem
+docker/cloudflared/.cloudflared
 
 # Laravel log files
 storage/logs/*.log
+
+# Laravel runtime caches (regenerated on boot; stale copies reference dev-only packages)
+bootstrap/cache/*.php
 
 # PHPUnit cache & result files
 .phpunit.result.cache

@@ -48,9 +48,8 @@ RUN apk add --no-cache \
     # Intl / ICU
     icu-dev \
     icu-libs \
-    # SQLite
-    sqlite-dev \
-    sqlite \
+    # PostgreSQL
+    postgresql-dev \
     # Misc tools
     zip \
     unzip \
@@ -63,7 +62,8 @@ RUN apk add --no-cache \
         --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
         pdo \
-        pdo_sqlite \
+        pdo_pgsql \
+        pgsql \
         gd \
         intl \
         bcmath \
@@ -101,14 +101,11 @@ RUN rm -rf \
     tests \
     docker
 
-# Ensure SQLite database file exists and storage/bootstrap/cache are writable
-RUN touch database/database.sqlite \
-    && chown -R www-data:www-data \
-        database \
+# Ensure storage/bootstrap/cache are writable
+RUN chown -R www-data:www-data \
         storage \
         bootstrap/cache \
     && chmod -R 775 \
-        database \
         storage \
         bootstrap/cache
 

@@ -1,17 +1,18 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# Lima Biji — Docker Compose (development + production equivalent)
+# ─────────────────────────────────────────────────────────────
+# Lima Biji — Docker Compose
+# app (PHP-FPM + Nginx + queue via Supervisor) + db (PostgreSQL)
+# Tunnel Cloudflare via cloudflared.exe di HOST (bukan container).
 #
 # Usage:
-#   cp .env.example .env          # fill in APP_KEY, Midtrans, RajaOngkir keys
-#   docker compose up --build -d
-#   docker compose exec app php artisan key:generate
+#   docker compose up -d --build
 #   docker compose exec app php artisan migrate --force
-# ─────────────────────────────────────────────────────────────────────────────
+#   docker compose exec app php artisan db:seed --force   (pertama kali)
+# ─────────────────────────────────────────────────────────────
 name: lima-biji
 
 services:
 
-  # ─── Application (PHP-FPM + Nginx + Queue Worker via Supervisor) ───────────
+  # ─── Application (PHP-FPM + Nginx + Queue Worker via Supervisor) ─────────
   app:
     build:
       context: .
@@ -20,42 +21,76 @@ services:
     image: lima-biji:latest
     container_name: lima-biji-app
     restart: unless-stopped
-
     env_file:
       - .env
-
     environment:
-      APP_ENV: local
-      APP_DEBUG: "true"
-      APP_URL: http://localhost:8080
-      DB_CONNECTION: sqlite
-      DB_DATABASE: /var/www/html/database/database.sqlite
-      # Session / Queue / Cache all use the SQLite DB
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: "https://limabiji.faiqsr.my.id"
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_DATABASE: lima_biji
+      DB_USERNAME: lima_biji
+      DB_PASSWORD: "${DB_PASSWORD:-ganti-password-ini}"
       SESSION_DRIVER: database
       QUEUE_CONNECTION: database
       CACHE_STORE: database
       LOG_CHANNEL: stderr
-
     volumes:
-      # Persist SQLite database and uploaded media across container restarts
-      - sqlite_data:/var/www/html/database
       - storage_data:/var/www/html/storage/app/public
-      # Hot-reload: mount source during local development
-      # (comment out for a fully built image test)
-      # - .:/var/www/html
-
     ports:
-      - "80:80"      # Nginx on port 80 inside → host port 8080
-
+      - "80:80"
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost/up || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 20s
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ─── Database: PostgreSQL 17 ──────────────────────────────────────────────
+  db:
+    image: postgres:17-alpine
+    container_name: lima-biji-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lima_biji
+      POSTGRES_USER: lima_biji
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-ganti-password-ini}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lima_biji -d lima_biji"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── Cloudflare Named Tunnel → https://limabiji.faiqsr.my.id ──────────────
+  # Credentials: docker/cloudflared/<tunnel-uuid>.json + cert.pem (gitignored).
+  # One-time setup (host in WSL, run as root so the mount is writable):
+  #   docker run --rm --user root -e HOME=/etc/cloudflared \
+  #     -v $PWD/docker/cloudflared:/etc/cloudflared cloudflare/cloudflared tunnel login
+  #   docker run --rm --user root -e HOME=/etc/cloudflared \
+  #     -v $PWD/docker/cloudflared:/etc/cloudflared cloudflare/cloudflared tunnel create limabiji
+  #   docker run --rm --user root -e HOME=/etc/cloudflared \
+  #     -v $PWD/docker/cloudflared:/etc/cloudflared cloudflare/cloudflared tunnel route dns limabiji limabiji.faiqsr.my.id
+  #   chmod 644 docker/cloudflared/*.json docker/cloudflared/cert.pem
+  #   # edit docker/cloudflared/config.yml → credentials-file: /etc/cloudflared/<uuid>.json
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: lima-biji-cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    volumes:
+      - ./docker/cloudflared:/etc/cloudflared
+    depends_on:
+      - app
 
 volumes:
-  sqlite_data:
+  postgres_data:
     driver: local
   storage_data:
     driver: local
