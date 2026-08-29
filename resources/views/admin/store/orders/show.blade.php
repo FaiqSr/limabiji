@@ -3,10 +3,129 @@
 @section('page_title', 'Order Management & Fulfillment')
 
 @section('content')
-<div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- ==================== PRINT-ONLY INVOICE ==================== -->
+    <div class="invoice-print-only hidden">
+        <div class="invoice-doc">
+            <!-- 1. Store Info (Top Left) -->
+            <div class="invoice-header">
+                <div class="invoice-store">
+                    <div class="invoice-store-name">{{ $store['name'] }}</div>
+                    <div class="invoice-store-line">{{ $store['address'] }}</div>
+                    <div class="invoice-store-line">{{ $store['email'] }} &bull; {{ $store['phone'] }}</div>
+                </div>
+                <div class="invoice-title">&nbsp;</div>
+            </div>
+
+            <!-- 2. Document Title & Date -->
+            <div class="invoice-head">
+                <div class="invoice-title-big">INVOICE</div>
+                <div class="invoice-meta">
+                    <div class="invoice-meta-row">
+                        <span class="invoice-meta-label">Date Issued</span>
+                        <span class="invoice-meta-value">{{ $order->created_at->format('d M Y') }}</span>
+                    </div>
+                    <div class="invoice-meta-row">
+                        <span class="invoice-meta-label">Reference</span>
+                        <span class="invoice-meta-value">{{ $order->order_number }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Invoice Information -->
+            <div class="invoice-info-grid">
+                <div>
+                    <div class="invoice-section-label">Billed To</div>
+                    <div class="invoice-billto">
+                        <div class="invoice-billto-name">{{ $order->customer_name }}</div>
+                        <div class="invoice-billto-line">{{ $order->customer_email }}</div>
+                        <div class="invoice-billto-line">{{ $order->customer_phone }}</div>
+                        <div class="invoice-billto-address">{{ $order->shipping_address }}</div>
+                        <div class="invoice-billto-line">{{ $order->city }}{{ $order->province ? ', '.$order->province : '' }} {{ $order->postal_code }}</div>
+                    </div>
+                </div>
+                <div class="invoice-info-right">
+                    <div class="invoice-line">
+                        <span class="invoice-line-label">Invoice No.</span>
+                        <span class="invoice-line-value">{{ str_replace('LB-', 'INV-', $order->order_number) }}</span>
+                    </div>
+                    <div class="invoice-line">
+                        <span class="invoice-line-label">Order No.</span>
+                        <span class="invoice-line-value">{{ $order->order_number }}</span>
+                    </div>
+                    <div class="invoice-line">
+                        <span class="invoice-line-label">Payment Method</span>
+                        <span class="invoice-line-value">{{ $order->payment_method_type ?? $order->payment_method }}</span>
+                    </div>
+                    <div class="invoice-line">
+                        <span class="invoice-line-label">Courier</span>
+                        <span class="invoice-line-value">{{ $order->courier }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Purchased Items Table -->
+            <div class="invoice-section-label">Purchased Items</div>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th class="invoice-col-no">No</th>
+                        <th class="invoice-col-desc">Product / Description</th>
+                        <th class="invoice-col-qty">Qty</th>
+                        <th class="invoice-col-num">Unit Price</th>
+                        <th class="invoice-col-num">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($order->items as $item)
+                        <tr>
+                            <td class="invoice-col-no">{{ $loop->iteration }}</td>
+                            <td class="invoice-col-desc">
+                                {{ $item->product_name }}
+                                @if ($item->weight || $item->grind_size)
+                                    <div class="invoice-desc-sub">
+                                        @if ($item->weight){{ $item->weight }}@endif
+                                        @if ($item->grind_size) &bull; {{ ucfirst(str_replace('_', ' ', $item->grind_size)) }}@endif
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="invoice-col-qty">{{ $item->quantity }}</td>
+                            <td class="invoice-col-num">{{ 'Rp '.number_format($item->unit_price, 0, ',', '.') }}</td>
+                            <td class="invoice-col-num">{{ 'Rp '.number_format($item->subtotal, 0, ',', '.') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- 5. Payment Summary -->
+            <div class="invoice-summary">
+                <div class="invoice-summary-inner">
+                    <div class="invoice-summary-row">
+                        <span>Subtotal</span>
+                        <span>{{ $order->getFormattedSubtotal() }}</span>
+                    </div>
+                    <div class="invoice-summary-row">
+                        <span>Shipping</span>
+                        <span>{{ $order->getFormattedShipping() }}</span>
+                    </div>
+                    <div class="invoice-summary-row invoice-summary-total">
+                        <span>TOTAL PAYMENT</span>
+                        <span>{{ $order->getFormattedTotal() }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-footer">
+                <span>Thank you for your order.</span>
+            </div>
+        </div>
+    </div>
+    <!-- ==================== END PRINT-ONLY INVOICE ==================== -->
+
+    <div class="max-w-6xl mx-auto space-y-6 print:hidden">
 
     <!-- Sticky Top Action Bar -->
-    <div class="mb-6 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div  class="mb-6 bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3 min-w-0">
             <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary text-xs py-2 px-3 shrink-0" title="Back to Orders list">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -280,3 +399,134 @@
 
 </div>
 @endsection
+
+@push('print-styles')
+<style>
+    /* Sembunyikan invoice di tampilan layar desktop biasa */
+    .invoice-print-only {
+        display: none !important;
+    }
+
+    @media print {
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        /* 1. Print-isolasi: sembunyikan SEMUA konten halaman, tampilkan hanya invoice.
+           Menggunakan visibility (bukan display) agar ukuran/layout invoice & multi-page
+           tetap normal, sekaligus menjamin tidak ada elemen admin lain yang ikut tercetak. */
+        body * {
+            visibility: hidden !important;
+        }
+        .invoice-print-only,
+        .invoice-print-only * {
+            visibility: visible !important;
+        }
+
+        /* 2. Tempatkan invoice di puncak halaman dengan lebar penuh */
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+        }
+        .invoice-print-only {
+            display: block !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 12mm !important;
+            box-sizing: border-box !important;
+            color: #0f172a !important;
+            font-family: Georgia, 'Times New Roman', serif !important;
+        }
+
+        /* --- Sisa Style Desain Invoice Anda --- */
+        .invoice-doc { max-width: 100%; }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #079f81;
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+        }
+        .invoice-store-name { font-size: 20px; font-weight: 700; letter-spacing: -.3px; }
+        .invoice-store-line { font-size: 11px; color: #475569; margin-top: 2px; }
+
+        .invoice-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 22px;
+        }
+        .invoice-title-big { font-size: 34px; font-weight: 800; letter-spacing: 4px; color: #079f81; }
+
+        .invoice-meta { text-align: right; }
+        .invoice-meta-row { display: flex; gap: 18px; font-size: 11px; padding: 3px 0; }
+        .invoice-meta-label { color: #64748b; text-align: right; min-width: 90px; }
+        .invoice-meta-value { font-weight: 700; color: #0f172a; }
+
+        .invoice-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 26px;
+        }
+        .invoice-info-right { align-self: end; }
+
+        .invoice-section-label {
+            font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+            font-weight: 700; color: #64748b; margin-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;
+        }
+
+        .invoice-billto-name { font-weight: 700; font-size: 13px; }
+        .invoice-billto-line { font-size: 11px; color: #334155; margin-top: 2px; }
+        .invoice-billto-address { font-size: 11px; color: #334155; margin-top: 6px; white-space: pre-line; }
+
+        .invoice-line { display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0; }
+        .invoice-line-label { color: #64748b; }
+        .invoice-line-value { font-weight: 700; color: #0f172a; }
+
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+        .invoice-table th {
+            background: #079f81 !important;
+            color: #fff !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+            font-weight: 700; padding: 8px 10px; text-align: left;
+        }
+        .invoice-table td { font-size: 11px; padding: 9px 10px; border-bottom: 1px solid #e2e8f0; color: #1e293b; }
+        .invoice-table tbody tr:nth-child(even) { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+        .invoice-col-no { width: 6%; }
+        .invoice-col-desc { width: 52%; }
+        .invoice-col-qty { width: 10%; text-align: center; }
+        .invoice-col-num { text-align: right; }
+
+        .invoice-desc-sub { font-size: 10px; color: #64748b; margin-top: 2px; }
+
+        .invoice-summary { display: flex; justify-content: flex-end; margin-bottom: 26px; }
+        .invoice-summary-inner { width: 280px; }
+        .invoice-summary-row { display: flex; justify-content: space-between; font-size: 12px; padding: 5px 0; color: #334155; }
+        .invoice-summary-total {
+            border-top: 2px solid #079f81; margin-top: 6px; padding-top: 10px;
+            font-size: 14px; font-weight: 800; color: #0f172a;
+        }
+
+        .invoice-footer {
+            border-top: 1px solid #e2e8f0; padding-top: 12px; font-size: 10px;
+            color: #94a3b8; text-align: center;
+        }
+    }
+
+
+</style>
+@endpush
+

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -50,7 +51,14 @@ class OrderController extends Controller
     {
         $order->load(['items.product']);
 
-        return view('admin.store.orders.show', compact('order'));
+        $store = [
+            'name' => SiteSetting::get('site_name', 'id', SiteSetting::get('site_name', 'en', 'Lima Biji Agritech')),
+            'address' => SiteSetting::get('contact_address', 'id', 'Bogor, Jawa Barat, Indonesia'),
+            'email' => SiteSetting::get('contact_email', null, 'export@limabijiagritech.com'),
+            'phone' => SiteSetting::get('contact_phone', null, '+62 812 3456 7890'),
+        ];
+
+        return view('admin.store.orders.show', compact('order', 'store'));
     }
 
     public function updateShipping(Request $request, Order $order)

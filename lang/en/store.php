@@ -4,7 +4,7 @@ return [
     // Catalog
     'page_title' => 'Specialty Coffee Store: Lima Biji Agritech',
     'hero_label' => 'Direct from Origin',
-    'hero_heading' => 'SPECIALTY COFFEE<br>STORE & ROASTERY',
+    'hero_heading' => 'LIMA BIJI AGRITECH STORE',
     'hero_subheading' => 'Order freshly roasted specialty beans processed with enzymatic bio-fermentation. Whole beans or custom ground, shipped directly to your door.',
     'search_placeholder' => 'Search coffee name, notes, or origin...',
     'filter_all' => 'All Beans',
