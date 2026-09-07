@@ -12,6 +12,7 @@ use App\Models\InnovationStep;
 use App\Models\Origin;
 use App\Models\Product;
 use App\Models\Testimonial;
+use App\Rules\ReCaptcha;
 use Illuminate\Http\Request;
 
 class LandingPages extends Controller
@@ -97,13 +98,19 @@ class LandingPages extends Controller
 
     public function submitContact(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'company' => ['nullable', 'string', 'max:255'],
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:5000'],
-        ]);
+        ];
+
+        if (filled(config('services.recaptcha.secret_key'))) {
+            $rules['g-recaptcha-response'] = ['required', new ReCaptcha];
+        }
+
+        $validated = $request->validate($rules);
 
         ContactMessage::create($validated);
 

@@ -42,4 +42,9 @@ return [
         'methods' => env('MIDTRANS_ENABLED_METHODS') ? explode(',', env('MIDTRANS_ENABLED_METHODS')) : null,
     ],
 
+    'recaptcha' => [
+        'site_key' => env('RECAPTCHA_SITE_KEY', ''),
+        'secret_key' => env('RECAPTCHA_SECRET_KEY', ''),
+    ],
+
 ];
