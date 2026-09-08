@@ -2,11 +2,16 @@
 .DS_Store
 .env
 .env.backup
+.env.local
 .env.production
 .phpactor.json
 .phpunit.result.cache
 /.codex
 /.cursor/
+/.agents
+/.hermes
+/.claude
+/.opencode
 /.idea
 /.nova
 /.phpunit.cache
@@ -29,3 +34,4 @@ Thumbs.db
 # Cloudflare tunnel credentials (never commit)
 /docker/cloudflared/*.json
 /docker/cloudflared/cert.pem
+
