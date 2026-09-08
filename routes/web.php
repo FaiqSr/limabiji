@@ -51,8 +51,12 @@ Route::post('/shipping/cost', [RajaOngkirController::class, 'shippingCost'])->na
 // Checkout & Payment
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('store.checkout');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('store.checkout.process');
-Route::get('/order/status/{orderNumber}', [CheckoutController::class, 'status'])->name('store.order.status');
-Route::get('/payment/status/{orderNumber}', [CheckoutController::class, 'paymentStatus'])->name('store.order.payment-status');
+Route::get('/order/status/{orderNumber}', [CheckoutController::class, 'status'])
+    ->middleware('throttle:60,1')
+    ->name('store.order.status');
+Route::get('/payment/status/{orderNumber}', [CheckoutController::class, 'paymentStatus'])
+    ->middleware('throttle:60,1')
+    ->name('store.order.payment-status');
 Route::post('/order/simulate/{orderNumber}', [CheckoutController::class, 'simulatePayment'])->name('store.order.simulate');
 Route::post('/payment/midtrans/notification', [CheckoutController::class, 'notification'])->name('payment.midtrans.notification');
 
@@ -71,11 +75,20 @@ Route::post('/locale', function (Request $request) {
 })->name('locale.switch');
 
 Route::get('/storage/{path}', function (string $path) {
-    $filePath = storage_path('app/public/'.$path);
-
-    if (! file_exists($filePath) || is_dir($filePath)) {
+    // Defense-in-depth: reject any traversal segment outright.
+    if (str_contains($path, '..')) {
         abort(404);
     }
 
-    return response()->file($filePath);
+    $realPath = realpath(storage_path('app/public/'.$path));
+    $publicRoot = realpath(storage_path('app/public'));
+
+    if ($realPath === false || is_dir($realPath) || $publicRoot === false || ! str_starts_with($realPath, $publicRoot.DIRECTORY_SEPARATOR)) {
+        abort(404);
+    }
+
+    $response = response()->file($realPath);
+    $response->headers->set('X-Content-Type-Options', 'nosniff');
+
+    return $response;
 })->where('path', '.*');

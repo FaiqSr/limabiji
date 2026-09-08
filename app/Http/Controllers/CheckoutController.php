@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -91,10 +92,12 @@ class CheckoutController extends Controller
         $totalAmount = $subtotal + $shippingCost;
 
         $orderNumber = 'LB-'.date('Ymd').'-'.strtoupper(substr(uniqid(), -5));
+        $statusToken = Str::random(32);
 
-        $order = DB::transaction(function () use ($validated, $orderNumber, $subtotal, $shippingCost, $totalAmount, $weightGrams, $cart, $paymentMethod, $courierServiceLabel) {
+        $order = DB::transaction(function () use ($validated, $orderNumber, $statusToken, $subtotal, $shippingCost, $totalAmount, $weightGrams, $cart, $paymentMethod, $courierServiceLabel) {
             $order = Order::create([
                 'order_number' => $orderNumber,
+                'status_token' => $statusToken,
                 'customer_name' => $validated['customer_name'],
                 'customer_email' => $validated['customer_email'],
                 'customer_phone' => $validated['customer_phone'],
@@ -148,16 +151,40 @@ class CheckoutController extends Controller
                 'order_number' => $order->order_number,
                 'payment_method_type' => $order->payment_method_type,
                 'instructions' => $instructions,
-                'redirect_url' => route('store.order.status', $order->order_number),
+                'redirect_url' => $this->orderStatusUrl($order),
             ]);
         }
 
-        return redirect()->route('store.order.status', $order->order_number);
+        return redirect()->to($this->orderStatusUrl($order));
     }
 
-    public function status(string $orderNumber, PaymentGatewayService $paymentService): View
+    /**
+     * Public order status URL. A per-order token is appended so the
+     * customer's PII is only shown to someone holding the token.
+     */
+    protected function orderStatusUrl(Order $order): string
+    {
+        return $order->status_token
+            ? route('store.order.status', [$order->order_number, 'token' => $order->status_token])
+            : route('store.order.status', $order->order_number);
+    }
+
+    public function status(Request $request, string $orderNumber, PaymentGatewayService $paymentService): View
     {
         $order = Order::with('items')->where('order_number', $orderNumber)->firstOrFail();
+        $token = (string) $request->query('token', '');
+
+        $tokenValid = $order->status_token !== null
+            && $token !== ''
+            && hash_equals($order->status_token, $token);
+
+        // Without a valid token the page still renders, but the customer's
+        // phone number and full shipping address are withheld.
+        if (! $tokenValid) {
+            $order->customer_phone = null;
+            $order->shipping_address = null;
+        }
+
         $paymentMethodLabel = $paymentService->methodLabel((string) $order->payment_method_type);
 
         return view('landingpages.store.order-status', compact('order', 'paymentMethodLabel'));
@@ -168,10 +195,16 @@ class CheckoutController extends Controller
      * GET status so the page reflects the latest authoritative state.
      */
     public function paymentStatus(
+        Request $request,
         string $orderNumber,
         PaymentGatewayService $paymentService
     ): JsonResponse {
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
+
+        $token = (string) $request->query('token', '');
+        if ($order->status_token === null || $token === '' || ! hash_equals($order->status_token, $token)) {
+            abort(404);
+        }
 
         $paymentService->syncStatus($order);
         $order->refresh();
@@ -191,19 +224,24 @@ class CheckoutController extends Controller
         string $orderNumber,
         PaymentGatewayService $paymentService
     ): RedirectResponse {
+        // The payment simulator must never be reachable in production.
+        if (! app()->environment(['local', 'testing'])) {
+            abort(404);
+        }
+
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
         $action = $request->input('action', 'pay');
 
         if ($action === 'pay') {
             $paymentService->markAsPaid($order, 'SIMULATOR-'.strtoupper(substr(md5((string) time()), 0, 10)));
 
-            return redirect()->route('store.order.status', $order->order_number)
+            return redirect()->to($this->orderStatusUrl($order))
                 ->with('success', __('store.payment_simulated_success'));
         }
 
         $order->update(['payment_status' => 'failed']);
 
-        return redirect()->route('store.order.status', $order->order_number)
+        return redirect()->to($this->orderStatusUrl($order))
             ->with('error', __('store.payment_simulated_failed'));
     }
 

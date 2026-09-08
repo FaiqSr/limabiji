@@ -21,7 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->trustProxies(at: '*');
+        $trustedProxies = collect(explode(',', (string) env('TRUSTED_PROXIES', '')))
+            ->map(fn (string $proxy) => trim($proxy))
+            ->filter(fn (string $proxy) => $proxy !== '')
+            ->values()
+            ->all();
+
+        $middleware->trustProxies(at: $trustedProxies);
 
         $middleware->validateCsrfTokens(except: [
             'payment/midtrans/notification',

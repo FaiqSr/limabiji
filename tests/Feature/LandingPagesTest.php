@@ -56,7 +56,7 @@ class LandingPagesTest extends TestCase
         $response->assertSee('ENZYMATIC');
         $response->assertSee('CIVET PROCESS');
         $response->assertSee('Ethical Cherry Sourcing');
-        $response->assertSee('Enzyme Isolation & Formulation', false);
+        $response->assertSee('Enzyme Isolation & Formulation');
     }
 
     public function test_innovation_page_renders_steps_in_indonesian(): void
@@ -66,7 +66,7 @@ class LandingPagesTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Pengadaan Ceri Etis');
-        $response->assertSee('Isolasi & Formulasi Enzim', false);
+        $response->assertSee('Isolasi & Formulasi Enzim');
     }
 
     public function test_testimonials_page_renders_successfully(): void

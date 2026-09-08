@@ -307,12 +307,16 @@
                             <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-2">{{ __('store.order_customer') }}</p>
                             <p class="font-semibold text-slate-900">{{ $order->customer_name }}</p>
                             <p class="text-slate-600 mt-0.5 break-all">{{ $order->customer_email }}</p>
-                            <p class="text-slate-600">{{ $order->customer_phone }}</p>
+                            @if ($order->customer_phone)
+                                <p class="text-slate-600">{{ $order->customer_phone }}</p>
+                            @endif
                         </div>
                         <div class="min-w-0">
                             <p class="text-[11px] font-mono font-bold uppercase tracking-widest text-slate-400 mb-2">{{ __('store.order_shipping_to') }}</p>
-                            <p class="text-slate-600 leading-relaxed">{{ $order->shipping_address }}</p>
-                            <p class="text-slate-900 font-medium mt-1">{{ $order->city }}{{ $order->province ? ', ' . $order->province : '' }}{{ $order->postal_code ? " ({$order->postal_code})" : '' }}</p>
+                            @if ($order->shipping_address)
+                                <p class="text-slate-600 leading-relaxed">{{ $order->shipping_address }}</p>
+                                <p class="text-slate-900 font-medium mt-1">{{ $order->city }}{{ $order->province ? ', ' . $order->province : '' }}{{ $order->postal_code ? " ({$order->postal_code})" : '' }}</p>
+                            @endif
                             <p class="text-slate-400 text-[11px] mt-1 font-mono">{{ __('store.order_courier') }}: {{ $order->courier }}</p>
                         </div>
                     </div>

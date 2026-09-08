@@ -4,6 +4,7 @@ namespace Tests\Feature\Store;
 
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
@@ -107,8 +108,9 @@ class CheckoutTest extends TestCase
         $this->assertEquals('JAWA BARAT', $order->province);
         $this->assertEquals(18000, (int) $order->shipping_cost);
         $this->assertEquals(1000, (int) $order->weight_grams);
+        $this->assertNotEmpty($order->status_token);
 
-        $response->assertRedirect('/order/status/'.$order->order_number);
+        $response->assertRedirect('/order/status/'.$order->order_number.'?token='.$order->status_token);
     }
 
     public function test_checkout_rejects_invalid_payment_method(): void
@@ -172,5 +174,84 @@ class CheckoutTest extends TestCase
         $order->refresh();
         $this->assertEquals('paid', $order->payment_status);
         $this->assertNotNull($order->paid_at);
+    }
+
+    public function test_simulate_payment_aborts_404_outside_local_testing(): void
+    {
+        app()->detectEnvironment(fn () => 'production');
+        $this->assertTrue(app()->environment('production'));
+
+        $order = Order::create([
+            'order_number' => 'LB-PROD-00001',
+            'customer_name' => 'Prod Tester',
+            'customer_email' => 'prod@example.com',
+            'customer_phone' => '081234567890',
+            'shipping_address' => 'Secret Address',
+            'city' => 'Jakarta',
+            'subtotal' => 100000,
+            'shipping_cost' => 25000,
+            'total_amount' => 125000,
+            'payment_method' => 'midtrans',
+            'payment_status' => 'pending',
+        ]);
+
+        $this->withoutMiddleware(PreventRequestForgery::class);
+
+        $this->post('/order/simulate/'.$order->order_number, ['action' => 'pay'])
+            ->assertStatus(404);
+
+        $order->refresh();
+        $this->assertEquals('pending', $order->payment_status);
+    }
+
+    public function test_status_page_hides_phone_and_address_without_token(): void
+    {
+        $order = Order::create([
+            'order_number' => 'LB-STATUS-00001',
+            'status_token' => 'topsecret-token-abc',
+            'customer_name' => 'Privacy Tester',
+            'customer_email' => 'privacy@example.com',
+            'customer_phone' => '0813999888777',
+            'shipping_address' => 'Jl. Rahasia No. 1, Jakarta',
+            'city' => 'Jakarta',
+            'subtotal' => 95000,
+            'shipping_cost' => 25000,
+            'total_amount' => 120000,
+            'payment_method' => 'midtrans',
+            'payment_method_type' => 'bca_va',
+            'payment_status' => 'pending',
+        ]);
+
+        $response = $this->get('/order/status/'.$order->order_number);
+
+        $response->assertStatus(200);
+        $response->assertSee($order->order_number);
+        $response->assertDontSee('0813999888777');
+        $response->assertDontSee('Jl. Rahasia No. 1, Jakarta');
+    }
+
+    public function test_status_page_shows_details_with_valid_token(): void
+    {
+        $order = Order::create([
+            'order_number' => 'LB-STATUS-00002',
+            'status_token' => 'topsecret-token-xyz',
+            'customer_name' => 'Privacy Tester',
+            'customer_email' => 'privacy@example.com',
+            'customer_phone' => '0813999888777',
+            'shipping_address' => 'Jl. Rahasia No. 1, Jakarta',
+            'city' => 'Jakarta',
+            'subtotal' => 95000,
+            'shipping_cost' => 25000,
+            'total_amount' => 120000,
+            'payment_method' => 'midtrans',
+            'payment_method_type' => 'bca_va',
+            'payment_status' => 'pending',
+        ]);
+
+        $response = $this->get('/order/status/'.$order->order_number.'?token='.$order->status_token);
+
+        $response->assertStatus(200);
+        $response->assertSee('0813999888777');
+        $response->assertSee('Jl. Rahasia No. 1, Jakarta');
     }
 }
