@@ -173,4 +173,33 @@ class ProductTest extends TestCase
 
         $this->assertDatabaseMissing('products', ['id' => $product->id]);
     }
+
+    public function test_can_store_product_with_green_bean_roast_level(): void
+    {
+        $payload = [
+            'name' => 'Gayo Green Bean Lot A',
+            'slug' => 'gayo-green-bean-lot-a',
+            'category' => 'arabika',
+            'origin' => 'Aceh Gayo',
+            'roast_level' => 'green_bean',
+            'base_price_200g' => 65000,
+            'price_500g' => 150000,
+            'price_1kg' => 280000,
+            'stock' => 25,
+            'is_active' => 1,
+        ];
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.store'), $payload);
+
+        $response->assertRedirect(route('admin.products.index'));
+        $this->assertDatabaseHas('products', ['slug' => 'gayo-green-bean-lot-a', 'roast_level' => 'green_bean']);
+    }
+
+    public function test_create_page_offers_green_bean_option(): void
+    {
+        $response = $this->actingAs($this->admin)->get(route('admin.products.create'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Green bean');
+    }
 }
