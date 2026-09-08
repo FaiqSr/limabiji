@@ -169,4 +169,126 @@ return [
     'footer_privacy' => 'Kebijakan Privasi',
     'footer_terms' => 'Syarat & Ketentuan',
     'footer_export' => 'Eksportir Kopi Luwak Enzimatik Specialty',
+
+    // Halaman Kebijakan Privasi
+    'privacy_label' => 'PRIVASI',
+    'privacy_heading' => 'KEBIJAKAN PRIVASI',
+    'privacy_last_updated' => 'Terakhir diperbarui: 8 September 2026',
+    'privacy_meta' => 'Baca bagaimana Lima Biji Agritech mengumpulkan, menggunakan, dan melindungi data pribadi Anda.',
+    'privacy_contact_heading' => '12. Hubungi Kami',
+    'privacy_contact_body' => 'Untuk pertanyaan, permintaan, atau pengaduan terkait Kebijakan Privasi ini, hubungi kami di:',
+    'privacy_sections' => [
+        [
+            'heading' => '1. Pendahuluan',
+            'body' => 'Lima Biji Agritech ("kami") mengoperasikan situs web ini, termasuk halaman beranda, berita, dan toko kopi spesialti. Kebijakan Privasi ini menjelaskan data pribadi apa yang kami kumpulkan saat Anda menjelajah atau berinteraksi dengan kami, alasan pengumpulannya, serta pilihan yang Anda miliki atas data tersebut. Dengan menggunakan situs web ini, Anda menyetujui praktik yang dijelaskan di sini.',
+        ],
+        [
+            'heading' => '2. Informasi yang Kami Kumpulkan',
+            'items' => [
+                'Informasi yang Anda berikan: nama, alamat email, perusahaan, dan pesan saat Anda mengisi formulir kontak; serta nama, email, nomor telepon, alamat pengiriman, dan detail pesanan saat Anda melakukan pemesanan.',
+                'Informasi yang dikumpulkan secara otomatis: data penggunaan dasar non-identitas dari analitik kunjungan halaman kami, serta cookie seperti preferensi bahasa (EN/ID) dan isi keranjang belanja (disimpan di local storage peramban Anda).',
+                'Informasi pembayaran: kami tidak menyimpan detail kartu atau rekening bank Anda. Pembayaran diproses oleh penyedia pembayaran kami, Midtrans.',
+            ],
+        ],
+        [
+            'heading' => '3. Cara Kami Menggunakan Informasi Anda',
+            'body' => 'Kami menggunakan informasi Anda untuk menanggapi pertanyaan, memproses dan mengirimkan pesanan, menghitung ongkos kirim (melalui RajaOngkir), menangani pembayaran dan pengembalian dana, menyediakan pelacakan pesanan, meningkatkan situs web dan produk kami, mencegah penipuan, serta memenuhi kewajiban hukum.',
+        ],
+        [
+            'heading' => '4. Cookie & Local Storage',
+            'body' => 'Kami menggunakan sejumlah kecil cookie dan entri local storage yang diperlukan agar situs web berfungsi: mengingat pilihan bahasa Anda dan menyimpan keranjang belanja. Kami juga menggunakan analitik kunjungan halaman yang menghormati privasi untuk memahami lalu lintas secara agregat. Anda dapat menghapus atau memblokir cookie melalui pengaturan peramban, tetapi sebagian fitur situs (seperti keranjang dan pengalih bahasa) mungkin tidak berfungsi.',
+        ],
+        [
+            'heading' => '5. Layanan Pihak Ketiga',
+            'body' => 'Kami hanya membagikan data yang diperlukan untuk menjalankan fitur tertentu kepada pemroses tepercaya: Midtrans (pemrosesan pembayaran), RajaOngkir (penghitungan ongkos kirim dan logistik pengiriman), serta Google reCAPTCHA (pelindungan dari spam pada formulir kontak). Setiap pemroses menerapkan kebijakan privasi dan pengamanan datanya masing-masing.',
+        ],
+        [
+            'heading' => '6. Berbagi & Pengungkapan Data',
+            'body' => 'Kami tidak pernah menjual data pribadi Anda. Data hanya dibagikan kepada penyedia layanan yang disebutkan di atas, kepada instansi pemerintah atau penegak hukum bila diwajibkan oleh hukum, atau untuk melindungi hak hukum kami.',
+        ],
+        [
+            'heading' => '7. Keamanan Data',
+            'body' => 'Kami melindungi data Anda dengan enkripsi HTTPS selama transmisi, pembatasan akses ke data pribadi, dan peninjauan keamanan rutin pada aplikasi kami. Tidak ada metode transmisi atau penyimpanan yang 100% aman, tetapi kami berupaya keras melindungi informasi Anda.',
+        ],
+        [
+            'heading' => '8. Penyimpanan Data',
+            'body' => 'Kami menyimpan pesan kontak dan catatan pesanan selama diperlukan untuk melayani Anda, menjaga catatan, dan memenuhi kewajiban hukum atau perpajakan. Setelah periode tersebut, data pribadi dihapus atau dianonimkan.',
+        ],
+        [
+            'heading' => '9. Hak-Hak Anda',
+            'items' => [
+                'Mengakses salinan data pribadi yang kami simpan tentang Anda.',
+                'Meminta perbaikan data yang tidak akurat atau tidak lengkap.',
+                'Meminta penghapusan data Anda, dengan tunduk pada kewajiban hukum.',
+                'Menolak atau membatasi pemrosesan tertentu, serta menarik persetujuan kapan saja.',
+                'Mengajukan pengaduan kepada otoritas pelindungan data yang berwenang.',
+            ],
+        ],
+        [
+            'heading' => '10. Privasi Anak',
+            'body' => 'Situs web kami tidak ditujukan untuk anak di bawah 16 tahun, dan kami tidak secara sengaja mengumpulkan data pribadi mereka. Jika Anda meyakini ada anak yang memberikan data kepada kami, hubungi kami dan data tersebut akan kami hapus.',
+        ],
+        [
+            'heading' => '11. Perubahan Kebijakan Ini',
+            'body' => 'Kami dapat memperbarui kebijakan ini dari waktu ke waktu. Versi terbaru selalu tampil di halaman ini beserta tanggal "pembaruan terakhir"-nya. Untuk perubahan penting, kami akan menyorotnya di situs web.',
+        ],
+    ],
+
+    // Halaman Syarat & Ketentuan
+    'terms_label' => 'LEGAL',
+    'terms_heading' => 'SYARAT & KETENTUAN',
+    'terms_last_updated' => 'Terakhir diperbarui: 8 September 2026',
+    'terms_meta' => 'Ketentuan yang mengatur penggunaan situs web dan toko Lima Biji Agritech.',
+    'terms_contact_heading' => '13. Hubungi Kami',
+    'terms_contact_body' => 'Untuk pertanyaan terkait Syarat & Ketentuan ini, hubungi kami di:',
+    'terms_sections' => [
+        [
+            'heading' => '1. Penerimaan Syarat & Ketentuan Ini',
+            'body' => 'Dengan mengakses atau menggunakan situs web ini, termasuk toko kopi spesialti dan layanan kami, Anda menyetujui Syarat & Ketentuan ini serta Kebijakan Privasi kami. Jika Anda tidak menyetujui sebagian atau seluruhnya, mohon jangan gunakan situs web ini.',
+        ],
+        [
+            'heading' => '2. Penggunaan Situs Web',
+            'body' => 'Anda dapat menjelajah dan menggunakan situs web ini hanya untuk tujuan yang sah. Anda setuju untuk tidak menyalahgunakan situs web, mengganggu pengoperasiannya, mencoba mengakses sistemnya tanpa izin, atau mengumpulkan data pengguna lain tanpa persetujuan.',
+        ],
+        [
+            'heading' => '3. Produk & Pesanan',
+            'body' => 'Deskripsi produk, harga, berat, tingkat roasting, dan ketersediaan dapat berubah sewaktu-waktu tanpa pemberitahuan. Kami dapat menolak atau membatalkan pesanan, termasuk ketika harga atau informasi produk tidak tepat. Dengan melakukan pemesanan, Anda menyatakan bahwa detail yang Anda berikan akurat dan lengkap.',
+        ],
+        [
+            'heading' => '4. Harga & Pembayaran',
+            'body' => 'Harga tercantum dalam Rupiah (IDR) dan sudah termasuk pajak yang berlaku kecuali dinyatakan lain. Pembayaran diproses secara aman oleh penyedia pembayaran kami, Midtrans. Pesanan dikonfirmasi hanya setelah pembayaran diterima dengan sukses.',
+        ],
+        [
+            'heading' => '5. Pengiriman & Pengantaran',
+            'body' => 'Pesanan dikirim melalui mitra penyedia logistik kami, dengan ongkos kirim yang dihitung melalui RajaOngkir. Perkiraan waktu pengiriman bersifat indikatif dan bergantung pada kurir serta tujuan yang dipilih. Risiko kerugian beralih kepada Anda setelah paket diserahkan kepada kurir.',
+        ],
+        [
+            'heading' => '6. Pengembalian & Pengembalian Dana',
+            'body' => 'Jika pesanan Anda tiba dalam keadaan rusak, tidak sesuai, atau cacat, hubungi kami sesegera mungkin dan kami akan menindaklanjutinya sesuai peraturan pelindungan konsumen yang berlaku. Produk khusus dan mudah rusak mungkin tidak dapat dikembalikan setelah dikirim.',
+        ],
+        [
+            'heading' => '7. Kekayaan Intelektual',
+            'body' => 'Semua konten di situs web ini, termasuk teks, grafis, logo, gambar, dan data produk, dimiliki oleh Lima Biji Agritech atau pemberi lisensinya dan dilindungi oleh hukum kekayaan intelektual yang berlaku. Anda tidak boleh menyalin, menggandakan, atau mendistribusikannya tanpa izin tertulis dari kami.',
+        ],
+        [
+            'heading' => '8. Kiriman & Komunikasi Pengguna',
+            'body' => 'Jika Anda mengirimkan pesan, testimoni, atau konten lain kepada kami, Anda memberikan kami lisensi non-eksklusif dan bebas royalti untuk menggunakannya guna mengoperasikan dan mempromosikan bisnis kami. Anda menyatakan bahwa kiriman Anda tidak melanggar hak pihak ketiga mana pun.',
+        ],
+        [
+            'heading' => '9. Penyangkalan Jaminan',
+            'body' => 'Situs web dan kontennya disediakan "sebagaimana adanya" tanpa jaminan apa pun, baik tersurat maupun tersirat, termasuk namun tidak terbatas pada jaminan tersirat atas kelayakan dagang dan kesesuaian untuk tujuan tertentu. Kami tidak menjamin bahwa situs web ini akan berjalan tanpa gangguan, tepat waktu, atau bebas dari kesalahan.',
+        ],
+        [
+            'heading' => '10. Batasan Tanggung Jawab',
+            'body' => 'Sejauh diizinkan oleh hukum yang berlaku, Lima Biji Agritech tidak bertanggung jawab atas kerugian tidak langsung, insidental, khusus, atau konsekuensial, maupun hilangnya keuntungan, yang timbul dari penggunaan situs web, produk kami, atau Syarat & Ketentuan ini.',
+        ],
+        [
+            'heading' => '11. Hukum yang Berlaku',
+            'body' => 'Syarat & Ketentuan ini diatur oleh hukum Republik Indonesia. Sengketa apa pun yang timbul dari ketentuan ini tunduk pada yurisdiksi eksklusif pengadilan di Bogor, Jawa Barat, Indonesia.',
+        ],
+        [
+            'heading' => '12. Perubahan Syarat & Ketentuan',
+            'body' => 'Kami dapat memperbarui Syarat & Ketentuan ini dari waktu ke waktu. Versi terbaru selalu tampil di halaman ini beserta tanggal "pembaruan terakhir"-nya. Penggunaan situs web yang berlanjut setelah perubahan dipublikasikan berarti penerimaan Anda atas Syarat yang telah direvisi.',
+        ],
+    ],
 ];

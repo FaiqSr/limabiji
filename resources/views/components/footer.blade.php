@@ -53,8 +53,8 @@
         <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-light-grey/50">
             <p>&copy; {{ date('Y') }} Lima Biji Agritech. {{ __('landing.footer_rights') }}</p>
             <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-white transition-colors">{{ __('landing.footer_privacy') }}</a>
-                <a href="#" class="hover:text-white transition-colors">{{ __('landing.footer_terms') }}</a>
+                <a href="{{ route('landingpages.privacy') }}" class="hover:text-white transition-colors">{{ __('landing.footer_privacy') }}</a>
+                <a href="{{ route('landingpages.terms') }}" class="hover:text-white transition-colors">{{ __('landing.footer_terms') }}</a>
             </div>
         </div>
     </div>

@@ -84,6 +84,62 @@ class LandingPagesTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_privacy_policy_page_renders_successfully(): void
+    {
+        $response = $this->get('/privacy');
+
+        $response->assertStatus(200);
+        $response->assertSee('PRIVACY POLICY');
+        $response->assertSee('Information We Collect');
+        $response->assertSee(route('landingpages.privacy'), false);
+    }
+
+    public function test_privacy_policy_page_renders_in_indonesian(): void
+    {
+        $this->post('/locale', ['locale' => 'id']);
+        $response = $this->get('/privacy');
+
+        $response->assertStatus(200);
+        $response->assertSee('KEBIJAKAN PRIVASI');
+        $response->assertSee('Informasi yang Kami Kumpulkan');
+    }
+
+    public function test_homepage_footer_links_to_privacy_policy(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('href="'.url('/privacy').'"', false);
+    }
+
+    public function test_terms_of_use_page_renders_successfully(): void
+    {
+        $response = $this->get('/terms');
+
+        $response->assertStatus(200);
+        $response->assertSee('TERMS OF USE');
+        $response->assertSee('Intellectual Property');
+        $response->assertSee(route('landingpages.terms'), false);
+    }
+
+    public function test_terms_of_use_page_renders_in_indonesian(): void
+    {
+        $this->post('/locale', ['locale' => 'id']);
+        $response = $this->get('/terms');
+
+        $response->assertStatus(200);
+        $response->assertSee('SYARAT & KETENTUAN');
+        $response->assertSee('Kekayaan Intelektual');
+    }
+
+    public function test_homepage_footer_links_to_terms_of_use(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('href="'.url('/terms').'"', false);
+    }
+
     public function test_contact_page_renders_recaptcha_widget_when_configured(): void
     {
         config(['services.recaptcha.site_key' => 'test-site-key']);

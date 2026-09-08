@@ -25,6 +25,8 @@ class SitemapTest extends TestCase
         $this->assertStringContainsString(route('landingpages.innovation'), $response->getContent());
         $this->assertStringContainsString(route('landingpages.news'), $response->getContent());
         $this->assertStringContainsString(route('landingpages.contact'), $response->getContent());
+        $this->assertStringContainsString(route('landingpages.privacy'), $response->getContent());
+        $this->assertStringContainsString(route('landingpages.terms'), $response->getContent());
     }
 
     public function test_sitemap_includes_active_origins_and_published_articles(): void
