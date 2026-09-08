@@ -57,7 +57,7 @@ class ProductController extends Controller
     {
         $product = new Product;
         $categories = ['arabika', 'robusta', 'blend', 'experimental'];
-        $roastLevels = ['light', 'medium', 'medium_dark', 'dark'];
+        $roastLevels = ['light', 'medium', 'medium_dark', 'dark', 'green_bean'];
 
         return view('admin.store.products.create', compact('product', 'categories', 'roastLevels'));
     }
@@ -74,7 +74,7 @@ class ProductController extends Controller
             'origin' => ['nullable', 'string', 'max:255'],
             'altitude' => ['nullable', 'string', 'max:255'],
             'process' => ['nullable', 'string', 'max:255'],
-            'roast_level' => ['required', 'string', 'in:light,medium,medium_dark,dark'],
+            'roast_level' => ['required', 'string', 'in:light,medium,medium_dark,dark,green_bean'],
             'sca_score' => ['nullable', 'string', 'max:20'],
             'tasting_notes' => ['nullable', 'array'],
             'tasting_notes.*' => ['string'],
@@ -108,7 +108,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = ['arabika', 'robusta', 'blend', 'experimental'];
-        $roastLevels = ['light', 'medium', 'medium_dark', 'dark'];
+        $roastLevels = ['light', 'medium', 'medium_dark', 'dark', 'green_bean'];
 
         return view('admin.store.products.edit', compact('product', 'categories', 'roastLevels'));
     }
@@ -125,7 +125,7 @@ class ProductController extends Controller
             'origin' => ['nullable', 'string', 'max:255'],
             'altitude' => ['nullable', 'string', 'max:255'],
             'process' => ['nullable', 'string', 'max:255'],
-            'roast_level' => ['required', 'string', 'in:light,medium,medium_dark,dark'],
+            'roast_level' => ['required', 'string', 'in:light,medium,medium_dark,dark,green_bean'],
             'sca_score' => ['nullable', 'string', 'max:20'],
             'tasting_notes' => ['nullable', 'array'],
             'tasting_notes.*' => ['string'],
