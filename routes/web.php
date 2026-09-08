@@ -21,6 +21,8 @@ Route::get('/origin/{name}', [LandingPages::class, 'origins'])->name('landingpag
 Route::get('/testimonials', [LandingPages::class, 'testimonials'])->name('landingpages.testimonials');
 Route::get('/contact', [LandingPages::class, 'contact'])->name('landingpages.contact');
 Route::post('/contact', [LandingPages::class, 'submitContact'])->name('landingpages.contact.submit');
+Route::get('/privacy', [LandingPages::class, 'privacy'])->name('landingpages.privacy');
+Route::get('/terms', [LandingPages::class, 'terms'])->name('landingpages.terms');
 
 // --- Specialty Coffee Store & Marketplace ---
 use App\Http\Controllers\CartController;

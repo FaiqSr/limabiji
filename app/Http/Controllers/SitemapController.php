@@ -49,6 +49,18 @@ class SitemapController extends Controller
                 'priority' => '0.7',
             ],
             [
+                'url' => route('landingpages.privacy'),
+                'lastmod' => now()->startOfMonth()->toAtomString(),
+                'changefreq' => 'yearly',
+                'priority' => '0.2',
+            ],
+            [
+                'url' => route('landingpages.terms'),
+                'lastmod' => now()->startOfMonth()->toAtomString(),
+                'changefreq' => 'yearly',
+                'priority' => '0.2',
+            ],
+            [
                 'url' => route('store.index'),
                 'lastmod' => now()->startOfDay()->toAtomString(),
                 'changefreq' => 'daily',

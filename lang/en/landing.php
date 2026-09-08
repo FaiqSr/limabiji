@@ -169,4 +169,126 @@ return [
     'footer_privacy' => 'Privacy Policy',
     'footer_terms' => 'Terms of Use',
     'footer_export' => 'Specialty Enzymatic Civet Coffee Exporter',
+
+    // Privacy Policy Page
+    'privacy_label' => 'PRIVACY',
+    'privacy_heading' => 'PRIVACY POLICY',
+    'privacy_last_updated' => 'Last updated: September 8, 2026',
+    'privacy_meta' => 'Read how Lima Biji Agritech collects, uses, and protects your personal data.',
+    'privacy_contact_heading' => '12. Contact Us',
+    'privacy_contact_body' => 'For any questions, requests, or complaints regarding this Privacy Policy, contact us at:',
+    'privacy_sections' => [
+        [
+            'heading' => '1. Introduction',
+            'body' => 'Lima Biji Agritech ("we", "us", or "our") operates this website, including our landing pages, news, and specialty coffee store. This Privacy Policy explains what personal data we collect when you browse or interact with us, why we collect it, and the choices you have over it. By using this website you agree to the practices described here.',
+        ],
+        [
+            'heading' => '2. Information We Collect',
+            'items' => [
+                'Information you give us: your name, email address, company, and message when you use our contact form; and your name, email, phone number, shipping address, and order details when you place an order.',
+                'Information collected automatically: basic, non-identifying usage data from our page-view analytics, plus cookies such as your language preference (EN/ID) and your shopping-cart contents (kept in your browser\'s local storage).',
+                'Payment information: we do not store your card or bank details. Payments are processed by our payment provider, Midtrans.',
+            ],
+        ],
+        [
+            'heading' => '3. How We Use Your Information',
+            'body' => 'We use your information to respond to inquiries, process and deliver orders, calculate shipping rates (via RajaOngkir), handle payments and refunds, provide order tracking, improve our website and products, prevent fraud, and comply with legal obligations.',
+        ],
+        [
+            'heading' => '4. Cookies & Local Storage',
+            'body' => 'We use a small set of cookies and local storage entries that are necessary for the website to function: remembering your language choice and keeping your shopping cart. We also use privacy-respecting page-view analytics to understand aggregate traffic. You can delete or block cookies through your browser settings, but parts of the site (such as the cart and the language switch) may stop working.',
+        ],
+        [
+            'heading' => '5. Third-Party Services',
+            'body' => 'We share only the data needed to run specific features with trusted processors: Midtrans (payment processing), RajaOngkir (shipping rate calculation and delivery logistics), and Google reCAPTCHA (spam protection on our contact form). Each processor applies its own privacy policy and data-protection safeguards.',
+        ],
+        [
+            'heading' => '6. Data Sharing & Disclosure',
+            'body' => 'We never sell your personal data. We disclose it only to the service providers listed above, to government or law-enforcement bodies when required by law, or to protect our legal rights.',
+        ],
+        [
+            'heading' => '7. Data Security',
+            'body' => 'We protect your data with HTTPS encryption in transit, restricted access to personal data, and routine security reviews of our application. No method of transmission or storage is 100% secure, but we work hard to protect your information.',
+        ],
+        [
+            'heading' => '8. Data Retention',
+            'body' => 'We keep contact messages and order records for as long as needed to serve you, maintain records, and meet legal or tax obligations. After that period, personal data is deleted or anonymized.',
+        ],
+        [
+            'heading' => '9. Your Rights',
+            'items' => [
+                'Access a copy of the personal data we hold about you.',
+                'Ask us to correct inaccurate or incomplete data.',
+                'Request erasure of your data, subject to legal obligations.',
+                'Object to or restrict certain processing, and withdraw consent at any time.',
+                'Lodge a complaint with the relevant data-protection authority.',
+            ],
+        ],
+        [
+            'heading' => '10. Children\'s Privacy',
+            'body' => 'Our website is not directed at children under 16, and we do not knowingly collect their personal data. If you believe a child has provided us data, contact us and we will delete it.',
+        ],
+        [
+            'heading' => '11. Changes to This Policy',
+            'body' => 'We may update this policy from time to time. The latest version always appears on this page together with its "last updated" date. For significant changes we will highlight them on the website.',
+        ],
+    ],
+
+    // Terms of Use Page
+    'terms_label' => 'LEGAL',
+    'terms_heading' => 'TERMS OF USE',
+    'terms_last_updated' => 'Last updated: September 8, 2026',
+    'terms_meta' => 'The terms governing your use of the Lima Biji Agritech website and store.',
+    'terms_contact_heading' => '13. Contact Us',
+    'terms_contact_body' => 'For any questions about these Terms, contact us at:',
+    'terms_sections' => [
+        [
+            'heading' => '1. Acceptance of These Terms',
+            'body' => 'By accessing or using this website, including our specialty coffee store and services, you agree to these Terms of Use and to our Privacy Policy. If you do not agree with any part of them, please do not use the website.',
+        ],
+        [
+            'heading' => '2. Use of the Website',
+            'body' => 'You may browse and use the website only for lawful purposes. You agree not to misuse the website, interfere with its operation, attempt unauthorized access to its systems, or collect data about other users without consent.',
+        ],
+        [
+            'heading' => '3. Products & Orders',
+            'body' => 'Product descriptions, prices, weights, roast levels, and availability may change without prior notice. We may refuse or cancel orders, including when pricing or product information is incorrect. By placing an order you confirm that the details you provide are accurate and complete.',
+        ],
+        [
+            'heading' => '4. Pricing & Payment',
+            'body' => 'Prices are listed in Indonesian Rupiah (IDR) and include applicable taxes unless stated otherwise. Payments are processed securely by our payment provider, Midtrans. An order is confirmed only after payment is successfully received.',
+        ],
+        [
+            'heading' => '5. Shipping & Delivery',
+            'body' => 'Orders are delivered through our partner logistics providers, with shipping rates calculated via RajaOngkir. Estimated delivery times are indicative only and depend on the selected courier and destination. Risk of loss passes to you once the parcel is handed to the carrier.',
+        ],
+        [
+            'heading' => '6. Returns & Refunds',
+            'body' => 'If your order arrives damaged, incorrect, or defective, contact us as soon as possible and we will resolve the issue in accordance with applicable consumer-protection regulations. Custom and perishable goods may not be eligible for return once dispatched.',
+        ],
+        [
+            'heading' => '7. Intellectual Property',
+            'body' => 'All content on this website, including text, graphics, logos, images, and product data, is owned by Lima Biji Agritech or its licensors and is protected by applicable intellectual-property laws. You may not copy, reproduce, or redistribute it without our prior written permission.',
+        ],
+        [
+            'heading' => '8. User Submissions & Communications',
+            'body' => 'If you send us messages, testimonials, or other content, you grant us a non-exclusive, royalty-free license to use it to operate and promote our business. You confirm that your submissions do not infringe the rights of any third party.',
+        ],
+        [
+            'heading' => '9. Disclaimer of Warranties',
+            'body' => 'The website and its content are provided "as is" and "as available" without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability and fitness for a particular purpose. We do not guarantee that the website will be uninterrupted, timely, or error-free.',
+        ],
+        [
+            'heading' => '10. Limitation of Liability',
+            'body' => 'To the maximum extent permitted by law, Lima Biji Agritech shall not be liable for any indirect, incidental, special, or consequential damages, or loss of profits, arising from your use of the website, our products, or these Terms.',
+        ],
+        [
+            'heading' => '11. Governing Law',
+            'body' => 'These Terms are governed by the laws of the Republic of Indonesia. Any dispute arising from them shall be subject to the exclusive jurisdiction of the courts of Bogor, West Java, Indonesia.',
+        ],
+        [
+            'heading' => '12. Changes to These Terms',
+            'body' => 'We may update these Terms from time to time. The latest version always appears on this page together with its "last updated" date. Your continued use of the website after changes are posted constitutes acceptance of the revised Terms.',
+        ],
+    ],
 ];

@@ -96,6 +96,16 @@ class LandingPages extends Controller
         return view('landingpages.contact');
     }
 
+    public function privacy()
+    {
+        return view('landingpages.privacy');
+    }
+
+    public function terms()
+    {
+        return view('landingpages.terms');
+    }
+
     public function submitContact(Request $request)
     {
         $rules = [
