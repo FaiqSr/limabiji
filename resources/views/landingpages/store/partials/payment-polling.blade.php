@@ -1,7 +1,7 @@
 {{-- resources/views/landingpages/store/partials/payment-polling.blade.php --}}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const pollUrl = '{{ route('store.order.payment-status', $order->order_number) }}';
+    const pollUrl = '{{ $order->status_token ? route('store.order.payment-status', [$order->order_number, 'token' => $order->status_token]) : route('store.order.payment-status', $order->order_number) }}';
     const reloadMs = 6000;
 
     // Copy-to-clipboard buttons

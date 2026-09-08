@@ -62,11 +62,11 @@ class MediaUploadTest extends TestCase
         Storage::disk('public')->assertExists($path);
     }
 
-    public function test_admin_can_upload_svg(): void
+    public function test_admin_cannot_upload_svg(): void
     {
         Storage::fake('public');
 
-        $svgContent = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 100 100"><!-- Comment --><circle cx="50" cy="50" r="50"/></svg>';
+        $svgContent = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>';
         $file = UploadedFile::fake()->createWithContent('icon.svg', $svgContent);
 
         $response = $this->actingAs($this->admin)->postJson(route('admin.media.upload'), [
@@ -74,12 +74,32 @@ class MediaUploadTest extends TestCase
             'context' => 'general',
         ]);
 
-        $response->assertStatus(200);
-        $path = $response->json('path');
-        Storage::disk('public')->assertExists($path);
+        $response->assertStatus(422);
+        $response->assertJson(['success' => false]);
+        Storage::disk('public')->assertMissing('general/icon.svg');
+    }
 
-        $storedSvg = Storage::disk('public')->get($path);
-        $this->assertStringNotContainsString('<!-- Comment -->', $storedSvg);
+    public function test_media_delete_rejects_outside_whitelisted_paths(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('articles/legit-image.jpg', 'img');
+
+        $traversal = $this->actingAs($this->admin)->deleteJson(route('admin.media.destroy'), [
+            'path' => '../../secrets/credentials.jpg',
+        ]);
+        $traversal->assertStatus(422);
+        $traversal->assertJson(['success' => false]);
+
+        $unsupported = $this->actingAs($this->admin)->deleteJson(route('admin.media.destroy'), [
+            'path' => 'articles/evil.svg',
+        ]);
+        $unsupported->assertStatus(422);
+
+        $legit = $this->actingAs($this->admin)->deleteJson(route('admin.media.destroy'), [
+            'path' => 'articles/legit-image.jpg',
+        ]);
+        $legit->assertStatus(200);
+        Storage::disk('public')->assertMissing('articles/legit-image.jpg');
     }
 
     public function test_image_optimizer_service_handles_resizing_large_images(): void

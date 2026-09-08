@@ -128,4 +128,48 @@ class ArticleTest extends TestCase
         $this->assertTrue($article->categories->contains($cat2));
         $this->assertFalse($article->categories->contains($cat1));
     }
+
+    public function test_article_html_sanitizer_preserves_safe_rich_text(): void
+    {
+        $article = new Article([
+            'content' => '<p>Hello <strong>World</strong> &amp; friends</p><ul><li>One</li></ul><a href="https://example.com" rel="noopener">Link</a>',
+        ]);
+
+        $html = $article->getHtmlContentForLocale('en');
+
+        $this->assertStringContainsString('<p>Hello <strong>World</strong> &amp; friends</p>', $html);
+        $this->assertStringContainsString('<ul><li>One</li></ul>', $html);
+        $this->assertStringContainsString('<a href="https://example.com" rel="noopener">Link</a>', $html);
+    }
+
+    public function test_article_html_sanitizer_strips_scripts_and_event_handlers(): void
+    {
+        $article = new Article([
+            'content' => '<p>Intro</p><script>alert(1)</script><p>Outro</p><img src="x.jpg" onerror="alert(2)"><a href="javascript:alert(3)">bad</a>',
+        ]);
+
+        $html = $article->getHtmlContentForLocale('en');
+
+        $this->assertStringNotContainsString('<script', $html);
+        $this->assertStringNotContainsString('alert(', $html);
+        $this->assertStringNotContainsString('onerror', $html);
+        $this->assertStringNotContainsString('javascript:', $html);
+        $this->assertStringContainsString('<p>Intro</p>', $html);
+        $this->assertStringContainsString('<p>Outro</p>', $html);
+    }
+
+    public function test_article_html_sanitizer_strips_disallowed_attributes(): void
+    {
+        $article = new Article([
+            'content' => '<p style="color:red" class="x" onclick="steal()">Text</p><img src="data:image/png;base64,AAAA" width="10">',
+        ]);
+
+        $html = $article->getHtmlContentForLocale('en');
+
+        $this->assertStringNotContainsString('style=', $html);
+        $this->assertStringNotContainsString('class=', $html);
+        $this->assertStringNotContainsString('onclick', $html);
+        $this->assertStringContainsString('<p>Text</p>', $html);
+        $this->assertStringContainsString('src="data:image/png;base64,AAAA"', $html);
+    }
 }

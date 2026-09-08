@@ -27,6 +27,7 @@ class MidtransPaymentTest extends TestCase
     {
         return Order::create(array_merge([
             'order_number' => 'LB-PAYTEST-'.strtoupper(substr(md5((string) time()), 0, 8)),
+            'status_token' => 'poll-secret-token-'.substr(md5((string) time()), 0, 8),
             'customer_name' => 'Payment Tester',
             'customer_email' => 'pay@example.com',
             'customer_phone' => '081234567890',
@@ -194,7 +195,7 @@ class MidtransPaymentTest extends TestCase
             ], 200),
         ]);
 
-        $response = $this->get(route('store.order.payment-status', $order->order_number));
+        $response = $this->get(route('store.order.payment-status', [$order->order_number, 'token' => $order->status_token]));
 
         $response->assertJson([
             'payment_status' => 'paid',
@@ -206,6 +207,20 @@ class MidtransPaymentTest extends TestCase
         $this->assertEquals('sync-5555', $order->payment_reference);
     }
 
+    public function test_status_polling_requires_matching_token(): void
+    {
+        $order = $this->createOrder(['payment_status' => 'pending']);
+
+        $this->get(route('store.order.payment-status', $order->order_number))
+            ->assertStatus(404);
+
+        $this->get(route('store.order.payment-status', [$order->order_number, 'token' => 'wrong-token']))
+            ->assertStatus(404);
+
+        $order->refresh();
+        $this->assertEquals('pending', $order->payment_status);
+    }
+
     public function test_webhook_route_is_exempt_from_csrf(): void
     {
         $reflection = new \ReflectionClass(PreventRequestForgery::class);
@@ -215,5 +230,46 @@ class MidtransPaymentTest extends TestCase
         $exempt = $property->getValue();
 
         $this->assertContains('payment/midtrans/notification', $exempt, 'Midtrans webhook route must be CSRF-exempt for server-to-server notifications.');
+    }
+
+    public function test_notification_without_signature_is_rejected_in_production_with_blank_key(): void
+    {
+        Config::set('services.midtrans.server_key', '');
+        app()->detectEnvironment(fn () => 'production');
+        $this->assertTrue(app()->environment('production'));
+
+        $order = $this->createOrder(['payment_status' => 'pending']);
+
+        $response = $this->post('/payment/midtrans/notification', [
+            'order_id' => $order->order_number,
+            'status_code' => '200',
+            'gross_amount' => '125000.00',
+            'transaction_status' => 'settlement',
+            'transaction_id' => 'no-signature-payload',
+        ]);
+
+        $response->assertJson(['status' => 'error']);
+        $order->refresh();
+        $this->assertEquals('pending', $order->payment_status);
+    }
+
+    public function test_notification_signature_is_skipped_in_testing_dev_mode(): void
+    {
+        Config::set('services.midtrans.server_key', '');
+        $this->assertTrue(app()->environment('testing'));
+
+        $order = $this->createOrder(['payment_status' => 'pending']);
+
+        $response = $this->post('/payment/midtrans/notification', [
+            'order_id' => $order->order_number,
+            'status_code' => '200',
+            'gross_amount' => '125000.00',
+            'transaction_status' => 'settlement',
+            'transaction_id' => 'dev-no-signature',
+        ]);
+
+        $response->assertJson(['status' => 'ok']);
+        $order->refresh();
+        $this->assertEquals('paid', $order->payment_status);
     }
 }

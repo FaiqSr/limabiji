@@ -37,9 +37,9 @@ class PaymentGatewayService
 
     public function __construct()
     {
-        $this->serverKey = (string) config('services.midtrans.server_key', env('MIDTRANS_SERVER_KEY', ''));
-        $this->clientKey = (string) config('services.midtrans.client_key', env('MIDTRANS_CLIENT_KEY', 'SB-Mid-client-sample-key'));
-        $this->isProduction = (bool) config('services.midtrans.is_production', env('MIDTRANS_IS_PRODUCTION', false));
+        $this->serverKey = (string) config('services.midtrans.server_key', '');
+        $this->clientKey = (string) config('services.midtrans.client_key', 'SB-Mid-client-sample-key');
+        $this->isProduction = (bool) config('services.midtrans.is_production', false);
         $this->apiBaseUrl = $this->isProduction ? 'https://api.midtrans.com' : 'https://api.sandbox.midtrans.com';
         $this->snapUrl = $this->isProduction
             ? 'https://app.midtrans.com/snap/v1/transactions'
@@ -207,7 +207,12 @@ class PaymentGatewayService
             return false;
         }
 
-        if (! $this->isDevMode()) {
+        // Signature verification is skipped ONLY in dev mode running on a
+        // local/testing environment. In production the signature is always
+        // verified, so payloads with a missing/blank server key are rejected.
+        $skipSignatureCheck = app()->environment(['local', 'testing']) && $this->isDevMode();
+
+        if (! $skipSignatureCheck) {
             if (! $this->verifyNotificationSignature($payload, $orderNumber)) {
                 Log::warning("Midtrans notification signature mismatch for order {$orderNumber}");
 

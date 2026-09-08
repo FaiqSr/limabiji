@@ -35,7 +35,7 @@ class MediaController extends Controller
         $isJsonRequest = $request->expectsJson() || $request->wantsJson() || $request->ajax() || $request->header('Accept') === 'application/json' || $request->has('context');
 
         $validator = Validator::make($request->all(), [
-            'file' => ['required', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,svg,gif'],
+            'file' => ['required', 'file', 'max:10240', 'mimes:jpg,jpeg,png,webp,gif'],
             'context' => ['nullable', 'string', 'in:general,media,articles,origins'],
         ]);
 
@@ -96,6 +96,18 @@ class MediaController extends Controller
         ]);
 
         $path = ltrim($validated['path'], '/');
+
+        // Only ever delete files living in a known media folder with an
+        // image extension, so a crafted path cannot escape storage.
+        if (! preg_match('#^(articles|origins|certificates|media)/[a-zA-Z0-9_-]+\.(jpg|jpeg|png|webp|gif)$#', $path)) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Invalid file path.'], 422);
+            }
+
+            return redirect()
+                ->route('admin.media.index')
+                ->with('error', 'Invalid file path.');
+        }
 
         if (Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);

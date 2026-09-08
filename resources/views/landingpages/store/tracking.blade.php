@@ -126,7 +126,7 @@
                     'merchant' => ['@id' => url('/') . '#organization'],
                 ] : null,
             ], fn ($node) => $node !== null),
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        ], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
 @endpush
 
@@ -357,7 +357,7 @@
                         </div>
 
                         <div class="px-6 sm:px-8 py-5 space-y-3">
-                            <a href="{{ route('store.order.status', $order->order_number) }}"
+                            <a href="{{ $order->status_token ? route('store.order.status', [$order->order_number, 'token' => $order->status_token]) : route('store.order.status', $order->order_number) }}"
                                 class="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-primary hover:bg-primary-hover active:scale-[0.98] text-white text-xs font-semibold uppercase tracking-wider transition-all duration-200 shadow-sm cursor-pointer">
                                 {{ __('store.tracking_open_status') }}
                             </a>

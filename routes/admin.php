@@ -24,7 +24,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
         ->name('admin.login');
-    Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
+        ->middleware('throttle:login');
 });
 
 // --- Admin Routes (auth + editor/admin) ---
