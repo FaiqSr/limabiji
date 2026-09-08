@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Article;
 use App\Models\Origin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class LandingPagesTest extends TestCase
@@ -80,8 +81,29 @@ class LandingPagesTest extends TestCase
     {
         $response = $this->get('/contact');
 
-        $response->assertStatus(200);
-        $response->assertSee('export@limabijiagritech.com');
+        $response->assertOk();
+    }
+
+    public function test_contact_page_renders_recaptcha_widget_when_configured(): void
+    {
+        config(['services.recaptcha.site_key' => 'test-site-key']);
+
+        $response = $this->get('/contact');
+
+        $response->assertOk();
+        $response->assertSee('g-recaptcha', false);
+        $response->assertSee('https://www.google.com/recaptcha/api.js', false);
+        $response->assertSee('data-sitekey="test-site-key"', false);
+    }
+
+    public function test_contact_page_hides_recaptcha_widget_when_not_configured(): void
+    {
+        config(['services.recaptcha.site_key' => '']);
+
+        $response = $this->get('/contact');
+
+        $response->assertOk();
+        $response->assertDontSee('g-recaptcha', false);
     }
 
     public function test_news_page_renders_with_search_and_category_filter(): void
@@ -162,5 +184,72 @@ class LandingPagesTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors(['name', 'email', 'message']);
+    }
+
+    public function test_contact_form_rejects_submission_when_recaptcha_is_not_configured_and_token_empty(): void
+    {
+        config(['services.recaptcha.secret_key' => '']);
+
+        $response = $this->post(route('landingpages.contact.submit'), [
+            'name' => 'John Roaster',
+            'email' => 'john@roastery.com',
+            'message' => 'No captcha configured, should still pass.',
+        ]);
+
+        $response->assertRedirect(route('landingpages.contact'));
+        $response->assertSessionHas('success');
+    }
+
+    public function test_contact_form_rejects_submission_when_recaptcha_token_missing(): void
+    {
+        config(['services.recaptcha.secret_key' => 'test-secret']);
+
+        $response = $this->post(route('landingpages.contact.submit'), [
+            'name' => 'John Roaster',
+            'email' => 'john@roastery.com',
+            'message' => 'No token provided.',
+        ]);
+
+        $response->assertSessionHasErrors(['g-recaptcha-response']);
+        $this->assertDatabaseCount('contact_messages', 0);
+    }
+
+    public function test_contact_form_rejects_submission_when_recaptcha_verification_fails(): void
+    {
+        config(['services.recaptcha.secret_key' => 'test-secret']);
+
+        Http::fake([
+            'https://www.google.com/recaptcha/api/siteverify' => Http::response(['success' => false, 'error-codes' => ['invalid-input-response']]),
+        ]);
+
+        $response = $this->post(route('landingpages.contact.submit'), [
+            'name' => 'John Roaster',
+            'email' => 'john@roastery.com',
+            'message' => 'Invalid captcha token.',
+            'g-recaptcha-response' => 'invalid-token',
+        ]);
+
+        $response->assertSessionHasErrors(['g-recaptcha-response']);
+        $this->assertDatabaseCount('contact_messages', 0);
+    }
+
+    public function test_contact_form_accepts_submission_when_recaptcha_verification_succeeds(): void
+    {
+        config(['services.recaptcha.secret_key' => 'test-secret']);
+
+        Http::fake([
+            'https://www.google.com/recaptcha/api/siteverify' => Http::response(['success' => true]),
+        ]);
+
+        $response = $this->post(route('landingpages.contact.submit'), [
+            'name' => 'John Roaster',
+            'email' => 'john@roastery.com',
+            'message' => 'Valid captcha token.',
+            'g-recaptcha-response' => 'valid-token',
+        ]);
+
+        $response->assertRedirect(route('landingpages.contact'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('contact_messages', ['email' => 'john@roastery.com']);
     }
 }

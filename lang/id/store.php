@@ -188,7 +188,6 @@ return [
     'order_customer' => 'Pelanggan',
     'order_courier' => 'Kurir',
     'order_qty' => 'Jumlah',
-    'order_pay_now_btn' => 'Selesaikan Pembayaran via Midtrans',
     'order_back_home' => 'Kembali ke Beranda',
     'order_browse_more' => 'Lihat Kopi Lainnya',
     'order_status_recovery_title' => 'Pembayaran Belum Selesai',

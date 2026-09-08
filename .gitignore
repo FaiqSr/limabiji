@@ -25,3 +25,7 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Cloudflare tunnel credentials (never commit)
+/docker/cloudflared/*.json
+/docker/cloudflared/cert.pem

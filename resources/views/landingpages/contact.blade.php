@@ -283,6 +283,19 @@
                             @enderror
                         </div>
 
+                        @if (config('services.recaptcha.site_key'))
+                            <div>
+                                <label
+                                    class="block text-white font-semibold text-xs uppercase tracking-wider mb-2">{{ __('landing.contact_form_captcha') }}
+                                    *</label>
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                                @error('g-recaptcha-response')
+                                    <p class="text-rose-400 text-xs mt-1.5">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        @endif
+
                         <button type="submit"
                             class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-lg font-medium text-base transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto">
                             <span>{{ __('landing.contact_form_submit') }}</span>
@@ -340,3 +353,9 @@
         </div>
     </div>
 @endsection
+
+@if (config('services.recaptcha.site_key'))
+    @push('scripts')
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endpush
+@endif

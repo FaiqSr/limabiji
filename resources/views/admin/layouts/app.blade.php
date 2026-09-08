@@ -36,6 +36,8 @@
     </style>
 
     @vite(['resources/css/admin.css', 'resources/js/app.js'])
+
+    @stack('print-styles')
 </head>
 <body class="font-body bg-slate-50 text-slate-900 antialiased selection:bg-emerald-500 selection:text-white" x-data="{ mobileOpen: false }">
 

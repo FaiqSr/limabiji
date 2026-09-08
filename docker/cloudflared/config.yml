@@ -1,0 +1,9 @@
+# Cloudflare named tunnel — limabiji
+# Created via: cloudflared tunnel create limabiji
+tunnel: limabiji
+credentials-file: /etc/cloudflared/1d9a6339-e3be-43a6-b1d3-5f4c3f7197df.json
+
+ingress:
+  - hostname: limabiji.faiqsr.my.id
+    service: http://app:80
+  - service: http_status:404

@@ -154,6 +154,8 @@ return [
     'contact_form_message_placeholder' => 'Tuliskan detail kebutuhan kopi specialty Anda...',
     'contact_form_submit' => 'Kirim Pesan',
     'contact_form_alert' => 'Pesan Anda berhasil terkirim.',
+    'contact_form_captcha' => 'Verifikasi Keamanan',
+    'contact_form_captcha_error' => 'Silakan verifikasi bahwa Anda bukan robot.',
 
     // Footer
     'footer_company' => 'Lima Biji Agritech',

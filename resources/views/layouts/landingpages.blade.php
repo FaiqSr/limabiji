@@ -28,6 +28,127 @@
     {{-- Structured Data Schema --}}
     @stack('schema')
 
+
+    <style>
+        /* === Overlay === */
+        #sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        #sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* === Sidebar === */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 70;
+            width: 320px;
+            max-width: 85vw;
+            height: 100%;
+            overflow-y: auto;
+            background: #142622;
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.35s ease-out;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        /* === Sidebar Header === */
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #sidebar-close {
+            color: rgba(255, 255, 255, 0.6);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        #sidebar-close:hover {
+            color: #FFFFFF;
+        }
+
+        /* === Sidebar Nav === */
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            gap: 4px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #FFFFFF;
+        }
+
+        .sidebar-link .arrow {
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* === Sidebar Footer === */
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-footer p:first-child {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .sidebar-footer p:last-child {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.15);
+            margin-top: 4px;
+        }
+    </style>
+
+
     {{-- Motion Js --}}
     <script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
 </head>
@@ -118,6 +239,45 @@
                 }, {
                     duration: 0.2
                 });
+            });
+        })();
+    </script>
+
+    <script>
+        (function() {
+            var openBtn = document.getElementById('sidebar-open');
+            var closeBtn = document.getElementById('sidebar-close');
+            var overlay = document.getElementById('sidebar-overlay');
+            var sidebar = document.getElementById('sidebar');
+            var links = sidebar.querySelectorAll('.sidebar-link');
+            var active = false;
+
+            function open() {
+                active = true;
+                overlay.classList.add('active');
+                sidebar.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function close() {
+                active = false;
+                overlay.classList.remove('active');
+                sidebar.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            if (openBtn) openBtn.addEventListener('click', open);
+            if (closeBtn) closeBtn.addEventListener('click', close);
+            if (overlay) overlay.addEventListener('click', close);
+
+            links.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    setTimeout(close, 150);
+                });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && active) close();
             });
         })();
     </script>

@@ -154,6 +154,8 @@ return [
     'contact_form_message_placeholder' => 'Tell us about your specialty coffee requirements...',
     'contact_form_submit' => 'Send Message',
     'contact_form_alert' => 'Thank you! Your message has been sent.',
+    'contact_form_captcha' => 'Security Check',
+    'contact_form_captcha_error' => 'Please verify that you are not a robot.',
 
     // Footer
     'footer_company' => 'Lima Biji Agritech',
